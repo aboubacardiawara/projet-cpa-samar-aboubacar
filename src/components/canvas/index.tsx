@@ -46,7 +46,12 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
         dy: 4 * randomSign(),
       },
     })),
-    obstacle: loadObstacles().map((data) => buildRectangle(data)),
+    //obstacle: loadObstacles().map((data) => buildRectangle(data)),
+    obstacle: new Array(2).fill(1).map((_) => ({
+      coord: {x:40, y:80, dx:0, dy:0},
+      width:400, 
+      height:400 
+    })),
     size: { height, width },
     endOfGame: true,
   }

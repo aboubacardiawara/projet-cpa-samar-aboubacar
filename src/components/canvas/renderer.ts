@@ -64,10 +64,10 @@ const drawRect = (
   img.src = 'brick.png'
   var tempCanvas = document.createElement("canvas")
   const tCtx = tempCanvas.getContext("2d");
-  tempCanvas.width = w;
-  tempCanvas.height = h;
+  tempCanvas.width = 40;
+  tempCanvas.height = 40;
   tCtx?.drawImage(img,0,0,img.width,img.height,0,0,40,40)
-  var brick= ctx.createPattern(tempCanvas, "repeat") 
+  var brick= ctx.createPattern(tempCanvas, 'repeat') 
   ctx.fillStyle = brick!
   ctx.fill()
 }
