@@ -2,7 +2,7 @@ import * as conf from './conf'
 import { useRef, useEffect } from 'react'
 import { State, step, click, mouseMove, endOfGame } from './state'
 import { render } from './renderer'
-import { description } from './file'
+import { description } from '../../config/game/file'
 
 const randomInt = (max: number) => Math.floor(Math.random() * max)
 const randomSign = () => Math.sign(Math.random() - 0.5)
@@ -10,7 +10,13 @@ const randomSign = () => Math.sign(Math.random() - 0.5)
 
 
 const loadObstacles = function () {
-  return description.obstacles.rectangles
+  let rectangles: number[][] = []
+
+  description.levels[0].obstacles.forEach(
+    obstacleData => rectangles.push(obstacleData.dimensions)
+  )
+
+  return rectangles;
 }
 
 const loadObstaclesBis = function () {
