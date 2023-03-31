@@ -1,21 +1,27 @@
 import * as conf from './conf'
-import * as fs from 'fs';
 import { useRef, useEffect } from 'react'
 import { State, step, click, mouseMove, endOfGame } from './state'
 import { render } from './renderer'
+import { description } from './file'
 
 const randomInt = (max: number) => Math.floor(Math.random() * max)
 const randomSign = () => Math.sign(Math.random() - 0.5)
 
+
+
 const loadObstacles = function () {
-  const FILE = "gameDescription/levels/level1/obstacle1.jeu"
-  const lines = fs.readFileSync(FILE, 'utf8').split("\n");
-  let rectangles: number[][] = [];
-  lines.forEach(e => {
-      let rectangle = e.split(" ").map((s) => parseInt(s))
-      rectangles.push(rectangle)
-  });
-  return rectangles;
+  return description.obstacles.rectangles
+}
+
+const loadObstaclesBis = function () {
+  const rectangles : number[][] = []
+  const cote : number = 40
+  rectangles.push([40, 40, cote*10, cote])
+  rectangles.push([80, 80, cote, cote])
+  rectangles.push([120, 80, cote, cote])
+  //rectangles.push([0, 40, cote, cote])
+
+  return rectangles
 }
 
 
@@ -31,7 +37,7 @@ const buildRectangle = (data: number[]) => (
   {
     coord: {x:data[0], y:data[1], dx:0, dy:0},
     width:data[2], 
-    height:data[4] 
+    height:data[3] 
   }
 )
 
@@ -46,12 +52,12 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
         dy: 4 * randomSign(),
       },
     })),
-    //obstacle: loadObstacles().map((data) => buildRectangle(data)),
-    obstacle: new Array(2).fill(1).map((_) => ({
+    obstacle: loadObstacles().map((data) => buildRectangle(data)),
+    /*obstacle: new Array(2).fill(1).map((_) => ({
       coord: {x:40, y:80, dx:0, dy:0},
       width:400, 
       height:400 
-    })),
+    })),*/
     size: { height, width },
     endOfGame: true,
   }

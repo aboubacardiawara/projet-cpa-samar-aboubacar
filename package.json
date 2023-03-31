@@ -2,6 +2,7 @@
   "name": "canvas",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",

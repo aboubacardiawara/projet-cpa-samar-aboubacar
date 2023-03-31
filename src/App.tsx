@@ -13,8 +13,8 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => {
       setSize({
-        height: container.current.clientHeight,
-        width: container.current.clientWidth,
+        height: 800,
+        width: 1200,
       })
     }, 100)
   })
