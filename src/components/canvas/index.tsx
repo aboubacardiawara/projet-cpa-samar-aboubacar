@@ -1,10 +1,23 @@
 import * as conf from './conf'
+import * as fs from 'fs';
 import { useRef, useEffect } from 'react'
 import { State, step, click, mouseMove, endOfGame } from './state'
 import { render } from './renderer'
 
 const randomInt = (max: number) => Math.floor(Math.random() * max)
 const randomSign = () => Math.sign(Math.random() - 0.5)
+
+const loadObstacles = function () {
+  const FILE = "gameDescription/levels/level1/obstacle1.jeu"
+  const lines = fs.readFileSync(FILE, 'utf8').split("\n");
+  let rectangles: number[][] = [];
+  lines.forEach(e => {
+      let rectangle = e.split(" ").map((s) => parseInt(s))
+      rectangles.push(rectangle)
+  });
+  return rectangles;
+}
+
 
 const initCanvas =
   (iterate: (ctx: CanvasRenderingContext2D) => void) =>
@@ -13,6 +26,14 @@ const initCanvas =
     if (!ctx) return
     requestAnimationFrame(() => iterate(ctx))
   }
+
+const buildRectangle = (data: number[]) => (
+  {
+    coord: {x:data[0], y:data[1], dx:0, dy:0},
+    width:data[2], 
+    height:data[4] 
+  }
+)
 
 const Canvas = ({ height, width }: { height: number; width: number }) => {
   const initialState: State = {
@@ -25,6 +46,7 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
         dy: 4 * randomSign(),
       },
     })),
+    obstacle: loadObstacles().map((data) => buildRectangle(data)),
     size: { height, width },
     endOfGame: true,
   }

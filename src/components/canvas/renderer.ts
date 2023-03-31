@@ -52,6 +52,25 @@ const drawCirle = (
   ctx.fill()
 }
 
+const drawRect = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number; },
+  w : number 
+  , h :number,
+) => {
+  ctx.beginPath()
+  ctx.rect(x,y,w,h)
+  var img = new Image()
+  img.src = 'brick.png'
+  var tempCanvas = document.createElement("canvas")
+  const tCtx = tempCanvas.getContext("2d");
+  tempCanvas.width = w;
+  tempCanvas.height = h;
+  tCtx?.drawImage(img,0,0,img.width,img.height,0,0,40,40)
+  var brick= ctx.createPattern(tempCanvas, "repeat") 
+  ctx.fillStyle = brick!
+  ctx.fill()
+}
 const computeColor = (life: number, maxLife: number, baseColor: string) =>
   rgbaTorgb(baseColor, (maxLife - life) * (1 / maxLife))
 
@@ -61,6 +80,10 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   state.pos.map((c) =>
     drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.RED))
   )
+
+  state.obstacle.map((r) =>
+  drawRect(ctx, r.coord,r.width,r.height)
+)
 
   if (state.endOfGame) {
     const text = 'END'
