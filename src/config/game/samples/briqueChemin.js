@@ -7,11 +7,11 @@ export const CONFIG = {
         {
             obstacles: [
                 {
-                    type: "rectangle",
+                    type: "wall",
                     dimensions: [0, MAX_Y - 3 * COTE, COTE * 13, COTE * 3],
                 },
                 {
-                    type: "rectangle",
+                    type: "wall",
                     dimensions: [COTE * 17, MAX_Y - 3 * COTE, COTE * 13, COTE * 3],
                 },
                 {

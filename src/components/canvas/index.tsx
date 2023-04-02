@@ -2,7 +2,8 @@ import * as conf from './conf'
 import { useRef, useEffect } from 'react'
 import { State, step, click, mouseMove, endOfGame, Element } from './state'
 import { render } from './renderer'
-import { CONFIG } from '../../config/game/samples/eau'
+//import { CONFIG } from '../../config/game/samples/eau'
+import { CONFIG } from '../../config/game/samples/ciel_en_brique'
 
 const randomInt = (max: number) => Math.floor(Math.random() * max)
 const randomSign = () => Math.sign(Math.random() - 0.5)

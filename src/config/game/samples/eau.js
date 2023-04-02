@@ -15,8 +15,8 @@ export const CONFIG = {
                     dimensions: [COTE * 20, MAX_Y - 5 * COTE, COTE * 13, COTE * 6],
                 },
                 {
-                    type: "water", 
-                    dimensions: [COTE*10, MAX_Y-4*COTE, COTE*10, COTE*4],
+                    type: "water",
+                    dimensions: [COTE * 10, MAX_Y - 4 * COTE, COTE * 10, COTE * 4],
                 },
 
             ],
