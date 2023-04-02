@@ -52,6 +52,18 @@ const drawCirle = (
   ctx.fill()
 }
 
+const drawWater = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number },
+  w: number,
+  h: number
+) => {
+  ctx.beginPath()
+  ctx.rect(x, y, w, h)
+  ctx.fillStyle = "blue"
+  ctx.fill()
+}
+
 const drawRect = (
   ctx: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number; },
@@ -81,8 +93,12 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
     drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.RED))
   )
 
-  state.obstacle.map((r) =>
-  drawRect(ctx, r.coord,r.width,r.height)
+  state.walls.map((r) =>
+  drawRect(ctx, r.coord,r.width,r.height),
+
+  state.water.map((r) =>
+    drawWater(ctx, r.coord, r.width, r.height))
+
 )
 
   if (state.endOfGame) {

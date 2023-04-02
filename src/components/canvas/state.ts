@@ -1,14 +1,18 @@
+import { type } from 'os';
 import * as conf from './conf'
 type Coord = { x: number; y: number; dx: number; dy: number }
 type Ball = { coord: Coord; life: number; invincible?: number }
 type Rect = {coord: Coord , height : number ; width : number  }
 type Size = { height: number; width: number }
 
+export type Element = {type: string, dimension: number[]}
+
 export type State = {
   pos: Array<Ball>
   size: Size
   endOfGame: boolean
-  obstacle:Array<Rect>
+  walls:Array<Rect>
+  water: Array<Rect>
 }
 
 const dist2 = (o1: Coord, o2: Coord) =>
