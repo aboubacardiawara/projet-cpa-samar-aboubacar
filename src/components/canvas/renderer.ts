@@ -89,9 +89,9 @@ const computeColor = (life: number, maxLife: number, baseColor: string) =>
 export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   clear(ctx)
 
-  state.pos.map((c) =>
-    drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.RED))
-  )
+  const c = state.balle;
+  drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.RED))
+  
 
   state.walls.map((r) =>
   drawRect(ctx, r.coord,r.width,r.height),

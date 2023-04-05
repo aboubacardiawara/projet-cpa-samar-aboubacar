@@ -1,6 +1,6 @@
 import * as conf from './conf'
 import { useRef, useEffect } from 'react'
-import { State, step, click, mouseMove, endOfGame, Element } from './state'
+import { State, step, mouseMove, endOfGame, Element, click, keyDown, keyUp } from './state'
 import { render } from './renderer'
 //import { CONFIG } from '../../config/game/samples/eau'
 import { CONFIG } from '../../config/game/samples/zig_zag'
@@ -20,18 +20,6 @@ const loadObstacles = function () {
 
   return rectangles;
 }
-
-const loadObstaclesBis = function () {
-  const rectangles: number[][] = []
-  const cote: number = 40
-  rectangles.push([40, 40, cote * 10, cote])
-  rectangles.push([80, 80, cote, cote])
-  rectangles.push([120, 80, cote, cote])
-  //rectangles.push([0, 40, cote, cote])
-
-  return rectangles
-}
-
 
 const initCanvas =
   (iterate: (ctx: CanvasRenderingContext2D) => void) =>
@@ -70,15 +58,7 @@ function initWalls(): { coord: { x: number; y: number; dx: number; dy: number };
 
 const Canvas = ({ height, width }: { height: number; width: number }) => {
   const initialState: State = {
-    pos: new Array(2).fill(1).map((_) => ({
-      life: conf.BALLLIFE,
-      coord: {
-        x: randomInt(width - 120) + 60,
-        y: randomInt(height - 120) + 60,
-        dx: 4 * randomSign(),
-        dy: 4 * randomSign(),
-      },
-    })),
+    balle: initBalle(),
     walls: initWalls(),
     water: initWater(),
     size: { height, width },
@@ -94,21 +74,37 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
     render(ctx)(state.current)
     if (!state.current.endOfGame) requestAnimationFrame(() => iterate(ctx))
   }
-  const onClick = (e: PointerEvent) => {
-    state.current = click(state.current)(e)
-  }
 
   const onMove = (e: PointerEvent) => {
     state.current = mouseMove(state.current)(e)
   }
+
+  const onclick = (e: PointerEvent) => {
+    state.current = click(state.current)(e)
+  }
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    state.current = keyDown(state.current)(e)
+
+  }
+  const onKeyUp = (e: KeyboardEvent) => {
+    state.current = keyUp(state.current)(e)
+  }
+
+
   useEffect(() => {
     if (ref.current) {
       initCanvas(iterate)(ref.current)
-      ref.current.addEventListener('click', onClick)
+      document.addEventListener('keydown', onKeyDown);
+      document.addEventListener('keyup', onKeyUp);
+      ref.current.addEventListener('click', onclick)
       ref.current.addEventListener('mousemove', onMove)
     }
     return () => {
-      ref.current.removeEventListener('click', onMove)
+
+      ref.current.removeEventListener('keydown', onKeyDown);
+      ref.current.removeEventListener('keyup', onKeyUp);
+      ref.current.removeEventListener('click', onclick)
       ref.current.removeEventListener('mousemove', onMove)
     }
   }, [])
@@ -116,3 +112,15 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
 }
 
 export default Canvas
+
+function initBalle() {
+  return {
+    life: conf.BALLLIFE,
+    coord: {
+      x: 100,
+      y: 100,
+      dx: 4,
+      dy: 4,
+    }
+  }
+}

@@ -8,7 +8,7 @@ type Size = { height: number; width: number }
 export type Element = {type: string, dimension: number[]}
 
 export type State = {
-  pos: Array<Ball>
+  balle: Ball
   size: Size
   endOfGame: boolean
   walls:Array<Rect>
@@ -43,21 +43,6 @@ const iterate = (bound: Size) => (ball: Ball) => {
   }
 }
 
-export const click =
-  (state: State) =>
-  (event: PointerEvent): State => {
-    const { offsetX, offsetY } = event
-    const target = state.pos.find(
-      (p) =>
-        dist2(p.coord, { x: offsetX, y: offsetY, dx: 0, dy: 0 }) <
-        Math.pow(conf.RADIUS, 2) + 100
-    )
-    if (target) {
-      target.coord.dx += Math.random() * 10
-      target.coord.dy += Math.random() * 10
-    }
-    return state
-  }
 
 const collide = (o1: Coord, o2: Coord) =>
   dist2(o1, o2) < Math.pow(2 * conf.RADIUS, 2)
@@ -83,26 +68,38 @@ const collideBoing = (p1: Coord, p2: Coord) => {
 }
 
 export const step = (state: State) => {
-  state.pos.map((p1, i, arr) => {
-    arr.slice(i + 1).map((p2) => {
-      if (collide(p1.coord, p2.coord)) {
-        if (!p1.invincible) {
-          p1.life--
-          p1.invincible = 20
-        }
-        if (!p2.invincible) {
-          p2.life--
-          p2.invincible = 20
-        }
-        collideBoing(p1.coord, p2.coord)
-      }
-    })
-  })
+  
   return {
     ...state,
-    pos: state.pos.map(iterate(state.size)).filter((p) => p.life > 0),
+    pos: state.balle,
   }
 }
+
+export const click = 
+  (state: State) =>
+  (event: PointerEvent): State => {
+    console.log("Click !");
+    
+    return state
+  }
+
+  export const keyDown = 
+  (state: State) =>
+  (event: KeyboardEvent): State => {
+    const keyName : string = event.key;
+    console.log(`keyDown: ${keyName}`);
+    
+    
+    return state
+  }
+
+  export const keyUp = 
+  (state: State) =>
+  (event: KeyboardEvent): State => {
+    console.log("Relaché !");
+    
+    return state
+  }
 
 export const mouseMove =
   (state: State) =>
