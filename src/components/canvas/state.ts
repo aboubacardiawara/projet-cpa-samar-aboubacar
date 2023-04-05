@@ -150,20 +150,43 @@ const moveBall = (state: State, dx: number, dy: number): State => {
 }
 
 const moveBallUp = (state: State): State => {
-  return moveBall(state, 0, -state.ball.coord.dy)
+  return ballCanMoveUp(state) ? moveBall(state, 0, -state.ball.coord.dy) : state
 }
 
 const moveBallDown = (state: State): State => {
-  return moveBall(state, 0, state.ball.coord.dy)
+  return ballCanMoveDown(state) ? moveBall(state, 0, state.ball.coord.dy) : state
 }
 
 const moveBallLeft = (state: State): State => {
-  console.log("dx: " + state.ball.coord.dx);
-  
-  return moveBall(state, -state.ball.coord.dx, 0)
+  return ballCanMoveLeft(state) ? moveBall(state, -state.ball.coord.dx, 0) : state
 }
 
 const moveBallRight = (state: State): State => {
-  console.log("dx: " + state.ball.coord.dx);
-  return moveBall(state, state.ball.coord.dx, 0)
+  return ballCanMoveRight(state) ? moveBall(state, state.ball.coord.dx, 0) : state
+}
+
+function ballCanMoveLeft(state: State) {
+  const ball: Ball = state.ball;
+  const currentPos: Coord = ball.coord;
+  return currentPos.x - conf.RADIUS - currentPos.dx >= 0
+}
+
+function ballCanMoveRight(state: State) {
+  const ball: Ball = state.ball;
+  const currentPos: Coord = ball.coord;
+  const limitX: number = state.size.width
+  return currentPos.x + conf.RADIUS + currentPos.dx <= limitX
+}
+
+function ballCanMoveUp(state: State) {
+  const ball: Ball = state.ball;
+  const currentPos: Coord = ball.coord;
+  return currentPos.y - conf.RADIUS - currentPos.dy >= 0
+}
+
+function ballCanMoveDown(state: State) {
+  const ball: Ball = state.ball;
+  const currentPos: Coord = ball.coord;
+  const limitY: number = state.size.height
+  return currentPos.y + conf.RADIUS + currentPos.dy <= limitY
 }

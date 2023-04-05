@@ -2,7 +2,7 @@ import * as conf from './conf'
 import { useRef, useEffect } from 'react'
 import { State, step, mouseMove, endOfGame, Element, click, keyDown, keyUp } from './state'
 import { render } from './renderer'
-import { CONFIG } from '../../config/game/samples/brique'
+import { CONFIG } from '../../config/game/samples/empty'
 
 const loadObstacles = function () {
   let rectangles: Element[] = []
