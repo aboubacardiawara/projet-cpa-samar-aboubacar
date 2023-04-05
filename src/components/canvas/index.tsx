@@ -2,13 +2,7 @@ import * as conf from './conf'
 import { useRef, useEffect } from 'react'
 import { State, step, mouseMove, endOfGame, Element, click, keyDown, keyUp } from './state'
 import { render } from './renderer'
-//import { CONFIG } from '../../config/game/samples/eau'
-import { CONFIG } from '../../config/game/samples/zig_zag'
-
-const randomInt = (max: number) => Math.floor(Math.random() * max)
-const randomSign = () => Math.sign(Math.random() - 0.5)
-
-
+import { CONFIG } from '../../config/game/samples/brique'
 
 const loadObstacles = function () {
   let rectangles: Element[] = []
@@ -58,7 +52,7 @@ function initWalls(): { coord: { x: number; y: number; dx: number; dy: number };
 
 const Canvas = ({ height, width }: { height: number; width: number }) => {
   const initialState: State = {
-    balle: initBalle(),
+    ball: initBall(),
     walls: initWalls(),
     water: initWater(),
     size: { height, width },
@@ -84,7 +78,7 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
   }
 
   const onKeyDown = (e: KeyboardEvent) => {
-    state.current = keyDown(state.current)(e)
+    state.current = keyDown(state.current)(e);
 
   }
   const onKeyUp = (e: KeyboardEvent) => {
@@ -95,15 +89,15 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
   useEffect(() => {
     if (ref.current) {
       initCanvas(iterate)(ref.current)
-      document.addEventListener('keydown', onKeyDown);
       document.addEventListener('keyup', onKeyUp);
+      document.addEventListener('keydown', onKeyDown);
       ref.current.addEventListener('click', onclick)
       ref.current.addEventListener('mousemove', onMove)
     }
     return () => {
 
-      ref.current.removeEventListener('keydown', onKeyDown);
-      ref.current.removeEventListener('keyup', onKeyUp);
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('keyup', onKeyUp);
       ref.current.removeEventListener('click', onclick)
       ref.current.removeEventListener('mousemove', onMove)
     }
@@ -113,14 +107,14 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
 
 export default Canvas
 
-function initBalle() {
+function initBall() {
   return {
     life: conf.BALLLIFE,
     coord: {
       x: 100,
       y: 100,
-      dx: 4,
-      dy: 4,
+      dx: 10,
+      dy: 10,
     }
   }
 }

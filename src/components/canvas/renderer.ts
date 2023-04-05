@@ -89,7 +89,7 @@ const computeColor = (life: number, maxLife: number, baseColor: string) =>
 export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   clear(ctx)
 
-  const c = state.balle;
+  const c = state.ball;
   drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.RED))
   
 

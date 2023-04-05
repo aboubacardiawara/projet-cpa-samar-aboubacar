@@ -1,17 +1,16 @@
-import { type } from 'os';
 import * as conf from './conf'
 type Coord = { x: number; y: number; dx: number; dy: number }
 type Ball = { coord: Coord; life: number; invincible?: number }
-type Rect = {coord: Coord , height : number ; width : number  }
+type Rect = { coord: Coord, height: number; width: number }
 type Size = { height: number; width: number }
 
-export type Element = {type: string, dimension: number[]}
+export type Element = { type: string, dimension: number[] }
 
 export type State = {
-  balle: Ball
+  ball: Ball
   size: Size
   endOfGame: boolean
-  walls:Array<Rect>
+  walls: Array<Rect>
   water: Array<Rect>
 }
 
@@ -68,43 +67,103 @@ const collideBoing = (p1: Coord, p2: Coord) => {
 }
 
 export const step = (state: State) => {
-  
+
   return {
     ...state,
-    pos: state.balle,
+    pos: {
+      ...state.ball,
+      coord: {
+        ...state.ball.coord,
+        x: state.ball.coord.x + state.ball.coord.dx,
+        y: state.ball.coord.y + state.ball.coord.dy
+      }
+    },
   }
 }
 
-export const click = 
+export const click =
   (state: State) =>
-  (event: PointerEvent): State => {
-    console.log("Click !");
-    
-    return state
-  }
+    (event: PointerEvent): State => {
+      return state
+    }
 
-  export const keyDown = 
+export const keyDown =
   (state: State) =>
-  (event: KeyboardEvent): State => {
-    const keyName : string = event.key;
-    console.log(`keyDown: ${keyName}`);
-    
-    
-    return state
-  }
+    (event: KeyboardEvent): State => {
+      //event.preventDefault()
+      let newState: State;
+      const keyName: string = event.key;
+      console.log(`keyDown: ${keyName}`);
+      switch (keyName) {
+        case "ArrowUp":
+          newState = moveBallUp(state);
+          break;
+        case "ArrowDown":
+          newState = moveBallDown(state);
+          break;
+        case "ArrowLeft":
+          newState = moveBallLeft(state);
+          break;
+        case "ArrowRight":
+          newState = moveBallRight(state);
+          break;
 
-  export const keyUp = 
+        default:
+          newState = state
+          break;
+      }
+      return newState
+    }
+
+export const keyUp =
   (state: State) =>
-  (event: KeyboardEvent): State => {
-    console.log("Relaché !");
-    
-    return state
-  }
+    (event: KeyboardEvent): State => {
+      console.log("Relaché !");
+      return state
+    }
 
 export const mouseMove =
   (state: State) =>
-  (event: PointerEvent): State => {
-    return state
-  }
+    (event: PointerEvent): State => {
+      return state
+    }
 
 export const endOfGame = (state: State): boolean => true
+
+
+const moveBall = (state: State, dx: number, dy: number): State => {
+  const currentPos: Coord = state.ball.coord
+
+  const newBall: Ball = {
+    ...state.ball,
+    coord: {
+      ...currentPos,
+      x: state.ball.coord.x + dx,
+      y: state.ball.coord.y + dy,
+    }
+  }
+
+  return {
+    ...state,
+    ball: newBall
+  }
+}
+
+const moveBallUp = (state: State): State => {
+  return moveBall(state, 0, -state.ball.coord.dy)
+}
+
+const moveBallDown = (state: State): State => {
+  return moveBall(state, 0, state.ball.coord.dy)
+}
+
+const moveBallLeft = (state: State): State => {
+  console.log("dx: " + state.ball.coord.dx);
+  
+  return moveBall(state, -state.ball.coord.dx, 0)
+}
+
+const moveBallRight = (state: State): State => {
+  console.log("dx: " + state.ball.coord.dx);
+  return moveBall(state, state.ball.coord.dx, 0)
+}
