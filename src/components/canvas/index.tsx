@@ -79,7 +79,6 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
 
   const onKeyDown = (e: KeyboardEvent) => {
     state.current = keyDown(state.current)(e);
-
   }
   const onKeyUp = (e: KeyboardEvent) => {
     state.current = keyUp(state.current)(e)
@@ -115,6 +114,7 @@ function initBall() {
       y: 100,
       dx: 10,
       dy: 10,
-    }
+    },
+    jumping: false
   }
 }

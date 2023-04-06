@@ -1,6 +1,6 @@
 import * as conf from './conf'
 type Coord = { x: number; y: number; dx: number; dy: number }
-type Ball = { coord: Coord; life: number; invincible?: number }
+type Ball = { coord: Coord; life: number; jumping: boolean }
 type Rect = { coord: Coord, height: number; width: number }
 type Size = { height: number; width: number }
 
@@ -17,69 +17,13 @@ export type State = {
 const dist2 = (o1: Coord, o2: Coord) =>
   Math.pow(o1.x - o2.x, 2) + Math.pow(o1.y - o2.y, 2)
 
-const iterate = (bound: Size) => (ball: Ball) => {
-  const invincible = ball.invincible ? ball.invincible - 1 : ball.invincible
-  const coord = ball.coord
-  const dx =
-    (coord.x + conf.RADIUS > bound.width || coord.x < conf.RADIUS
-      ? -coord.dx
-      : coord.dx) * conf.FRICTION
-  const dy =
-    (coord.y + conf.RADIUS > bound.height || coord.y < conf.RADIUS
-      ? -coord.dy
-      : coord.dy) * conf.FRICTION
-  if (Math.abs(dx) + Math.abs(dy) < conf.MINMOVE)
-    return { ...ball, invincible, coord: { ...coord, dx: 0, dy: 0 } }
-  return {
-    ...ball,
-    invincible,
-    coord: {
-      x: coord.x + dx,
-      y: coord.y + dy,
-      dx,
-      dy,
-    },
-  }
+const iterate = (state: State) => {
+  console.log("dy: " + state.ball.coord.dy);
+  //return state
+  return applyGravitation(state);
 }
 
-
-const collide = (o1: Coord, o2: Coord) =>
-  dist2(o1, o2) < Math.pow(2 * conf.RADIUS, 2)
-
-const collideBoing = (p1: Coord, p2: Coord) => {
-  const nx = (p2.x - p1.x) / (2 * conf.RADIUS)
-  const ny = (p2.y - p1.y) / (2 * conf.RADIUS)
-  const gx = -ny
-  const gy = nx
-
-  const v1g = gx * p1.dx + gy * p1.dy
-  const v2n = nx * p2.dx + ny * p2.dy
-  const v2g = gx * p2.dx + gy * p2.dy
-  const v1n = nx * p1.dx + ny * p1.dy
-  p1.dx = nx * v2n + gx * v1g
-  p1.dy = ny * v2n + gy * v1g
-  p2.dx = nx * v1n + gx * v2g
-  p2.dy = ny * v1n + gy * v2g
-  p1.x += p1.dx
-  p1.y += p1.dy
-  p2.x += p2.dx
-  p2.y += p2.dy
-}
-
-export const step = (state: State) => {
-
-  return {
-    ...state,
-    pos: {
-      ...state.ball,
-      coord: {
-        ...state.ball.coord,
-        x: state.ball.coord.x + state.ball.coord.dx,
-        y: state.ball.coord.y + state.ball.coord.dy
-      }
-    },
-  }
-}
+export const step = iterate
 
 export const click =
   (state: State) =>
@@ -93,7 +37,6 @@ export const keyDown =
       //event.preventDefault()
       let newState: State;
       const keyName: string = event.key;
-      console.log(`keyDown: ${keyName}`);
       switch (keyName) {
         case "ArrowUp":
           newState = moveBallUp(state);
@@ -106,6 +49,11 @@ export const keyDown =
           break;
         case "ArrowRight":
           newState = moveBallRight(state);
+          break;
+        case " ":
+          console.log("La balle saute");
+          newState = jumpBall(state);
+          //newState = state;
           break;
 
         default:
@@ -157,12 +105,58 @@ const moveBallDown = (state: State): State => {
   return ballCanMoveDown(state) ? moveBall(state, 0, state.ball.coord.dy) : state
 }
 
+function fallBall(state: State) {
+  const newState = moveBall(state, 0, state.ball.coord.dy);
+  const changeBallSpeed = {
+    ...newState.ball,
+    coord: {
+      ...newState.ball.coord,
+      dy: newState.ball.coord.dy + conf.ACCELERATION_CHUTE
+    }
+  }
+  return { ...newState, ball: changeBallSpeed }
+}
+
+const stopFalling = (state: State) => {
+  const changeBallSpeed = {
+    ...state.ball,
+    coord: {
+      ...state.ball.coord,
+      dy: 0
+    }
+  }
+  return { ...state, ball: changeBallSpeed }
+}
+
 const moveBallLeft = (state: State): State => {
   return ballCanMoveLeft(state) ? moveBall(state, -state.ball.coord.dx, 0) : state
 }
 
 const moveBallRight = (state: State): State => {
   return ballCanMoveRight(state) ? moveBall(state, state.ball.coord.dx, 0) : state
+}
+
+const jumpBall = (state: State): State => {
+  const jumpBallAux = (state: State) => {
+    const changeBallSpeed = {
+      ...state.ball,
+      coord: {
+        ...state.ball.coord,
+        dy: state.ball.coord.dy - conf.ACCELERATION_CHUTE * 10
+      },
+      jumping: true
+    }
+    console.log("jumping: " + changeBallSpeed.coord.dy);
+
+    return { ...state, ball: changeBallSpeed }
+  }
+
+  return ballCanJump(state) ? jumpBallAux(state) : state
+}
+
+const jumpBall2 = (state: State): State => {
+  const newState: State = moveBallUp(state);
+  return newState
 }
 
 function ballCanMoveLeft(state: State) {
@@ -190,3 +184,18 @@ function ballCanMoveDown(state: State) {
   const limitY: number = state.size.height
   return currentPos.y + conf.RADIUS + currentPos.dy <= limitY
 }
+function ballCanJump(state: State) {
+  return true;
+}
+
+const applyGravitation = (state: State) => {
+  if (ballCanMoveDown(state))
+    return fallBall(state)
+  else {
+    if (state.ball.jumping)
+      return state
+    return stopFalling(state)
+  }
+}
+
+
