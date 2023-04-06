@@ -1,6 +1,6 @@
 import * as conf from './conf'
 type Coord = { x: number; y: number; dx: number; dy: number }
-type Ball = { coord: Coord; life: number; jumping: boolean }
+export type Ball = { coord: Coord; life: number; jumping: boolean }
 type Rect = { coord: Coord, height: number; width: number }
 type Size = { height: number; width: number }
 
@@ -58,60 +58,6 @@ const isBallInCanvas = (size: Size, newBall: Ball) => {
 
   return condDown && condLeft && condRight && condUp;
 }
-
-/*
-const ballCanMoveLeft = (state: State) => {
-  const ball: Ball = state.ball;
-  const currentPos: Coord = ball.coord;
-  return currentPos.x - conf.RADIUS - currentPos.dx >= 0
-}
-
-const ballCanMoveRight = (state: State) => {
-  const ball: Ball = state.ball;
-  const currentPos: Coord = ball.coord;
-  const limitX: number = state.size.width
-  return currentPos.x + conf.RADIUS + currentPos.dx <= limitX
-}
-
-const ballCanMoveUp = (state: State) => {
-  const ball: Ball = state.ball;
-  const currentPos: Coord = ball.coord;
-  return currentPos.y - conf.RADIUS - currentPos.dy >= 0
-}
-
-const ballCanMoveDown = (state: State) => {
-  const ball: Ball = state.ball;
-  const currentPos: Coord = ball.coord;
-  const limitY: number = state.size.height
-  return currentPos.y + conf.RADIUS + currentPos.dy <= limitY
-}
-*/
-
-export const keyDown =
-  (state: State) =>
-    (event: KeyboardEvent): State => {
-      //event.preventDefault()
-      let newState: State;
-      const keyName: string = event.key;
-      switch (keyName) {
-        case "ArrowUp":
-          break;
-        case "ArrowDown":
-          break;
-        case "ArrowLeft":
-          break;
-        case "ArrowRight":
-          break;
-        case " ":
-          console.log("La balle saute");
-          break;
-
-        default:
-          newState = state
-          break;
-      }
-      return state
-    }
 
 export const endOfGame = (state: State): boolean => true
 export const step = iterate

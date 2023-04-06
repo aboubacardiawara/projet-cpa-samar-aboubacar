@@ -1,8 +1,12 @@
 import * as conf from './conf'
-import { useRef, useEffect } from 'react'
-import { State, step, endOfGame, Element, keyDown, } from './state'
+import { useRef, useEffect, MutableRefObject } from 'react'
+import { State, step, endOfGame, Element, Ball } from './state'
+
 import { render } from './renderer'
 import { CONFIG } from '../../config/game/samples/empty'
+import { keyDown } from './keyboard'
+
+var accelerationIntervallId: string | number | NodeJS.Timer | undefined;
 
 const loadObstacles = function () {
   let rectangles: Element[] = []
@@ -69,12 +73,37 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
     if (!state.current.endOfGame) requestAnimationFrame(() => iterate(ctx))
   }
 
-
-
-  const onKeyDown = (e: KeyboardEvent) => {
+  const onKeyDown2 = (e: KeyboardEvent) => {
     state.current = keyDown(state.current)(e);
   }
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    accelerationIntervallId = setInterval(() => {
+      console.log("... appui en cours");
+      
+      state.current = acceleration(state);
+    }, 50)
+  }
+
+  const acceleration = (state: MutableRefObject<State>): State => {
+    const newBall: Ball = {
+      ...state.current.ball,
+      coord: {
+        ...state.current.ball.coord,
+        dx: state.current.ball.coord.dx + 1
+      }
+    }
+
+    return {
+      ...state.current,
+      ball: newBall
+    }
+  }
+
+
+
   const onKeyUp = (e: KeyboardEvent) => {
+    clearInterval(accelerationIntervallId);
     state.current = keyDown(state.current)(e) // to do
   }
 
@@ -105,7 +134,7 @@ function initBall() {
       x: 100,
       y: 100,
       dx: 0,
-      dy: -5,
+      dy: 0,
     },
     jumping: true
   }
