@@ -122,7 +122,8 @@ const stopFalling = (state: State) => {
     ...state.ball,
     coord: {
       ...state.ball.coord,
-      dy: 0
+      dy: 0,
+      jumping: false
     }
   }
   return { ...state, ball: changeBallSpeed }
@@ -185,15 +186,14 @@ function ballCanMoveDown(state: State) {
   return currentPos.y + conf.RADIUS + currentPos.dy <= limitY
 }
 function ballCanJump(state: State) {
-  return true;
+  return true
+  return !state.ball.jumping
 }
 
 const applyGravitation = (state: State) => {
   if (ballCanMoveDown(state))
     return fallBall(state)
   else {
-    if (state.ball.jumping)
-      return state
     return stopFalling(state)
   }
 }

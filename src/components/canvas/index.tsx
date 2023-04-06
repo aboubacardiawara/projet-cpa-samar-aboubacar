@@ -113,8 +113,8 @@ function initBall() {
       x: 100,
       y: 100,
       dx: 10,
-      dy: 10,
+      dy: 0,
     },
-    jumping: false
+    jumping: true
   }
 }
