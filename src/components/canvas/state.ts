@@ -16,7 +16,23 @@ export type State = {
 
 const iterate = (state: State) => {
   const newState: State = moveBall(state)
-  return newState
+  console.log("velocity: "+newState.ball.coord.dx);
+  const res: State = appliqueForceDeFrottements(newState)
+  return res;
+}
+
+const appliqueForceDeFrottements = (state: State): State => {
+  const newBall: Ball = {
+    ...state.ball,
+    coord: {
+      ...state.ball.coord,
+      dx: state.ball.coord.dx <= 0 ? 0 : 0
+    }
+  }
+  return {
+    ...state,
+    ball: newBall
+  }
 }
 
 const moveBall = (state: State) => {

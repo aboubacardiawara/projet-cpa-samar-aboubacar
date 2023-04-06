@@ -20,7 +20,7 @@ export const keyDown =
                     newState = state
                     break;
             }
-            return newState
+            return state
         }
 
 const handleLeftClick = (state: State): State => {
