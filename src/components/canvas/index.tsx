@@ -7,7 +7,6 @@ import { CONFIG } from '../../config/game/samples/empty'
 import { keyDown } from './keyboard'
 
 var accelerationIntervallId: string | number | NodeJS.Timer | undefined;
-
 const loadObstacles = function () {
   let rectangles: Element[] = []
 
@@ -78,19 +77,33 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
   }
 
   const onKeyDown = (e: KeyboardEvent) => {
-    accelerationIntervallId = setInterval(() => {
-      console.log("... appui en cours");
-      
-      state.current = acceleration(state);
-    }, 50)
+    e.preventDefault();
+    const keyName: string = e.key;
+    switch (keyName) {
+      case "ArrowLeft":
+        accelerationIntervallId = setInterval(() => {
+          console.log("->");
+          state.current = acceleration(state, - conf.ACCELARATION_HORIZ);
+        }, conf.DELAY_ACCELERATION)
+        break;
+      case "ArrowRight":
+        accelerationIntervallId = setInterval(() => {
+          console.log("<-");
+          state.current = acceleration(state, conf.ACCELARATION_HORIZ);
+        }, conf.DELAY_ACCELERATION)
+        break;
+      default:
+        break;
+    }
+
   }
 
-  const acceleration = (state: MutableRefObject<State>): State => {
+  const acceleration = (state: MutableRefObject<State>, value: number): State => {
     const newBall: Ball = {
       ...state.current.ball,
       coord: {
         ...state.current.ball.coord,
-        dx: state.current.ball.coord.dx + 1
+        dx: state.current.ball.coord.dx + value
       }
     }
 
