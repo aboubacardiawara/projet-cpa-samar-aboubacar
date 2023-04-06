@@ -1,6 +1,6 @@
 import * as conf from './conf'
 import { useRef, useEffect } from 'react'
-import { State, step, mouseMove, endOfGame, Element, click, keyDown, keyUp } from './state'
+import { State, step, endOfGame, Element, keyDown, } from './state'
 import { render } from './renderer'
 import { CONFIG } from '../../config/game/samples/empty'
 
@@ -69,19 +69,13 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
     if (!state.current.endOfGame) requestAnimationFrame(() => iterate(ctx))
   }
 
-  const onMove = (e: PointerEvent) => {
-    state.current = mouseMove(state.current)(e)
-  }
 
-  const onclick = (e: PointerEvent) => {
-    state.current = click(state.current)(e)
-  }
 
   const onKeyDown = (e: KeyboardEvent) => {
     state.current = keyDown(state.current)(e);
   }
   const onKeyUp = (e: KeyboardEvent) => {
-    state.current = keyUp(state.current)(e)
+    state.current = keyDown(state.current)(e) // to do
   }
 
 
@@ -91,14 +85,12 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
       document.addEventListener('keyup', onKeyUp);
       document.addEventListener('keydown', onKeyDown);
       ref.current.addEventListener('click', onclick)
-      ref.current.addEventListener('mousemove', onMove)
     }
     return () => {
 
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);
       ref.current.removeEventListener('click', onclick)
-      ref.current.removeEventListener('mousemove', onMove)
     }
   }, [])
   return <canvas {...{ height, width, ref }} />
@@ -112,8 +104,8 @@ function initBall() {
     coord: {
       x: 100,
       y: 100,
-      dx: 10,
-      dy: 0,
+      dx: 0,
+      dy: -5,
     },
     jumping: true
   }
