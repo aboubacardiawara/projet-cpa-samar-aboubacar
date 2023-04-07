@@ -1,6 +1,6 @@
 import * as conf from './conf'
 import { useRef, useEffect, MutableRefObject } from 'react'
-import { State, step, endOfGame, Element, Ball } from './state'
+import { State, step, endOfGame, Element, Ball, Direction } from './state'
 
 import { render } from './renderer'
 import { CONFIG } from '../../config/game/samples/empty'
@@ -100,6 +100,7 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
 export default Canvas
 
 function initBall() {
+  const sens: Direction = "nothing"
   return {
     life: conf.BALLLIFE,
     coord: {
@@ -109,7 +110,8 @@ function initBall() {
       dy: 0,
     },
     jumping: false,
-    acceleration: 0
+    acceleration: 0,
+    direction: sens
 
   }
 }

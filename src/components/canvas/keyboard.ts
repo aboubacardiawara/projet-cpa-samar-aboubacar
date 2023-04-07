@@ -27,7 +27,8 @@ export const keyDown =
 const handleLeftClick = (state: State): State => {
     const newBall: Ball = {
         ...state.ball,
-        acceleration: -ACCELARATION_HORIZ
+        acceleration: -ACCELARATION_HORIZ,
+        direction: "left"
     }
     return {
         ...state,
@@ -38,7 +39,9 @@ const handleLeftClick = (state: State): State => {
 const handleRightClick = (state: State): State => {
     const newBall: Ball = {
         ...state.ball,
-        acceleration: ACCELARATION_HORIZ
+        acceleration: ACCELARATION_HORIZ,
+        direction: "right"
+        
     }
     return {
         ...state,

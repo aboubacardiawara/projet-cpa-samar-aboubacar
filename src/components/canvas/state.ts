@@ -1,6 +1,7 @@
 import * as conf from './conf'
 type Coord = { x: number; y: number; dx: number; dy: number }
-export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number }
+export type Direction = "left" | "right" | "nothing"
+export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction }
 type Rect = { coord: Coord, height: number; width: number }
 type Size = { height: number; width: number }
 
@@ -16,25 +17,53 @@ export type State = {
 
 export const step = (state: State) => {
   const newState: State = moveBall(state)
-  console.log("velocity: "+newState.ball.coord.dx);
+  console.log("velocity: " + newState.ball.coord.dx);
   return state.ball.acceleration !== 0 ? newState : ralentir(newState);
+}
+
+export const isMovingLeft = (direction: Direction): boolean => {
+  return direction === "left"
+}
+
+export const isNotMoving = (direction: Direction): boolean => {
+  return direction === "nothing"
+}
+
+export const isMovingRight = (direction: Direction): boolean => {
+  return direction === "right"
 }
 
 const ralentir = (state: State): State => {
   console.log("Ralentir");
-  
+  const direction = state.ball.direction
   const currentDx = state.ball.coord.dx
+  let newDx: number;
+  // currentDx <= 0 ? 0 : isMovingRight(direction) ? currentDx - conf.ACCELARATION_HORIZ : currentDx + conf.ACCELARATION_HORIZ
+
+  if (isMovingRight(direction)) {
+    if (currentDx <= 0) {
+      newDx = 0
+    } else {
+      newDx = currentDx - conf.ACCELARATION_HORIZ
+    }
+  } else  {
+    if (currentDx >= 0) {
+      newDx = 0
+    } else {
+      newDx = currentDx + conf.ACCELARATION_HORIZ
+    }
+  } 
   const newBall: Ball = {
-      ...state.ball,
-      coord: {
-          ...state.ball.coord,
-          dx: currentDx <= 0 ? 0 : currentDx - conf.ACCELARATION_HORIZ
-      },
-      acceleration: 0
+    ...state.ball,
+    coord: {
+      ...state.ball.coord,
+      dx: newDx
+    },
+    acceleration: 0
   }
   return {
-      ...state,
-      ball: newBall
+    ...state,
+    ball: newBall
   }
 }
 
