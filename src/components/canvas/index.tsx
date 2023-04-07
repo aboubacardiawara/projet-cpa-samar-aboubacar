@@ -104,8 +104,8 @@ function initBall() {
   return {
     life: conf.BALLLIFE,
     coord: {
-      x: 100,
-      y: 100,
+      x: 200,
+      y: 400,
       dx: 0,
       dy: 0,
     },

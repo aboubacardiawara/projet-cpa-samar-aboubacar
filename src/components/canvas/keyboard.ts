@@ -1,5 +1,5 @@
 import { ACCELARATION_HORIZ } from "./conf";
-import { State, Ball } from "./state";
+import { State, Ball, changeBallVelocity } from "./state";
 
 export const keyDown =
     (state: State) =>
@@ -50,7 +50,12 @@ const handleRightClick = (state: State): State => {
 }
 
 const handleSpaceClick = (state: State): State => {
-    return state;
+    const ball:Ball = state.ball
+    const newBall: Ball = changeBallVelocity(state.ball, {dx:ball.coord.dx, dy:-10})
+    return {
+        ...state,
+        ball: newBall
+    }
 }
 
 

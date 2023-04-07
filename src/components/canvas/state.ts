@@ -29,6 +29,7 @@ export const isNotMoving = (direction: Direction): boolean => {
   return direction === "nothing"
 }
 
+
 export const isMovingRight = (direction: Direction): boolean => {
   return direction === "right"
 }
@@ -108,6 +109,18 @@ const isBallInCanvas = (size: Size, newBall: Ball) => {
   const condRight: boolean = (x + r) <= limitX;
 
   return condDown && condLeft && condRight && condUp;
+}
+
+export const changeBallVelocity = (ball: Ball, newVelocity: any): Ball => {
+  return {
+    ...ball,
+    coord: {
+      ...ball.coord,
+      dx: newVelocity.dx,
+      dy: newVelocity.dy
+
+    }
+  }
 }
 
 export const endOfGame = (state: State): boolean => true
