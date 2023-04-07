@@ -18,7 +18,19 @@ export type State = {
 export const step = (state: State) => {
   const newState: State = moveBall(state)
   console.log("velocity: " + newState.ball.coord.dx);
-  return state.ball.acceleration !== 0 ? newState : ralentir(newState);
+  const resHor: State = state.ball.acceleration !== 0 ? newState : ralentir(newState);
+  const resVert: State = newton(resHor)
+
+  return resVert
+}
+
+const newton = (state: State): State => {
+  const ball: Ball = state.ball
+  const newBall: Ball = changeBallVelocity(ball, {dx:ball.coord.dx, dy: ball.coord.dy+conf.ACCELERATION_CHUTE})
+  return {
+    ...state,
+    ball: newBall
+  }
 }
 
 export const isMovingLeft = (direction: Direction): boolean => {
@@ -47,13 +59,13 @@ const ralentir = (state: State): State => {
     } else {
       newDx = currentDx - conf.ACCELARATION_HORIZ
     }
-  } else  {
+  } else {
     if (currentDx >= 0) {
       newDx = 0
     } else {
       newDx = currentDx + conf.ACCELARATION_HORIZ
     }
-  } 
+  }
   const newBall: Ball = {
     ...state.ball,
     coord: {

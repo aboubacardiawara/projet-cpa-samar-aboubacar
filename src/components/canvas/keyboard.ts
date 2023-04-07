@@ -51,7 +51,7 @@ const handleRightClick = (state: State): State => {
 
 const handleSpaceClick = (state: State): State => {
     const ball:Ball = state.ball
-    const newBall: Ball = changeBallVelocity(state.ball, {dx:ball.coord.dx, dy:-10})
+    const newBall: Ball = changeBallVelocity(state.ball, {dx:ball.coord.dx, dy:-15})
     return {
         ...state,
         ball: newBall
