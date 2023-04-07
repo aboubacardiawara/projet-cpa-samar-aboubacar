@@ -17,21 +17,24 @@ export type State = {
 export const step = (state: State) => {
   const newState: State = moveBall(state)
   console.log("velocity: "+newState.ball.coord.dx);
-  //const res: State = appliqueForceDeFrottements(newState)
-  return newState;
+  return state.ball.acceleration !== 0 ? newState : ralentir(newState);
 }
 
-const appliqueForceDeFrottements = (state: State): State => {
+const ralentir = (state: State): State => {
+  console.log("Ralentir");
+  
+  const currentDx = state.ball.coord.dx
   const newBall: Ball = {
-    ...state.ball,
-    coord: {
-      ...state.ball.coord,
-      dx: state.ball.coord.dx <= 0 ? 0 : 0
-    }
+      ...state.ball,
+      coord: {
+          ...state.ball.coord,
+          dx: currentDx <= 0 ? 0 : currentDx - conf.ACCELARATION_HORIZ
+      },
+      acceleration: 0
   }
   return {
-    ...state,
-    ball: newBall
+      ...state,
+      ball: newBall
   }
 }
 

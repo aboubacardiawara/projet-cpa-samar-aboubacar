@@ -60,26 +60,11 @@ export const keyUp =
 
 const stopBall = (state: State): State => {
     console.log("stop the ball");
-
     const newBall: Ball = {
         ...state.ball,
         coord: {
             ...state.ball.coord,
-            dx: 0
         },
-        acceleration: 0
-    }
-    return {
-        ...state,
-        ball: newBall
-    }
-}
-
-const stopBall2 = (state: State): State => {
-    console.log("stop the ball");
-
-    const newBall: Ball = {
-        ...state.ball,
         acceleration: 0
     }
     return {
