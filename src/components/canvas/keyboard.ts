@@ -1,3 +1,4 @@
+import { ACCELARATION_HORIZ } from "./conf";
 import { State, Ball } from "./state";
 
 export const keyDown =
@@ -24,13 +25,20 @@ export const keyDown =
         }
 
 const handleLeftClick = (state: State): State => {
-    return state;
+    const newBall: Ball = {
+        ...state.ball,
+        acceleration: -ACCELARATION_HORIZ
+    }
+    return {
+        ...state,
+        ball: newBall
+    }
 }
 
 const handleRightClick = (state: State): State => {
     const newBall: Ball = {
         ...state.ball,
-        accelerating: true
+        acceleration: ACCELARATION_HORIZ
     }
     return {
         ...state,
@@ -40,4 +48,42 @@ const handleRightClick = (state: State): State => {
 
 const handleSpaceClick = (state: State): State => {
     return state;
+}
+
+
+export const keyUp =
+    (state: State) =>
+        (event: KeyboardEvent): State => {
+            event.preventDefault()
+            return stopBall(state)
+        }
+
+const stopBall = (state: State): State => {
+    console.log("stop the ball");
+
+    const newBall: Ball = {
+        ...state.ball,
+        coord: {
+            ...state.ball.coord,
+            dx: 0
+        },
+        acceleration: 0
+    }
+    return {
+        ...state,
+        ball: newBall
+    }
+}
+
+const stopBall2 = (state: State): State => {
+    console.log("stop the ball");
+
+    const newBall: Ball = {
+        ...state.ball,
+        acceleration: 0
+    }
+    return {
+        ...state,
+        ball: newBall
+    }
 }

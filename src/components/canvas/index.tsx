@@ -4,9 +4,8 @@ import { State, step, endOfGame, Element, Ball } from './state'
 
 import { render } from './renderer'
 import { CONFIG } from '../../config/game/samples/empty'
-import { keyDown } from './keyboard'
+import { keyDown, keyUp } from './keyboard'
 
-var accelerationIntervallId: NodeJS.Timer;
 const loadObstacles = function () {
   let rectangles: Element[] = []
 
@@ -76,62 +75,8 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
     state.current = keyDown(state.current)(e);
   }
 
-  const onKeyDown3 = (e: KeyboardEvent) => {
-    e.preventDefault();
-    const keyName: string = e.key;
-    switch (keyName) {
-      case "ArrowLeft":
-        accelerationIntervallId = setInterval(() => {
-          //console.log("acceleration [left]");
-          
-          state.current = acceleration(state, - conf.ACCELARATION_HORIZ);
-        }, conf.DELAY_ACCELERATION)
-        break;
-      case "ArrowRight":
-        accelerationIntervallId = setInterval(() => {
-          //console.log("acceleration [right]");
-          state.current = acceleration(state, conf.ACCELARATION_HORIZ);
-        }, conf.DELAY_ACCELERATION)
-        break;
-      default:
-        break;
-    }
-
-  }
-
-  const acceleration = (state: MutableRefObject<State>, value: number): State => {
-    const currentDx: number = state.current.ball.coord.dx;
-    const newBall: Ball = {
-      ...state.current.ball,
-      coord: {
-        ...state.current.ball.coord,
-        dx: Math.abs(currentDx) < 10 ? currentDx + value  : currentDx
-      }
-    }
-
-    return {
-      ...state.current,
-      ball: newBall
-    }
-  }
-
-
-
   const onKeyUp = (e: KeyboardEvent) => {
-    e.preventDefault();
-    console.log("arrete toi: " + accelerationIntervallId);
-    clearInterval(accelerationIntervallId);
-    //state.current = keyUp(state.current)(e) // to do
-    state.current = {
-      ...state.current,
-      ball: {
-        ...state.current.ball,
-        coord: {
-          ...state.current.ball.coord,
-          dx: 0
-        }
-      }
-    }
+    state.current = keyUp(state.current)(e);
   }
 
 
@@ -164,7 +109,7 @@ function initBall() {
       dy: 0,
     },
     jumping: false,
-    accelerating: false
+    acceleration: 0
 
   }
 }
