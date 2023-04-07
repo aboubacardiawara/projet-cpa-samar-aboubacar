@@ -1,4 +1,4 @@
-import { State } from "./state";
+import { State, Ball } from "./state";
 
 export const keyDown =
     (state: State) =>
@@ -20,7 +20,7 @@ export const keyDown =
                     newState = state
                     break;
             }
-            return state
+            return newState
         }
 
 const handleLeftClick = (state: State): State => {
@@ -28,7 +28,14 @@ const handleLeftClick = (state: State): State => {
 }
 
 const handleRightClick = (state: State): State => {
-    return state;
+    const newBall: Ball = {
+        ...state.ball,
+        accelerating: true
+    }
+    return {
+        ...state,
+        ball: newBall
+    }
 }
 
 const handleSpaceClick = (state: State): State => {

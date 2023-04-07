@@ -6,7 +6,7 @@ import { render } from './renderer'
 import { CONFIG } from '../../config/game/samples/empty'
 import { keyDown } from './keyboard'
 
-var accelerationIntervallId: string | number | NodeJS.Timer | undefined;
+var accelerationIntervallId: NodeJS.Timer;
 const loadObstacles = function () {
   let rectangles: Element[] = []
 
@@ -72,23 +72,24 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
     if (!state.current.endOfGame) requestAnimationFrame(() => iterate(ctx))
   }
 
-  const onKeyDown2 = (e: KeyboardEvent) => {
+  const onKeyDown = (e: KeyboardEvent) => {
     state.current = keyDown(state.current)(e);
   }
 
-  const onKeyDown = (e: KeyboardEvent) => {
+  const onKeyDown3 = (e: KeyboardEvent) => {
     e.preventDefault();
     const keyName: string = e.key;
     switch (keyName) {
       case "ArrowLeft":
         accelerationIntervallId = setInterval(() => {
-          console.log("->");
+          //console.log("acceleration [left]");
+          
           state.current = acceleration(state, - conf.ACCELARATION_HORIZ);
         }, conf.DELAY_ACCELERATION)
         break;
       case "ArrowRight":
         accelerationIntervallId = setInterval(() => {
-          console.log("<-");
+          //console.log("acceleration [right]");
           state.current = acceleration(state, conf.ACCELARATION_HORIZ);
         }, conf.DELAY_ACCELERATION)
         break;
@@ -99,11 +100,12 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
   }
 
   const acceleration = (state: MutableRefObject<State>, value: number): State => {
+    const currentDx: number = state.current.ball.coord.dx;
     const newBall: Ball = {
       ...state.current.ball,
       coord: {
         ...state.current.ball.coord,
-        dx: state.current.ball.coord.dx + value
+        dx: Math.abs(currentDx) < 10 ? currentDx + value  : currentDx
       }
     }
 
@@ -116,16 +118,28 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
 
 
   const onKeyUp = (e: KeyboardEvent) => {
+    e.preventDefault();
+    console.log("arrete toi: " + accelerationIntervallId);
     clearInterval(accelerationIntervallId);
-    state.current = keyDown(state.current)(e) // to do
+    //state.current = keyUp(state.current)(e) // to do
+    state.current = {
+      ...state.current,
+      ball: {
+        ...state.current.ball,
+        coord: {
+          ...state.current.ball.coord,
+          dx: 0
+        }
+      }
+    }
   }
 
 
   useEffect(() => {
     if (ref.current) {
       initCanvas(iterate)(ref.current)
-      document.addEventListener('keyup', onKeyUp);
       document.addEventListener('keydown', onKeyDown);
+      document.addEventListener('keyup', onKeyUp);
       ref.current.addEventListener('click', onclick)
     }
     return () => {
@@ -149,6 +163,8 @@ function initBall() {
       dx: 0,
       dy: 0,
     },
-    jumping: true
+    jumping: false,
+    accelerating: false
+
   }
 }

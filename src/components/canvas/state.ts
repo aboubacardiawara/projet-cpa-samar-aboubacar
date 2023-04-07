@@ -1,6 +1,7 @@
 import * as conf from './conf'
+import { ACCELARATION_HORIZ, VITESSE_MAX } from './conf';
 type Coord = { x: number; y: number; dx: number; dy: number }
-export type Ball = { coord: Coord; life: number; jumping: boolean }
+export type Ball = { coord: Coord; life: number; jumping: boolean, accelerating: boolean }
 type Rect = { coord: Coord, height: number; width: number }
 type Size = { height: number; width: number }
 
@@ -16,9 +17,9 @@ export type State = {
 
 const iterate = (state: State) => {
   const newState: State = moveBall(state)
-  console.log("velocity: "+newState.ball.coord.dx);
-  const res: State = appliqueForceDeFrottements(newState)
-  return res;
+  //console.log("velocity: "+newState.ball.coord.dx);
+  //const res: State = appliqueForceDeFrottements(newState)
+  return newState;
 }
 
 const appliqueForceDeFrottements = (state: State): State => {
@@ -37,12 +38,15 @@ const appliqueForceDeFrottements = (state: State): State => {
 
 const moveBall = (state: State) => {
   const ball = state.ball
+  const currentDx = ball.coord.dx;
+  const newDx: number = ball.accelerating? (currentDx < VITESSE_MAX ? currentDx + ACCELARATION_HORIZ : currentDx) : currentDx
   const newBall: Ball = {
     ...ball,
     coord: {
       ...ball.coord,
-      x: ball.coord.x + ball.coord.dx,
-      y: ball.coord.y + ball.coord.dy
+      x: ball.coord.x + newDx,
+      y: ball.coord.y + ball.coord.dy,
+      dx: newDx
     }
   }
   const newState: State = {
