@@ -8,7 +8,7 @@ export const CONFIG = {
             obstacles: [
                 {
                     type: "wall", 
-                    dimensions: [80, MAX_Y-40, COTE*5, COTE],
+                    dimensions: [80, MAX_Y-40, COTE*0, COTE],
                 },
             ],
             ressources: []

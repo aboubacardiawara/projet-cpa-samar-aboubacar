@@ -47,7 +47,7 @@ const auSol = (state: State): boolean => {
 }
 
 const blocDessous = (state: State): number => {
-  return 40
+  return 0
 }
 
 const arreteNewton = (state: State): State => {
