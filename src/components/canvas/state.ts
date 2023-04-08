@@ -46,8 +46,44 @@ const auSol = (state: State): boolean => {
   return (y + r) === limitY - blocDessous(state);
 }
 
+const blocDessousNaif = (state: State): number => {
+  return 40 * 6
+}
+
 const blocDessous = (state: State): number => {
-  return 0
+  const walls: Array<Rect> = state.walls.filter(w => canSupportBall(w, state.ball))
+  const candidatWall: Rect = maxWallInHeight(state, walls)
+  const res: number = distanceToBottom(state, candidatWall)
+  console.log(res);
+  return res
+}
+
+const distanceToBottom = (state:State, wall: Rect) : number => {
+  return state.size.height - wall.coord.y
+}
+
+const maxWallInHeight = (state: State, walls: Array<Rect>): Rect => {
+  let res: Rect = walls[0];
+  for (let index = 0; index < walls.length; index++) {
+    const element = walls[index];
+    if (distanceToBottom(state, element) > distanceToBottom(state, res)) {
+      res = element
+    }
+
+  }
+
+  return res;
+}
+
+/**
+ * Ameliorer: details rayon balle
+ * @param w 
+ * @param ball 
+ * @returns 
+ */
+const canSupportBall = (w: Rect, ball: Ball): boolean => {
+  // w.x < ball < w.x+w.width
+  return w.coord.x <= ball.coord.x && ball.coord.x <= w.coord.x + w.width
 }
 
 const arreteNewton = (state: State): State => {
@@ -84,7 +120,7 @@ export const isMovingRight = (direction: Direction): boolean => {
 }
 
 const ralentir = (state: State): State => {
-  console.log("Ralentir");
+  //console.log("Ralentir");
   const direction = state.ball.direction
   const currentDx = state.ball.coord.dx
   let newDx: number;

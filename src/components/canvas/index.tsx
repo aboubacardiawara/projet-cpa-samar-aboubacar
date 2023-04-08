@@ -3,7 +3,7 @@ import { useRef, useEffect, MutableRefObject } from 'react'
 import { State, step, endOfGame, Element, Ball, Direction } from './state'
 
 import { render } from './renderer'
-import { CONFIG } from '../../config/game/samples/empty'
+import { CONFIG } from '../../config/game/samples/brique'
 import { keyDown, keyUp } from './keyboard'
 
 const loadObstacles = function () {
@@ -105,7 +105,7 @@ function initBall() {
     life: conf.BALLLIFE,
     coord: {
       x: 200,
-      y: 400,
+      y: 300,
       dx: 0,
       dy: 0,
     },
