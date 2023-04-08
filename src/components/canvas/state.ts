@@ -34,7 +34,7 @@ const auSol = (state: State): boolean => {
 }
 
 const blocDessous = (state: State): number => {
-  return 0
+  return 300
 }
 
 const arreteNewton = (state: State): State => {
@@ -122,7 +122,7 @@ const moveBallVerti = (state: State) => {
     ball: newBall
   }
 
-  return isBallInCanvasVertical(state.size, newBall) ? newState : state
+  return isBallInCanvasVertical(newState) ? newState : state
 }
 
 const moveBallHoriz = (state: State) => {
@@ -142,7 +142,7 @@ const moveBallHoriz = (state: State) => {
     ball: newBall
   }
 
-  return isBallInCanvasHorital(state.size, newBall) ? newState : state
+  return isBallInCanvasHorital(newState) ? newState : state
 }
 
 /**
@@ -151,19 +151,23 @@ const moveBallHoriz = (state: State) => {
  * @param newBall 
  * @returns 
  */
-const isBallInCanvasVertical = (size: Size, newBall: Ball) => {
+const isBallInCanvasVertical = (state: State): boolean => {
+  const size: Size = state.size
+  const newBall: Ball = state.ball
   const r: number = conf.RADIUS;
   const limitY: number = size.height
   const y: number = newBall.coord.y
 
   // x, y: le centre du cercle
   const condUp: boolean = (y - r) >= 0;
-  const condDown: boolean = (y + r) <= limitY;
+  const condDown: boolean = (y + r) <= limitY - blocDessous(state);
 
   return condDown && condUp;
 }
 
-const isBallInCanvasHorital = (size: Size, newBall: Ball) => {
+const isBallInCanvasHorital = (state: State): boolean => {
+  const size: Size = state.size
+  const newBall: Ball = state.ball
   const r: number = conf.RADIUS;
   const limitX: number = size.width
   const x: number = newBall.coord.x
