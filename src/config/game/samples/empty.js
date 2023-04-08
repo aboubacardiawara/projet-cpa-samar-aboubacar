@@ -5,7 +5,12 @@ const MAX_Y = 800;
 export const CONFIG = {
     levels: [
         {
-            obstacles: [],
+            obstacles: [
+                {
+                    type: "wall", 
+                    dimensions: [80, MAX_Y-40, COTE*5, COTE],
+                },
+            ],
             ressources: []
         }
 

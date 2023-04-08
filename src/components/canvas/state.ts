@@ -1,5 +1,6 @@
 import { stat } from 'fs';
 import * as conf from './conf'
+import { notJumping } from './keyboard';
 type Coord = { x: number; y: number; dx: number; dy: number }
 export type Direction = "left" | "right" | "nothing"
 export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction }
@@ -16,12 +17,24 @@ export type State = {
   water: Array<Rect>
 }
 
+const enLair = (state: State): boolean => {
+  return !auSol(state)
+}
+
+const jumping = (state: State): State => {
+  return updateState(state, {
+    ...state.ball,
+    jumping: true
+  })
+}
+
 export const step = (state: State) => {
   const newState: State = moveBall(state)
   console.log(`velocity: (${newState.ball.coord.dx}, ${newState.ball.coord.dy})`);
-  const resVert: State = auSol(state) ? arreteNewton(newState) : newton(newState)
+  let resVert: State;
+  resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
+  resVert = enLair(resVert) ? jumping(resVert) : resVert
   const resHor: State = state.ball.acceleration !== 0 ? resVert : ralentir(resVert);
-  
 
   return resHor
 }
@@ -30,20 +43,21 @@ const auSol = (state: State): boolean => {
   const y: number = state.ball.coord.y;
   const r: number = conf.RADIUS;
   const limitY: number = state.size.height;
-  return (y + r) >= limitY - blocDessous(state);
+  return (y + r) === limitY - blocDessous(state);
 }
 
 const blocDessous = (state: State): number => {
-  return 300
+  return 40
 }
 
 const arreteNewton = (state: State): State => {
   const ball: Ball = state.ball
-  const newBall: Ball = changeBallVelocity(ball, { dx: ball.coord.dx, dy: 0 })
-  return updateState(state, newBall);
+  const newBall: Ball = changeBallVelocity(ball, { dx: ball.coord.dx, dy: ball.jumping ? ball.coord.dy : 0 })
+  const newState: State = updateState(state, newBall);
+  return notJumping(newState)
 }
 
-const updateState = (state: State, newBall: Ball): State => {
+export const updateState = (state: State, newBall: Ball): State => {
   return {
     ...state,
     ball: newBall
@@ -105,7 +119,8 @@ const ralentir = (state: State): State => {
 
 const moveBall = (state: State): State => {
   const deplacementHorizontal: State = moveBallHoriz(state);
-  return moveBallVerti(deplacementHorizontal);
+  const res: State = moveBallVerti(deplacementHorizontal);
+  return res;
 }
 
 const moveBallVerti = (state: State) => {
@@ -122,7 +137,20 @@ const moveBallVerti = (state: State) => {
     ball: newBall
   }
 
-  return isBallInCanvasVertical(newState) ? newState : state
+  return isBallInCanvasVertical(newState) ? newState : replaceVert(state)
+}
+
+const replaceVert = (state: State): State => {
+  const ball: Ball = state.ball;
+  const newBall: Ball = {
+    ...ball,
+    coord: {
+      ...ball.coord,
+      y: state.size.height - conf.RADIUS - blocDessous(state)
+    }
+
+  }
+  return updateState(state, newBall)
 }
 
 const moveBallHoriz = (state: State) => {
@@ -160,7 +188,7 @@ const isBallInCanvasVertical = (state: State): boolean => {
 
   // x, y: le centre du cercle
   const condUp: boolean = (y - r) >= 0;
-  const condDown: boolean = (y + r) <= limitY - blocDessous(state);
+  const condDown: boolean = (y + r) < limitY - blocDessous(state);
 
   return condDown && condUp;
 }
