@@ -45,11 +45,11 @@ export const replaceVert = (state: State): State => {
     return updateState(state, newBall)
 }
 
-const ballAtLeftBoundarie = (state: State): boolean => {
+export const ballAtLeftBoundarie = (state: State): boolean => {
     return state.ball.coord.x <= state.center.coord.x
 }
 
-const ballAtRightBoundarie = (state: State): boolean => {
+export const ballAtRightBoundarie = (state: State): boolean => {
     const x: number = state.center.coord.x;
     const w: number = state.center.width;
     return state.ball.coord.x >= x + w;

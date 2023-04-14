@@ -1,4 +1,4 @@
-import { Ball, changeBallVelocity } from "./ball";
+import { Ball, ballAtLeftBoundarie, ballAtRightBoundarie, changeBallVelocity } from "./ball";
 import { ACCELARATION_HORIZ } from "./conf";
 import { State, updateState } from "./state";
 
@@ -98,5 +98,22 @@ const stopBall = (state: State): State => {
 
 const stopScreen = (state: State): State => {
     state.centerAcceleration = 0;
+    return replaceBall(state);
+    
+}
+
+
+
+const replaceBall = (state: State): State => {
+    const newBall:Ball = state.ball;
+    const delta: number = 3;
+    if (ballAtLeftBoundarie(state)) {
+        newBall.coord.x += delta
+    } else if (ballAtRightBoundarie(state)) {
+        newBall.coord.x -= delta
+    } else {
+        return state
+    }
+    state.ball = newBall;
     return state;
 }
