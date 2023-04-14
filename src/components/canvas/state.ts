@@ -3,7 +3,7 @@ import * as conf from './conf'
 import { Coord } from './coord';
 import { Direction, isMovingRight } from './direction';
 import { notJumping } from './keyboard';
-type Rect = { coord: Coord, height: number; width: number }
+export type Rect = { coord: Coord, height: number; width: number }
 export type Size = { height: number; width: number }
 
 export type Element = { type: string, dimension: number[] }
@@ -11,6 +11,7 @@ export type Element = { type: string, dimension: number[] }
 export type State = {
   ball: Ball
   size: Size
+  center: Rect
   endOfGame: boolean
   walls: Array<Rect>
   water: Array<Rect>
@@ -28,14 +29,14 @@ const jumping = (state: State): State => {
 }
 
 export const step = (state: State) => {
-  const newState: State = moveBall(state)
-  console.log(`velocity: (${newState.ball.coord.dx}, ${newState.ball.coord.dy})`);
+  const newState: State = moveBall(state);
+  //onsole.log(`velocity: (${newState.ball.coord.dx}, ${newState.ball.coord.dy})`);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
   resVert = enLair(resVert) ? jumping(resVert) : resVert
   const resHor: State = state.ball.acceleration !== 0 ? resVert : ralentir(resVert);
 
-  return resHor
+  return moveScreen(resHor)
 }
 
 const auSol = (state: State): boolean => {
@@ -53,7 +54,7 @@ export const blocDessous = (state: State): number => {
   const walls: Array<Rect> = state.walls.filter(w => canSupportBall(w, state.ball))
   const candidatWall: Rect = maxWallInHeight(state, walls)
   const res: number = distanceToBottom(state, candidatWall)
-  console.log(res);
+  //console.log(res);
   return res
 }
 
@@ -139,6 +140,13 @@ const ralentir = (state: State): State => {
   }
 }
 
-
+const moveScreen = (state: State): State => {
+  const newState = {...state};
+  newState.walls.map((wal: Rect) => {
+    const newRect: Rect = {...wal};
+    newRect.coord.x += state.center.coord.dx;
+  })
+  return newState;
+}
 
 export const endOfGame = (state: State): boolean => true

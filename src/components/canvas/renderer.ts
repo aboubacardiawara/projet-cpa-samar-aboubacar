@@ -1,4 +1,5 @@
 import * as conf from './conf'
+import { Coord } from './coord'
 import { State } from './state'
 const COLORS = {
   RED: '#ff0000',
@@ -60,26 +61,37 @@ const drawWater = (
 ) => {
   ctx.beginPath()
   ctx.rect(x, y, w, h)
-  ctx.fillStyle = "blue"
+  ctx.fillStyle = "red"
+  ctx.fill()
+}
+const drawCenter = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number; },
+  w: number
+  , h: number,
+) => {
+  ctx.beginPath()
+  ctx.rect(x, y, w, h)
+  ctx.fillStyle = "grey"
   ctx.fill()
 }
 
 const drawRect = (
   ctx: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number; },
-  w : number 
-  , h :number,
+  w: number
+  , h: number,
 ) => {
   ctx.beginPath()
-  ctx.rect(x,y,w,h)
+  ctx.rect(x, y, w, h)
   var img = new Image()
   img.src = 'brick.png'
   var tempCanvas = document.createElement("canvas")
   const tCtx = tempCanvas.getContext("2d");
   tempCanvas.width = 40;
   tempCanvas.height = 40;
-  tCtx?.drawImage(img,0,0,img.width,img.height,0,0,40,40)
-  var brick= ctx.createPattern(tempCanvas, 'repeat') 
+  tCtx?.drawImage(img, 0, 0, img.width, img.height, 0, 0, 40, 40)
+  var brick = ctx.createPattern(tempCanvas, 'repeat')
   ctx.fillStyle = brick!
   ctx.fill()
 }
@@ -89,17 +101,24 @@ const computeColor = (life: number, maxLife: number, baseColor: string) =>
 export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   clear(ctx)
 
+  if (conf.DEBUG_ON) {
+    const center = state.center;
+    drawCenter(ctx, center.coord, center.width, center.height)
+  }
+
   const c = state.ball;
   drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.RED))
-  
+
 
   state.walls.map((r) =>
-  drawRect(ctx, r.coord,r.width,r.height),
+    drawRect(ctx, r.coord, r.width, r.height),
 
-  state.water.map((r) =>
-    drawWater(ctx, r.coord, r.width, r.height))
+    state.water.map((r) =>
+      drawWater(ctx, r.coord, r.width, r.height))
+  )
 
-)
+  
+
 
   if (state.endOfGame) {
     const text = 'END'

@@ -7,7 +7,25 @@ import { CONFIG } from '../../config/game/samples/brique'
 import { keyDown, keyUp } from './keyboard'
 import { Direction } from './direction'
 
-const loadObstacles = function () {
+const superloadObstacles = function () {
+  let rectangles: Element[] = []
+
+  for (let i = 0; i < 10; i++) {
+    CONFIG.levels[0].obstacles.forEach(obstacleData => {
+      const dim: number[] = [...obstacleData.dimensions];
+      console.log(`ecran ${i}, dim: ${dim}`);
+      dim[0] = dim[0] + i*conf.MAX_X;
+      console.log(`dim*: ${dim}`);
+      const element: Element = { type: obstacleData.type, dimension: dim }
+      rectangles.push(element)
+    })
+ 
+  }
+
+  return rectangles;
+}
+
+const loadObstaclesNormal = function () {
   let rectangles: Element[] = []
 
   CONFIG.levels[0].obstacles.forEach(obstacleData => {
@@ -16,6 +34,10 @@ const loadObstacles = function () {
   })
 
   return rectangles;
+}
+
+const loadObstacles = function () {
+  return superloadObstacles();
 }
 
 const initCanvas =
@@ -57,6 +79,7 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
   const initialState: State = {
     ball: initBall(),
     walls: initWalls(),
+    center: {coord: {dx:0, dy:0, x:480-40*2, y:0},  height:800, width:40*10}, 
     water: initWater(),
     size: { height, width },
     endOfGame: true,
