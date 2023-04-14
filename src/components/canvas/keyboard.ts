@@ -78,11 +78,11 @@ export const keyUp =
     (state: State) =>
         (event: KeyboardEvent): State => {
             event.preventDefault()
-            return stopBall(state)
+            return stopScreen(stopBall(state))
         }
 
 const stopBall = (state: State): State => {
-    console.log("stop the ball");
+    //console.log("stop the ball");
     const newBall: Ball = {
         ...state.ball,
         coord: {
@@ -94,4 +94,9 @@ const stopBall = (state: State): State => {
         ...state,
         ball: newBall
     }
+}
+
+const stopScreen = (state: State): State => {
+    state.centerAcceleration = 0;
+    return state;
 }

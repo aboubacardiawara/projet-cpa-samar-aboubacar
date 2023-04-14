@@ -12,6 +12,7 @@ export type State = {
   ball: Ball
   size: Size
   center: Rect
+  centerAcceleration: number
   endOfGame: boolean
   walls: Array<Rect>
   water: Array<Rect>
@@ -29,6 +30,8 @@ const jumping = (state: State): State => {
 }
 
 export const step = (state: State) => {
+  console.log(state.centerAcceleration);
+
   const newState: State = moveBall(state);
   //onsole.log(`velocity: (${newState.ball.coord.dx}, ${newState.ball.coord.dy})`);
   let resVert: State;
@@ -36,7 +39,7 @@ export const step = (state: State) => {
   resVert = enLair(resVert) ? jumping(resVert) : resVert
   const resHor: State = state.ball.acceleration !== 0 ? resVert : ralentir(resVert);
 
-  return moveScreen(resHor)
+  return state.centerAcceleration !== 0 ? moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
 }
 
 const auSol = (state: State): boolean => {
@@ -58,7 +61,7 @@ export const blocDessous = (state: State): number => {
   return res
 }
 
-const distanceToBottom = (state:State, wall: Rect) : number => {
+const distanceToBottom = (state: State, wall: Rect): number => {
   return state.size.height - wall.coord.y
 }
 
@@ -106,8 +109,9 @@ const newton = (state: State): State => {
   return updateState(state, newBall)
 }
 
+
+
 const ralentir = (state: State): State => {
-  //console.log("Ralentir");
   const direction = state.ball.direction
   const currentDx = state.ball.coord.dx
   let newDx: number;
@@ -140,13 +144,55 @@ const ralentir = (state: State): State => {
   }
 }
 
+const isMovingRightEcran = (ecran: Rect): boolean => {
+  return ecran.coord.dx > 0;
+}
+
+const isMovingLeftEcran = (ecran: Rect): boolean => {
+  return ecran.coord.dx < 0;
+}
+
+
+const ralentirEcran = (state: State): State => {
+  const currentDx = state.center.coord.dx;
+  let newDx: number;
+  if (isMovingRightEcran(state.center)) {
+    if (currentDx <= 0) {
+      newDx = 0
+    } else {
+      newDx = currentDx - conf.ACCELARATION_HORIZ
+    }
+  } else {
+    if (currentDx >= 0) {
+      newDx = 0
+    } else {
+      newDx = currentDx + conf.ACCELARATION_HORIZ
+    }
+  }
+
+  state.center.coord.dx = newDx;
+  return state;
+}
+
 const moveScreen = (state: State): State => {
-  const newState = {...state};
+  const newState = { ...state };
+  const center: Rect = state.center;
+  const currentDx = center.coord.dx;
+  const newDx: number = Math.abs(currentDx) < conf.VITESSE_MAX ? currentDx + state.centerAcceleration : currentDx
   newState.walls.map((wal: Rect) => {
-    const newRect: Rect = {...wal};
-    newRect.coord.x += state.center.coord.dx;
+    const newRect: Rect = { ...wal };
+    newRect.coord.x += newDx;
   })
-  return newState;
+
+  const newCenter: Rect = {
+    ...center,
+    coord: {
+      ...center.coord,
+      dx: newDx
+    }
+  }
+
+  return { ...newState, center: newCenter };
 }
 
 export const endOfGame = (state: State): boolean => true

@@ -15,7 +15,7 @@ export const moveBall = (state: State): State => {
 }
 
 export const moveBallVerti = (state: State) => {
-    console.log(`center dx: ${state.center.coord.dx}`);
+    //console.log(`center dx: ${state.center.coord.dx}`);
     const ball = state.ball
     const newBall: Ball = {
         ...ball,
@@ -57,13 +57,13 @@ const ballAtRightBoundarie = (state: State): boolean => {
 
 const moveScreenToTheRight = (state: State): State => {
     const newState: State = state;
-    newState.center.coord.dx = 10;
+    newState.centerAcceleration = conf.ACCELARATION_HORIZ;
     return newState;
 }
 
 const moveScreenToTheLeft = (state: State): State => {
     const newState: State = state;
-    newState.center.coord.dx = -10;
+    newState.centerAcceleration = -conf.ACCELARATION_HORIZ;
     return newState;
 }
 
@@ -73,17 +73,33 @@ const stopMovingScreen = (state: State): State => {
     return newState;
 }
 
+const arreteBall = (state: State): State => {
+    const  newBall:Ball = state.ball;
+    newBall.coord.dx = 0;
+    newBall.acceleration = 0;
+    //newBall.direction = "nothing";
+    return {...state, ball:newBall};
+}
+
+const isMovingRightBis = (ball: Ball):boolean => {
+    return ball.coord.dx > 0;
+}
+
+const isMovingLeftBis = (ball: Ball):boolean => {
+    return ball.coord.dx < 0;
+}
+
 export const moveBallHoriz = (state0: State) => {
     let state: State;
     if (isMovingRight(state0.ball.direction)) {
         if (ballAtRightBoundarie(state0)) {
-            state = moveScreenToTheLeft(state0);
+            state = arreteBall(moveScreenToTheLeft(state0));
         } else {
             state = state0;
         }
     } else if (isMovingLeft(state0.ball.direction)) {
         if (ballAtLeftBoundarie(state0)) {
-            state = moveScreenToTheRight(state0);
+            state = arreteBall(moveScreenToTheRight(state0));
         } else {
             state = state0;
         }
@@ -103,7 +119,7 @@ export const moveBallHoriz = (state0: State) => {
         }
     }
     if (newBall.coord.dx === 0) {
-        newBall.direction = "nothing"
+        //all.direction = "nothing"
     }
     const newState: State = {
         ...state,
