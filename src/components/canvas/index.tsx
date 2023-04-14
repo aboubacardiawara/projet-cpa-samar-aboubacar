@@ -1,10 +1,11 @@
 import * as conf from './conf'
 import { useRef, useEffect, MutableRefObject } from 'react'
-import { State, step, endOfGame, Element, Ball, Direction } from './state'
+import { State, step, endOfGame, Element} from './state'
 
 import { render } from './renderer'
 import { CONFIG } from '../../config/game/samples/brique'
 import { keyDown, keyUp } from './keyboard'
+import { Direction } from './direction'
 
 const loadObstacles = function () {
   let rectangles: Element[] = []

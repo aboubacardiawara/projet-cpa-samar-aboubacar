@@ -1,0 +1,1 @@
+export type Coord = { x: number; y: number; dx: number; dy: number }

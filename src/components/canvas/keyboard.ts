@@ -1,5 +1,6 @@
+import { Ball, changeBallVelocity } from "./ball";
 import { ACCELARATION_HORIZ } from "./conf";
-import { State, Ball, changeBallVelocity, updateState } from "./state";
+import { State, updateState } from "./state";
 
 export const keyDown =
     (state: State) =>
