@@ -42,16 +42,7 @@ const clear = (ctx: CanvasRenderingContext2D) => {
   ctx.fillRect(0, 0, width, height)
 }
 
-const drawCirle = (
-  ctx: CanvasRenderingContext2D,
-  { x, y }: { x: number; y: number },
-  color: string
-) => {
-  ctx.beginPath()
-  ctx.fillStyle = color
-  ctx.arc(x, y, conf.RADIUS, 0, 2 * Math.PI)
-  ctx.fill()
-}
+
 
 const drawWater = (
   ctx: CanvasRenderingContext2D,
@@ -95,6 +86,38 @@ const drawRect = (
   ctx.fillStyle = brick!
   ctx.fill()
 }
+
+const drawCirle = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number },
+  color: string
+) => {
+  ctx.beginPath()
+  ctx.fillStyle = color
+  ctx.arc(x, y, conf.RADIUS, 0, 2 * Math.PI)
+  ctx.fill()
+}
+
+const drawBounce = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number; },
+  id: number
+) => {
+  ctx.beginPath()
+  ctx.arc(x, y, conf.RADIUS, 0, 2 * Math.PI)
+  ctx.closePath()
+  ctx.save() // sauvegarder l'état courant du contexte
+  ctx.clip() // définir un masque circulaire
+  
+  var img = new Image()
+  img.src = `bounce${id}.png`
+  img.onload = () => {
+    ctx.drawImage(img, x - conf.RADIUS, y - conf.RADIUS, conf.RADIUS * 2, conf.RADIUS * 2)
+    ctx.restore() // restaurer l'état du contexte
+  }
+}
+
+
 const computeColor = (life: number, maxLife: number, baseColor: string) =>
   rgbaTorgb(baseColor, (maxLife - life) * (1 / maxLife))
 
@@ -107,8 +130,16 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   }
 
   const c = state.ball;
-  drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.RED))
-
+  let couleur;
+  if (c.imgid % 3 === 0) {
+    couleur = COLORS.RED;
+  } else if (c.imgid % 3 === 1) {
+    couleur = COLORS.GREEN;
+  } else {
+    couleur = COLORS.BLUE 
+  }
+  drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE));
+  //drawBounce(ctx, c.coord, 1);
 
   state.walls.map((r) =>
     drawRect(ctx, r.coord, r.width, r.height),
@@ -116,9 +147,6 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
     state.water.map((r) =>
       drawWater(ctx, r.coord, r.width, r.height))
   )
-
-  
-
 
   if (state.endOfGame) {
     const text = 'END'

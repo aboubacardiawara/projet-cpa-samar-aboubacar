@@ -77,7 +77,7 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
   const initialState: State = {
     ball: initBall(),
     walls: initWalls(),
-    center: {coord: {dx:0, dy:0, x:480-40*2, y:0},  height:800, width:40*10}, 
+    center: {coord: {dx:0, dy:0, x:480-40*5, y:0},  height:800, width:40*15}, 
     centerAcceleration: 0,
     water: initWater(),
     size: { height, width },
@@ -134,7 +134,7 @@ function initBall() {
     },
     jumping: false,
     acceleration: 0,
-    direction: sens
-
+    direction: sens,
+    imgid:0
   }
 }

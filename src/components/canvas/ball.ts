@@ -4,7 +4,7 @@ import { Rect, Size, State, blocDessous, updateState } from "./state";
 import * as conf from './conf'
 import { stat } from "fs";
 
-export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction }
+export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction, imgid:number}
 
 
 export const moveBall = (state: State): State => {
@@ -116,7 +116,8 @@ export const moveBallHoriz = (state0: State) => {
             ...ball.coord,
             x: ball.coord.x + newDx,
             dx: newDx
-        }
+        },
+        imgid: computeNewImgId(state) + ball.imgid
     }
     if (newBall.coord.dx === 0) {
         //all.direction = "nothing"
@@ -127,6 +128,13 @@ export const moveBallHoriz = (state0: State) => {
     }
 
     return isBallInCanvasHorital(newState) ? newState : state
+}
+
+const computeNewImgId = (state:State):number => {
+    if (state.centerAcceleration === 0 && state.ball.coord.dx == 0) {
+        return 0
+    }
+    return 1
 }
 
 /**
