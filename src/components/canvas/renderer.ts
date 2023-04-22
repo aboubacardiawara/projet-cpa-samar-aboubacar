@@ -1,3 +1,4 @@
+import { collisionCircleBox } from './collision'
 import * as conf from './conf'
 import { Coord } from './coord'
 import { State } from './state'
@@ -43,6 +44,18 @@ const clear = (ctx: CanvasRenderingContext2D) => {
 }
 
 
+const drawEnemies = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number },
+  w: number,
+  h: number
+) => {
+  ctx.beginPath()
+  ctx.rect(x, y, w, h)
+  ctx.fillStyle = "red"
+  ctx.fill()
+}
+
 
 const drawWater = (
   ctx: CanvasRenderingContext2D,
@@ -55,6 +68,7 @@ const drawWater = (
   ctx.fillStyle = "red"
   ctx.fill()
 }
+
 const drawCenter = (
   ctx: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number; },
@@ -108,7 +122,7 @@ const drawBounce = (
   ctx.closePath()
   ctx.save() // sauvegarder l'état courant du contexte
   ctx.clip() // définir un masque circulaire
-  
+
   var img = new Image()
   img.src = `bounce${id}.png`
   img.onload = () => {
@@ -131,25 +145,20 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
 
   const c = state.ball;
   let couleur;
-  if (c.imgid % 3 === 0) {
-    couleur = COLORS.RED;
-  } else if (c.imgid % 3 === 1) {
-    couleur = COLORS.GREEN;
-  } else {
-    couleur = COLORS.BLUE 
-  }
+  
   drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE));
-  //drawBounce(ctx, c.coord, 1);
 
   state.walls.map((r) =>
-    drawRect(ctx, r.coord, r.width, r.height),
+    drawRect(ctx, r.coord, r.width, r.height))
 
-    state.water.map((r) =>
-      drawWater(ctx, r.coord, r.width, r.height))
-  )
+  state.water.map((r) =>
+    drawWater(ctx, r.coord, r.width, r.height))
+
+  state.enemies.map((r) =>
+    drawEnemies(ctx, r.coord, r.width, r.height))
 
   if (state.endOfGame) {
-    const text = 'END'
+    const text = 'Game Over'
     ctx.font = '48px arial'
     ctx.strokeText(text, state.size.width / 2 - 200, state.size.height / 2)
   }

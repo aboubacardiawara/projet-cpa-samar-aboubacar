@@ -1,9 +1,9 @@
 import * as conf from './conf'
 import { useRef, useEffect, MutableRefObject } from 'react'
-import { State, step, endOfGame, Element} from './state'
+import { State, step, endOfGame, Element } from './state'
 
 import { render } from './renderer'
-import { CONFIG } from '../../config/game/samples/brique'
+import { CONFIG } from '../../config/game/samples/enemies'
 import { keyDown, keyUp } from './keyboard'
 import { Direction } from './direction'
 
@@ -13,11 +13,11 @@ const superloadObstacles = function () {
   for (let i = 0; i < 4; i++) {
     CONFIG.levels[0].obstacles.forEach(obstacleData => {
       const dim: number[] = [...obstacleData.dimensions];
-      dim[0] = dim[0] + i*conf.MAX_X;
+      dim[0] = dim[0] + i * conf.MAX_X;
       const element: Element = { type: obstacleData.type, dimension: dim }
       rectangles.push(element)
     })
- 
+
   }
 
   return rectangles;
@@ -62,8 +62,18 @@ const buildWater = (data: number[]) => (
   }
 )
 
+const buildEnemies = (data: number[]) => (
+  {
+    coord: { x: data[0], y: data[1], dx: 0, dy: 0 },
+    width: data[2],
+    height: data[3]
+  }
+)
+
+
 const isWall = (data: Element) => (data.type === 'wall')
 const isWater = (data: Element) => (data.type === 'water')
+const isEnemie = (data: Element) => (data.type === 'enemie')
 
 function initWater(): { coord: { x: number; y: number; dx: number; dy: number }; height: number; width: number }[] {
   return loadObstacles().filter(isWater).map((data: Element) => buildWater(data.dimension))
@@ -73,13 +83,19 @@ function initWalls(): { coord: { x: number; y: number; dx: number; dy: number };
   return loadObstacles().filter(isWall).map((data: Element) => buildWalls(data.dimension))
 }
 
+function initEnemies(): { coord: { x: number; y: number; dx: number; dy: number }; height: number; width: number }[] {
+  return loadObstacles().filter(isEnemie).map((data: Element) => buildEnemies(data.dimension))
+}
+
+
 const Canvas = ({ height, width }: { height: number; width: number }) => {
   const initialState: State = {
     ball: initBall(),
     walls: initWalls(),
-    center: {coord: {dx:0, dy:0, x:480-40*5, y:0},  height:800, width:40*15}, 
+    center: { coord: { dx: 0, dy: 0, x: 480 - 40 * 5, y: 0 }, height: 800, width: 40 * 15 },
     centerAcceleration: 0,
     water: initWater(),
+    enemies: initEnemies(),
     size: { height, width },
     endOfGame: true,
   }
@@ -89,7 +105,6 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
 
   const iterate = (ctx: CanvasRenderingContext2D) => {
     state.current = step(state.current)
-    state.current.endOfGame = !endOfGame(state.current)
     render(ctx)(state.current)
     if (!state.current.endOfGame) requestAnimationFrame(() => iterate(ctx))
   }
@@ -135,6 +150,6 @@ function initBall() {
     jumping: false,
     acceleration: 0,
     direction: sens,
-    imgid:0
+    imgid: 0
   }
 }

@@ -17,6 +17,7 @@ export type State = {
   endOfGame: boolean
   walls: Array<Rect>
   water: Array<Rect>
+  enemies: Array<Rect>
 }
 
 const enLair = (state: State): boolean => {
@@ -41,7 +42,13 @@ export const step = (state: State) => {
 
   const screenState: State = state.centerAcceleration !== 0 ? moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
 
-  return screenState;
+  return checkGameOver(screenState);
+}
+
+const checkGameOver = (state: State):State => {
+  const newState: State = state
+  newState.endOfGame = state.enemies.some(enemie => collisionCircleBox(state.ball, enemie))
+  return newState;
 }
 
 const auSol = (state: State): boolean => {
@@ -244,4 +251,4 @@ const moveScreen = (state: State): State => {
   return { ...newState, center: newCenter };
 }
 
-export const endOfGame = (state: State): boolean => true
+export const endOfGame = (state: State): boolean => state.endOfGame

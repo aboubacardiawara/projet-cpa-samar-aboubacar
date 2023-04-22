@@ -1,5 +1,5 @@
 export const FRICTION = 1
-export const RADIUS = 20
+export const RADIUS = 25
 export const MINMOVE = 0.1
 export const ACCELERATION_CHUTE = 0.5
 export const ACCELARATION_HORIZ = 0.08

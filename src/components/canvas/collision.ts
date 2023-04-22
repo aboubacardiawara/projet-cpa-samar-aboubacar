@@ -2,7 +2,7 @@ import { Ball } from "./ball";
 import { RADIUS } from "./conf";
 import { Rect } from "./state";
 
-export const collisionCircleBoxOriginal = (ball: Ball, rec: Rect): boolean => {
+export const collisionCircleBox = (ball: Ball, rec: Rect): boolean => {
 
     const circle = { x: ball.coord.x, y: ball.coord.y, radius: RADIUS }
     const box = { x: rec.coord.x, y: rec.coord.y, width: rec.width, height: rec.height }
@@ -32,7 +32,7 @@ export const collisionCircleBoxOriginal = (ball: Ball, rec: Rect): boolean => {
 }
 
 
-export const collisionCircleBox = (ball: Ball, rec: Rect): boolean => {
-    return collisionCircleBoxOriginal(ball, rec);
+export const collisionCircleBoxHorizontal = (ball: Ball, rec: Rect): boolean => {
+      return collisionCircleBox(ball, rec)
 }
 
