@@ -160,6 +160,6 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   if (state.endOfGame) {
     const text = 'Game Over'
     ctx.font = '48px arial'
-    ctx.strokeText(text, state.size.width / 2 - 200, state.size.height / 2)
+    ctx.strokeText(text, state.size.width / 2 - 100, state.size.height / 2)
   }
 }

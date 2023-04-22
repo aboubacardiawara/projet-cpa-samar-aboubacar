@@ -3,7 +3,7 @@ import { Direction, isMovingLeft, isMovingRight } from "./direction";
 import { Rect, Size, State, blocDessous, updateState } from "./state";
 import * as conf from './conf'
 import { stat } from "fs";
-import { collisionCircleBoxHorizontal } from "./collision";
+import { collisionCircleBox } from "./collision";
 
 export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction, imgid: number }
 
@@ -138,8 +138,8 @@ const arreteBallAndScreen = (state: State) : State => {
 
 const gestionCollisionHorizontal = (state: State): State => {
     state.walls.forEach(wall => {
-        if (collisionCircleBoxHorizontal(state.ball, wall)) {
-            console.log("direction: " + state.ball.direction)
+        if (collisionCircleBox(state.ball, wall)) {
+            console.log("collision")
             return arreteBallAndScreen(replaceBall(state, wall));
         }
     })

@@ -240,6 +240,11 @@ const moveScreen = (state: State): State => {
     newRect.coord.x += newDx;
   })
 
+  newState.enemies.map((enemie: Rect) => {
+    const newRect: Rect = { ...enemie };
+    newRect.coord.x += newDx;
+  })
+
   const newCenter: Rect = {
     ...center,
     coord: {
