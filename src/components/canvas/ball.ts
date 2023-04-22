@@ -3,8 +3,9 @@ import { Direction, isMovingLeft, isMovingRight } from "./direction";
 import { Rect, Size, State, blocDessous, updateState } from "./state";
 import * as conf from './conf'
 import { stat } from "fs";
+import { collisionCircleBox } from "./collision";
 
-export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction, imgid:number}
+export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction, imgid: number }
 
 
 export const moveBall = (state: State): State => {
@@ -74,18 +75,18 @@ const stopMovingScreen = (state: State): State => {
 }
 
 export const arreteBall = (state: State): State => {
-    const  newBall:Ball = state.ball;
+    const newBall: Ball = state.ball;
     newBall.coord.dx = 0;
     newBall.acceleration = 0;
     //newBall.direction = "nothing";
-    return {...state, ball:newBall};
+    return { ...state, ball: newBall };
 }
 
-const isMovingRightBis = (ball: Ball):boolean => {
+const isMovingRightBis = (ball: Ball): boolean => {
     return ball.coord.dx > 0;
 }
 
-const isMovingLeftBis = (ball: Ball):boolean => {
+const isMovingLeftBis = (ball: Ball): boolean => {
     return ball.coord.dx < 0;
 }
 
@@ -122,15 +123,41 @@ export const moveBallHoriz = (state0: State) => {
     if (newBall.coord.dx === 0) {
         //all.direction = "nothing"
     }
-    const newState: State = {
+    let newState: State = {
         ...state,
         ball: newBall
     }
 
+    newState = gestionCollisionHorizontal(newState)
+
     return isBallInCanvasHorital(newState) ? newState : state
 }
 
-const computeNewImgId = (state:State):number => {
+const gestionCollisionHorizontal = (state: State): State => {
+    state.walls.forEach(wall => {
+        if (collisionCircleBox(state.ball, wall)) {
+            console.log("direction: " + state.ball.direction)
+            return arreteBall(replaceBall(state, wall));
+        }
+    })
+
+    return state;
+}
+
+const replaceBall = (state: State, wall: Rect): State => {
+    let newBall: Ball = state.ball
+    if (state.ball.coord.x < wall.coord.x) {
+        // la balle est à gauche
+        newBall.coord.x = wall.coord.x - conf.RADIUS
+    } else if ((state.ball.coord.x > wall.coord.x)) {
+        // la balle est à droite
+        newBall.coord.x = wall.coord.x + wall.width + conf.RADIUS
+    }
+    return updateState(state, newBall)
+}
+
+
+const computeNewImgId = (state: State): number => {
     if (state.centerAcceleration === 0 && state.ball.coord.dx == 0) {
         return 0
     }
@@ -181,3 +208,4 @@ export const changeBallVelocity = (ball: Ball, newVelocity: any): Ball => {
         }
     }
 }
+

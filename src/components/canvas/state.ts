@@ -39,19 +39,7 @@ export const step = (state: State) => {
 
   const screenState: State = state.centerAcceleration !== 0 ? moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
 
-  const collisionHorizontal:State = gestionCollisionHorizontal(screenState);
-  return collisionHorizontal;
-}
-
-const gestionCollisionHorizontal = (state: State): State => {
-  state.walls.forEach( wall => {
-      if (collisionCircleBox(state.ball, wall)) {
-        return arreteBall(state)
-      }
-    }
-  )
-
-  return state;
+  return screenState;
 }
 
 const auSol = (state: State): boolean => {
@@ -61,20 +49,39 @@ const auSol = (state: State): boolean => {
   return (y + r) === limitY - blocDessous(state);
 }
 
-const blocDessousNaif = (state: State): number => {
-  return 40 * 6
-}
-
+/**
+ * Calcul le niveau sur lequel doit chuter la balle.
+ * @param state 
+ * @returns 
+ */
 export const blocDessous = (state: State): number => {
   const walls: Array<Rect> = state.walls.filter(w => canSupportBall(w, state.ball))
   const candidatWall: Rect = maxWallInHeight(state, walls)
   const res: number = distanceToBottom(state, candidatWall)
-  //console.log(res);
   return res
 }
 
+/**
+ * alcul le niveau sur lequel doit chuter la balle.
+ * En fonction de la position X du centre de la ball,
+ * ameliorer le placement.
+ * @param state 
+ * @param wall 
+ * @returns 
+ */
 const distanceToBottom = (state: State, wall: Rect): number => {
-  return state.size.height - wall.coord.y
+
+  const ballX: number = state.ball.coord.x
+  const wallX: number = wall.coord.x
+  const distanceNaive:number = state.size.height - wall.coord.y
+  /*
+  if (wallX > ballX) {
+    return distanceNaive - (wallX-ballX)
+  } else if (wallX + wall.width < ballX) {
+    return distanceNaive - (ballX - (wallX + wall.width)) 
+  } */
+
+  return distanceNaive
 }
 
 const maxWallInHeight = (state: State, walls: Array<Rect>): Rect => {
@@ -97,7 +104,8 @@ const maxWallInHeight = (state: State, walls: Array<Rect>): Rect => {
  * @returns 
  */
 const canSupportBall = (w: Rect, ball: Ball): boolean => {
-  // w.x < ball < w.x+w.width
+  // w.x < ball.x - r < w.x+w.width
+  //return w.coord.x <= ball.coord.x + conf.RADIUS && ball.coord.x - conf.RADIUS <= w.coord.x + w.width
   return w.coord.x <= ball.coord.x && ball.coord.x <= w.coord.x + w.width
 }
 
