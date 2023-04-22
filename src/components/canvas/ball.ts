@@ -73,7 +73,7 @@ const stopMovingScreen = (state: State): State => {
     return newState;
 }
 
-const arreteBall = (state: State): State => {
+export const arreteBall = (state: State): State => {
     const  newBall:Ball = state.ball;
     newBall.coord.dx = 0;
     newBall.acceleration = 0;

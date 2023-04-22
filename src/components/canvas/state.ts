@@ -1,7 +1,8 @@
-import { Ball, changeBallVelocity, moveBall } from './ball';
+import { Ball, arreteBall, changeBallVelocity, moveBall } from './ball';
+import { collisionCircleBox } from './collision';
 import * as conf from './conf'
 import { Coord } from './coord';
-import { Direction, isMovingRight } from './direction';
+import { isMovingRight } from './direction';
 import { notJumping } from './keyboard';
 export type Rect = { coord: Coord, height: number; width: number }
 export type Size = { height: number; width: number }
@@ -30,16 +31,27 @@ const jumping = (state: State): State => {
 }
 
 export const step = (state: State) => {
-  console.log(state.centerAcceleration);
-
   const newState: State = moveBall(state);
-  //onsole.log(`velocity: (${newState.ball.coord.dx}, ${newState.ball.coord.dy})`);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
   resVert = enLair(resVert) ? jumping(resVert) : resVert
   const resHor: State = state.ball.acceleration !== 0 ? resVert : ralentir(resVert);
 
-  return state.centerAcceleration !== 0 ? moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
+  const screenState: State = state.centerAcceleration !== 0 ? moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
+
+  const collisionHorizontal:State = gestionCollisionHorizontal(screenState);
+  return collisionHorizontal;
+}
+
+const gestionCollisionHorizontal = (state: State): State => {
+  state.walls.forEach( wall => {
+      if (collisionCircleBox(state.ball, wall)) {
+        return arreteBall(state)
+      }
+    }
+  )
+
+  return state;
 }
 
 const auSol = (state: State): boolean => {
