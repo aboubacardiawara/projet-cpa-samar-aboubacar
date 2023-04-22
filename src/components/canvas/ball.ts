@@ -148,10 +148,10 @@ const replaceBall = (state: State, wall: Rect): State => {
     let newBall: Ball = state.ball
     if (state.ball.coord.x < wall.coord.x) {
         // la balle est à gauche
-        newBall.coord.x = wall.coord.x - conf.RADIUS
+        newBall.coord.x = wall.coord.x - conf.RADIUS -1
     } else if ((state.ball.coord.x > wall.coord.x)) {
         // la balle est à droite
-        newBall.coord.x = wall.coord.x + wall.width + conf.RADIUS
+        newBall.coord.x = wall.coord.x + wall.width + conf.RADIUS + 1
     }
     return updateState(state, newBall)
 }

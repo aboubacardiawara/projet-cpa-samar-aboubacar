@@ -74,12 +74,13 @@ const distanceToBottom = (state: State, wall: Rect): number => {
   const ballX: number = state.ball.coord.x
   const wallX: number = wall.coord.x
   const distanceNaive:number = state.size.height - wall.coord.y
-  /*
+  
+  const correctionDistance: number = 5
   if (wallX > ballX) {
-    return distanceNaive - (wallX-ballX)
+    return distanceNaive - correctionDistance
   } else if (wallX + wall.width < ballX) {
-    return distanceNaive - (ballX - (wallX + wall.width)) 
-  } */
+    return distanceNaive + correctionDistance
+  }
 
   return distanceNaive
 }
@@ -105,8 +106,8 @@ const maxWallInHeight = (state: State, walls: Array<Rect>): Rect => {
  */
 const canSupportBall = (w: Rect, ball: Ball): boolean => {
   // w.x < ball.x - r < w.x+w.width
-  //return w.coord.x <= ball.coord.x + conf.RADIUS && ball.coord.x - conf.RADIUS <= w.coord.x + w.width
-  return w.coord.x <= ball.coord.x && ball.coord.x <= w.coord.x + w.width
+  return w.coord.x <= ball.coord.x + conf.RADIUS && ball.coord.x - conf.RADIUS <= w.coord.x + w.width
+  //return w.coord.x <= ball.coord.x && ball.coord.x <= w.coord.x + w.width
 }
 
 const arreteNewton = (state: State): State => {
