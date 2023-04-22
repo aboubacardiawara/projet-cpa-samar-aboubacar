@@ -78,7 +78,6 @@ export const arreteBall = (state: State): State => {
     const newBall: Ball = state.ball;
     newBall.coord.dx = 0;
     newBall.acceleration = 0;
-    //newBall.direction = "nothing";
     return { ...state, ball: newBall };
 }
 
@@ -133,11 +132,15 @@ export const moveBallHoriz = (state0: State) => {
     return isBallInCanvasHorital(newState) ? newState : state
 }
 
+const arreteBallAndScreen = (state: State) : State => {
+    return arreteBall(stopMovingScreen(state))
+}
+
 const gestionCollisionHorizontal = (state: State): State => {
     state.walls.forEach(wall => {
         if (collisionCircleBox(state.ball, wall)) {
             console.log("direction: " + state.ball.direction)
-            return arreteBall(replaceBall(state, wall));
+            return arreteBallAndScreen(replaceBall(state, wall));
         }
     })
 

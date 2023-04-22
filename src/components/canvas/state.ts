@@ -31,7 +31,7 @@ const jumping = (state: State): State => {
 }
 
 export const step = (state: State) => {
-  console.log(`ecran: ${state.centerAcceleration}, ${state.center.coord.dx}`);
+  console.log(`ecran: ${state.centerAcceleration}, ${state.center.coord.dx}, ${state.ball.acceleration}, ${state.ball.direction}`);
   
   const newState: State = moveBall(state);
   let resVert: State;
@@ -192,11 +192,42 @@ const ralentirEcran = (state: State): State => {
   return state;
 }
 
+/**
+ * Screen can move to left if there is at least one wall
+ * outside the screen (at right side)
+ * @param state 
+ */
+const screenCanMoveToLeft = (state: State) : boolean => {
+  return state.walls.some(wall => wall.coord.x >= state.size.width)
+}
+
+/**
+ * Screen can move to right if there is at least one wall
+ * outside the screen (at left side)
+ * @param state 
+ */
+const screenCanMoveToRight = (state: State) : boolean => {
+  return state.walls.some(wall => wall.coord.x < 0)
+}
+
 const moveScreen = (state: State): State => {
   const newState = { ...state };
   const center: Rect = state.center;
   const currentDx = center.coord.dx;
   const newDx: number = Math.abs(currentDx) < conf.VITESSE_MAX ? currentDx + state.centerAcceleration : currentDx
+  
+  if (newDx > 0) {
+    if (!screenCanMoveToRight(state)) {
+      return state
+    }
+  } 
+
+  if (newDx < 0) {
+    if (!screenCanMoveToLeft(state)) {
+      return state
+    }
+  } 
+  
   newState.walls.map((wal: Rect) => {
     const newRect: Rect = { ...wal };
     newRect.coord.x += newDx;
