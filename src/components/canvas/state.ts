@@ -31,6 +31,8 @@ const jumping = (state: State): State => {
 }
 
 export const step = (state: State) => {
+  console.log(`ecran: ${state.centerAcceleration}, ${state.center.coord.dx}`);
+  
   const newState: State = moveBall(state);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
@@ -178,17 +180,12 @@ const ralentirEcran = (state: State): State => {
   const currentDx = state.center.coord.dx;
   let newDx: number;
   if (isMovingRightEcran(state.center)) {
-    if (currentDx <= 0) {
-      newDx = 0
-    } else {
-      newDx = currentDx - conf.ACCELARATION_HORIZ
-    }
+    newDx = currentDx - conf.ACCELARATION_HORIZ
+    newDx = newDx < 0 ? 0 : newDx  
   } else {
-    if (currentDx >= 0) {
-      newDx = 0
-    } else {
-      newDx = currentDx + conf.ACCELARATION_HORIZ
-    }
+    
+    newDx = currentDx + conf.ACCELARATION_HORIZ
+    newDx = newDx > 0 ? 0 : newDx
   }
 
   state.center.coord.dx = newDx;

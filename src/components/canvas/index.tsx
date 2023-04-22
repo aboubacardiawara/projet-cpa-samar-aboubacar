@@ -10,7 +10,7 @@ import { Direction } from './direction'
 const superloadObstacles = function () {
   let rectangles: Element[] = []
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 4; i++) {
     CONFIG.levels[0].obstacles.forEach(obstacleData => {
       const dim: number[] = [...obstacleData.dimensions];
       dim[0] = dim[0] + i*conf.MAX_X;
