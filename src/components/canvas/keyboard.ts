@@ -1,5 +1,5 @@
 import { Ball, ballAtLeftBoundarie, ballAtRightBoundarie, changeBallVelocity } from "./ball";
-import { ACCELARATION_HORIZ } from "./conf";
+import { ACCELARATION_HORIZ, RADIUS, VITESSE_INIT_SAUT } from "./conf";
 import { State, updateState } from "./state";
 
 export const keyDown =
@@ -61,7 +61,7 @@ const handleSpaceClick = (state: State): State => {
 
 const jump = (ball: Ball): Ball => {
     const newBall: Ball = {
-        ...changeBallVelocity(ball, { dx: ball.coord.dx, dy: -15 }),
+        ...changeBallVelocity(ball, { dx: ball.coord.dx, dy: VITESSE_INIT_SAUT * RADIUS }),
         jumping: true
     }
     return ball.jumping ? ball : newBall

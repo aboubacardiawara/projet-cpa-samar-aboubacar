@@ -3,6 +3,7 @@ export const RADIUS = 20
 export const MINMOVE = 0.1
 export const ACCELERATION_CHUTE = 0.5
 export const ACCELARATION_HORIZ = 0.08
+export const VITESSE_INIT_SAUT = -0.75
 export const BALLLIFE = 4
 export const PLAYERLIFE = 10
 export const DELAY_ACCELERATION: number = 1
