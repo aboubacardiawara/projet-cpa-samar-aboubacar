@@ -25,6 +25,26 @@ export const keyDown =
             return newState
         }
 
+export const keyUp =
+    (state: State) =>
+        (event: KeyboardEvent): State => {
+            event.preventDefault()
+            let newState:State;
+            const keyName: string = event.key;
+            switch (keyName) {
+                case "ArrowLeft":
+                    newState = stopScreen(stopBall(state));
+                    break;
+                case "ArrowRight":
+                    newState = stopScreen(stopBall(state));
+                    break;
+                default:
+                    newState = state
+                    break;
+            }
+            return newState
+        }
+
 const handleLeftClick = (state: State): State => {
     const newBall: Ball = {
         ...state.ball,
@@ -74,13 +94,6 @@ export const notJumping = (state: State): State => {
 }
 
 
-export const keyUp =
-    (state: State) =>
-        (event: KeyboardEvent): State => {
-            event.preventDefault()
-            return stopScreen(stopBall(state))
-        }
-
 const stopBall = (state: State): State => {
     //console.log("stop the ball");
     const newBall: Ball = {
@@ -99,13 +112,13 @@ const stopBall = (state: State): State => {
 const stopScreen = (state: State): State => {
     state.centerAcceleration = 0;
     return replaceBall(state);
-    
+
 }
 
 
 
 const replaceBall = (state: State): State => {
-    const newBall:Ball = state.ball;
+    const newBall: Ball = state.ball;
     const delta: number = 3;
     if (ballAtLeftBoundarie(state)) {
         newBall.coord.x += delta
