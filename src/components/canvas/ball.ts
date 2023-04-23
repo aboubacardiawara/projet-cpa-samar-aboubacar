@@ -75,6 +75,9 @@ const stopMovingScreen = (state: State): State => {
 }
 
 export const arreteBall = (state: State): State => {
+    if (state.ball.jumping) {
+        return state
+    }
     const newBall: Ball = state.ball;
     newBall.coord.dx = 0;
     newBall.acceleration = 0;
