@@ -21,8 +21,13 @@ export const CONFIG = {
                 },
                 {
                     type: "enemie", 
-                    dimensions: [400-TAILLE_ENEMIE, MAX_Y-TAILLE_ENEMIE-COTE, TAILLE_ENEMIE, TAILLE_ENEMIE],
+                    dimensions: [320, MAX_Y-TAILLE_ENEMIE-COTE, TAILLE_ENEMIE, TAILLE_ENEMIE],
+                },
+                {
+                    type: "enemie", 
+                    dimensions: [320+14*COTE, MAX_Y-TAILLE_ENEMIE-6*COTE, TAILLE_ENEMIE, TAILLE_ENEMIE],
                 }
+
             ],
             ressources: []
         }
