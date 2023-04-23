@@ -1,5 +1,5 @@
 import { Ball, arreteBall, changeBallVelocity, moveBall } from './ball';
-import { collisionCircleBox } from './collision';
+import { collisionBallObstacles, collisionCircleBox } from './collision';
 import * as conf from './conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
@@ -47,7 +47,7 @@ export const step = (state: State) => {
 
 const checkGameOver = (state: State):State => {
   const newState: State = state
-  newState.endOfGame = state.enemies.some(enemie => collisionCircleBox(state.ball, enemie))
+  newState.endOfGame = state.enemies.some(enemie => collisionBallObstacles(state.ball, enemie))
   return newState;
 }
 
