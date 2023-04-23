@@ -96,6 +96,7 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
     centerAcceleration: 0,
     water: initWater(),
     enemies: initEnemies(),
+    ballShouldBeRecentered: false,
     size: { height, width },
     endOfGame: true,
   }

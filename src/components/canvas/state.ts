@@ -3,7 +3,7 @@ import { collisionBallObstacles, collisionCircleBox } from './collision';
 import * as conf from './conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
-import { notJumping } from './keyboard';
+import { notJumping, stopScreen } from './keyboard';
 export type Rect = { coord: Coord, height: number; width: number }
 export type Size = { height: number; width: number }
 
@@ -14,6 +14,7 @@ export type State = {
   size: Size
   center: Rect
   centerAcceleration: number
+  ballShouldBeRecentered: boolean
   endOfGame: boolean
   walls: Array<Rect>
   water: Array<Rect>
@@ -31,17 +32,73 @@ const jumping = (state: State): State => {
   })
 }
 
-export const step = (state: State) => {
-  console.log(`ecran: ${state.centerAcceleration}, ${state.center.coord.dx}, ${state.ball.acceleration}, ${state.ball.direction}`);
+/**
+ * 
+ * @param state verifie si la ball est en dehaord du centre.
+ * En consequence, on doit adapter la camera.
+ * @returns 
+ */
+const ballOutSideCenter = (state:State): boolean => {
+  const epsilon:number = 5
+  return !state.ball.jumping && state.ball.coord.x - epsilon  > state.center.coord.x + state.center.width 
+  /*|| state.ball.coord.x < state.center.coord.x;*/
+}
+
+/**
+ * 
+ * @param state verifie si la balle est au centre de l'ecran.
+ * @returns 
+ */
+const ballShouldNotBeCentered = (state:State): boolean => {
+  const epsilon: number = 100
+  return state.ball.coord.x < state.center.coord.x + state.center.width - epsilon
+  /*|| state.ball.coord.x < state.center.coord.x;*/
+}
+
+
+const recenterBall = (state:State): State => {
+  const newState = state
+  const delta = 20
+  // deplacer la balle
+  newState.ball.coord.x -= delta
   
+  // deplacer les murs
+  newState.walls = newState.walls.map(w => {
+    w.coord.x -= delta
+    return w
+  })
+
+  
+  // deplacer les enemis
+  newState.enemies = newState.enemies.map(e => {
+    e.coord.x -= delta
+    return e
+  })
+  return newState
+}
+
+const recenterScreenChecker = (state:State): State => {
+  const newState = state
+  newState.ballShouldBeRecentered = ballOutSideCenter(state)
+  return newState
+}
+
+export const step = (state: State) => {
+  console.log(`toReplace: ${state.ballShouldBeRecentered}`);
+  
+  if (state.ballShouldBeRecentered)  {
+    const newState:State = recenterBall(state)
+    newState.ballShouldBeRecentered = !ballShouldNotBeCentered(state);
+    return stopScreen(newState)
+  }
   const newState: State = moveBall(state);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
   resVert = enLair(resVert) ? jumping(resVert) : resVert
   const resHor: State = state.ball.acceleration !== 0 ? resVert : ralentir(resVert);
 
-  const screenState: State = state.centerAcceleration !== 0 ? moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
-
+  let screenState: State = state.centerAcceleration !== 0 ? moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
+  screenState = recenterScreenChecker(screenState)
   return checkGameOver(screenState);
 }
 

@@ -109,7 +109,7 @@ const stopBall = (state: State): State => {
     }
 }
 
-const stopScreen = (state: State): State => {
+export const stopScreen = (state: State): State => {
     state.centerAcceleration = 0;
     return replaceBall(state);
 
