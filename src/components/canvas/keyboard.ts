@@ -94,8 +94,7 @@ export const notJumping = (state: State): State => {
 }
 
 
-const stopBall = (state: State): State => {
-    //console.log("stop the ball");
+export const stopBall = (state: State): State => {
     const newBall: Ball = {
         ...state.ball,
         coord: {
@@ -111,9 +110,17 @@ const stopBall = (state: State): State => {
 
 export const stopScreen = (state: State): State => {
     state.centerAcceleration = 0;
-    return replaceBall(state);
-
+    
+    return state.ballShouldBeRecentered ? state : replaceBall(state);
 }
+
+export const stopScreenVitesse = (state: State): State => {
+    state.centerAcceleration = 0;
+    state.center.coord.dx = 0;
+    return state.ballShouldBeRecentered ? state : replaceBall(state);
+}
+
+
 
 
 

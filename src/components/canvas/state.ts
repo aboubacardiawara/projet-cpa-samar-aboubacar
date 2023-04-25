@@ -3,7 +3,7 @@ import { collisionBallObstacles, collisionCircleBox } from './collision';
 import * as conf from './conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
-import { notJumping, stopScreen } from './keyboard';
+import { notJumping, stopBall, stopScreen, stopScreenVitesse } from './keyboard';
 export type Rect = { coord: Coord, height: number; width: number }
 export type Size = { height: number; width: number }
 
@@ -58,7 +58,7 @@ const ballShouldNotBeCentered = (state:State): boolean => {
 
 const recenterBall = (state:State): State => {
   const newState = state
-  const delta = 20
+  const delta = -state.center.coord.dx
   // deplacer la balle
   newState.ball.coord.x -= delta
   
@@ -84,13 +84,18 @@ const recenterScreenChecker = (state:State): State => {
 }
 
 export const step = (state: State) => {
-  console.log(`toReplace: ${state.ballShouldBeRecentered}`);
-  
+  /*
   if (state.ballShouldBeRecentered)  {
-    const newState:State = recenterBall(state)
+    let newState:State = recenterBall(state)
     newState.ballShouldBeRecentered = !ballShouldNotBeCentered(state);
+    if (!newState.ballShouldBeRecentered) {
+      newState = stopScreenVitesse(newState)
+    }
+    if (screenCanMoveToLeft(state)) {
+      newState = arreteBall(newState)
+    }
     return stopScreen(newState)
-  }
+  }*/
   const newState: State = moveBall(state);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)

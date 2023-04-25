@@ -3,14 +3,14 @@ import { useRef, useEffect, MutableRefObject } from 'react'
 import { State, step, endOfGame, Element } from './state'
 
 import { render } from './renderer'
-import { CONFIG } from '../../config/game/samples/enemies'
+import { CONFIG } from '../../config/game/samples/chemin_plat'
 import { keyDown, keyUp } from './keyboard'
 import { Direction } from './direction'
 
 const superloadObstacles = function () {
   let rectangles: Element[] = []
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     CONFIG.levels[0].obstacles.forEach(obstacleData => {
       const dim: number[] = [...obstacleData.dimensions];
       dim[0] = dim[0] + i * conf.MAX_X;
@@ -92,7 +92,7 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
   const initialState: State = {
     ball: initBall(),
     walls: initWalls(),
-    center: { coord: { dx: 0, dy: 0, x: 480 - 40 * 5, y: 0 }, height: 800, width: 40 * 15 },
+    center: { coord: { dx: 0, dy: 0, x: 480-40, y: 0 }, height: 800, width: 40 * 8 },
     centerAcceleration: 0,
     water: initWater(),
     enemies: initEnemies(),
