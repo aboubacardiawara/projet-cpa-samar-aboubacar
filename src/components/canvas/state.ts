@@ -169,7 +169,13 @@ const canSupportBall = (w: Rect, ball: Ball): boolean => {
 
 const arreteNewton = (state: State): State => {
   const ball: Ball = state.ball
-  let newDy:number = ball.coord.dy <= 2 ? 0 : ball.coord.dy * 0.3
+  const elasticity: number = 0.5
+  
+  let newDy:number = Math.abs(ball.coord.dy) <= 2 ? 0 : - ball.coord.dy * elasticity
+  if (ball.coord.dy > 0) {
+    newDy = ball.coord.dy <= 2 ? 0 : ball.coord.dy * elasticity
+  }
+  console.log(`${ball.coord.dy}, ${newDy} ${auSol(state)} ${enLair(state)}`);
   
   const newBall: Ball = changeBallVelocity(ball, { dx: ball.coord.dx, dy: ball.jumping ? ball.coord.dy : - newDy })
   const newState: State = updateState(state, newBall);
