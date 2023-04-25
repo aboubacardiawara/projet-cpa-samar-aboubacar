@@ -16,7 +16,6 @@ export const moveBall = (state: State): State => {
 }
 
 export const moveBallVerti = (state: State) => {
-    //console.log(`center dx: ${state.center.coord.dx}`);
     const ball = state.ball
     const newBall: Ball = {
         ...ball,
@@ -84,25 +83,19 @@ export const arreteBall = (state: State): State => {
     return { ...state, ball: newBall };
 }
 
-const isMovingRightBis = (ball: Ball): boolean => {
-    return ball.coord.dx > 0;
-}
-
-const isMovingLeftBis = (ball: Ball): boolean => {
-    return ball.coord.dx < 0;
-}
-
 export const moveBallHoriz = (state0: State) => {
     let state: State;
-    if (isMovingRight(state0.ball.direction)) {
+    if (state0.center.coord.dx < 0) { // moving right
         if (ballAtRightBoundarie(state0)) {
-            state = arreteBall(moveScreenToTheLeft(state0));
+            //state = arreteBall(moveScreenToTheLeft(state0));
+            state = moveScreenToTheLeft(state0);
         } else {
             state = state0;
         }
-    } else if (isMovingLeft(state0.ball.direction)) {
+    } else if (state0.center.coord.dx > 0) { // moving left
         if (ballAtLeftBoundarie(state0)) {
-            state = arreteBall(moveScreenToTheRight(state0));
+            //state = arreteBall(moveScreenToTheRight(state0));
+            state = moveScreenToTheRight(state0);
         } else {
             state = state0;
         }

@@ -52,7 +52,6 @@ const ballOutSideCenter = (state:State): boolean => {
 const ballShouldNotBeCentered = (state:State): boolean => {
   const epsilon: number = 100
   return state.ball.coord.x < state.center.coord.x + state.center.width - epsilon
-  /*|| state.ball.coord.x < state.center.coord.x;*/
 }
 
 
@@ -84,18 +83,6 @@ const recenterScreenChecker = (state:State): State => {
 }
 
 export const step = (state: State) => {
-  /*
-  if (state.ballShouldBeRecentered)  {
-    let newState:State = recenterBall(state)
-    newState.ballShouldBeRecentered = !ballShouldNotBeCentered(state);
-    if (!newState.ballShouldBeRecentered) {
-      newState = stopScreenVitesse(newState)
-    }
-    if (screenCanMoveToLeft(state)) {
-      newState = arreteBall(newState)
-    }
-    return stopScreen(newState)
-  }*/
   const newState: State = moveBall(state);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
@@ -178,12 +165,13 @@ const maxWallInHeight = (state: State, walls: Array<Rect>): Rect => {
 const canSupportBall = (w: Rect, ball: Ball): boolean => {
   // w.x < ball.x - r < w.x+w.width
   return w.coord.x <= ball.coord.x + conf.RADIUS && ball.coord.x - conf.RADIUS <= w.coord.x + w.width
-  //return w.coord.x <= ball.coord.x && ball.coord.x <= w.coord.x + w.width
 }
 
 const arreteNewton = (state: State): State => {
   const ball: Ball = state.ball
-  const newBall: Ball = changeBallVelocity(ball, { dx: ball.coord.dx, dy: ball.jumping ? ball.coord.dy : 0 })
+  let newDy:number = ball.coord.dy <= 2 ? 0 : ball.coord.dy * 0.3
+  
+  const newBall: Ball = changeBallVelocity(ball, { dx: ball.coord.dx, dy: ball.jumping ? ball.coord.dy : - newDy })
   const newState: State = updateState(state, newBall);
   return notJumping(newState)
 }
@@ -207,7 +195,6 @@ const ralentir = (state: State): State => {
   const direction = state.ball.direction
   const currentDx = state.ball.coord.dx
   let newDx: number;
-  // currentDx <= 0 ? 0 : isMovingRight(direction) ? currentDx - conf.ACCELARATION_HORIZ : currentDx + conf.ACCELARATION_HORIZ
 
   if (isMovingRight(direction)) {
     if (currentDx <= 0) {

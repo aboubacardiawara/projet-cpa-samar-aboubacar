@@ -3,7 +3,7 @@ import { useRef, useEffect, MutableRefObject } from 'react'
 import { State, step, endOfGame, Element } from './state'
 
 import { render } from './renderer'
-import { CONFIG } from '../../config/game/samples/chemin_plat'
+import { CONFIG } from '../../config/game/samples/enemies'
 import { keyDown, keyUp } from './keyboard'
 import { Direction } from './direction'
 
@@ -143,7 +143,7 @@ function initBall() {
   return {
     life: conf.BALLLIFE,
     coord: {
-      x: 200,
+      x: conf.MAX_X/2,
       y: 300,
       dx: 0,
       dy: 0,

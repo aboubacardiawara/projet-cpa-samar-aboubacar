@@ -33,10 +33,10 @@ export const keyUp =
             const keyName: string = event.key;
             switch (keyName) {
                 case "ArrowLeft":
-                    newState = stopScreen(stopBall(state));
+                    newState = stopScreen(state);
                     break;
                 case "ArrowRight":
-                    newState = stopScreen(stopBall(state));
+                    newState = stopScreen(state);
                     break;
                 default:
                     newState = state
@@ -46,28 +46,15 @@ export const keyUp =
         }
 
 const handleLeftClick = (state: State): State => {
-    const newBall: Ball = {
-        ...state.ball,
-        acceleration: -ACCELARATION_HORIZ,
-        direction: "left"
-    }
-    return {
-        ...state,
-        ball: newBall
-    }
+    const newState = state
+    newState.centerAcceleration = +ACCELARATION_HORIZ
+    return newState
 }
 
 const handleRightClick = (state: State): State => {
-    const newBall: Ball = {
-        ...state.ball,
-        acceleration: ACCELARATION_HORIZ,
-        direction: "right"
-
-    }
-    return {
-        ...state,
-        ball: newBall
-    }
+    const newState = state
+    newState.centerAcceleration = -ACCELARATION_HORIZ
+    return newState
 }
 
 const handleSpaceClick = (state: State): State => {
