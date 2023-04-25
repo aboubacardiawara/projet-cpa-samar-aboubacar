@@ -26,8 +26,8 @@ export const CONFIG = {
                 {
                     direction: "H",
                     debut: 500,
-                    destination: 500,
-                    position: [500, 500],
+                    destination: 600,
+                    position: [500, MAX_Y-TAILLE_ENEMIE-COTE*3],
                 }
             ],
             ressources: []

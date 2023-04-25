@@ -12,4 +12,5 @@ export const VITESSE_MAX: number = 7
 export const DEBUG_ON: boolean = false
 export const MAX_X: number = 1200;
 export const TAILLE_ENEMIE = 80
+export const ENEMIE_VITESSE = 1
 const MAX_Y: number = 800;

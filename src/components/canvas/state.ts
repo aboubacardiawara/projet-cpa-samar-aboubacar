@@ -3,11 +3,12 @@ import { collisionBallObstacles, collisionCircleBox } from './collision';
 import * as conf from './conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
+import { moveEnemie } from './enemie';
 import { notJumping, stopBall, stopScreen, stopScreenVitesse } from './keyboard';
 export type Position = {x: number, y:number}
 export type Rect = { coord: Coord, height: number; width: number }
 export type Size = { height: number; width: number }
-export type Enemie = {direction: String, debut: Position, destination: Position, position: Position}
+export type Enemie = {direction: String, debut: number, destination: number, position: Position}
 export type Element = { type: string, dimension: number[] }
 
 export type State = {
@@ -84,8 +85,18 @@ const recenterScreenChecker = (state:State): State => {
   return newState
 }
 
+
+const moveCharacters = (state: State): State => {
+  state.enemiesMobiles = state.enemiesMobiles.map(
+    enemieMobile => moveEnemie(enemieMobile)
+  )
+
+  return state
+}
+
 export const step = (state: State) => {
-  const newState: State = moveBall(state);
+  const moveOtherCharacters = moveCharacters(state)
+  const newState: State = moveBall(moveOtherCharacters);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
   resVert = enLair(resVert) ? jumping(resVert) : resVert
@@ -300,6 +311,11 @@ const moveScreen = (state: State): State => {
   newState.enemies.map((enemie: Rect) => {
     const newRect: Rect = { ...enemie };
     newRect.coord.x += newDx;
+  })
+
+  newState.enemiesMobiles.map((enemie: Enemie) => {
+    const newEnemie: Enemie = { ...enemie };
+    newEnemie.position.x += newDx;
   })
 
   const newCenter: Rect = {
