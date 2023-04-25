@@ -8,7 +8,7 @@ import { notJumping, stopBall, stopScreen, stopScreenVitesse } from './keyboard'
 export type Position = {x: number, y:number}
 export type Rect = { coord: Coord, height: number; width: number }
 export type Size = { height: number; width: number }
-export type Enemie = {direction: String, debut: number, destination: number, position: Position}
+export type Enemie = {direction: String, debut: number, destination: number, coord: Coord}
 export type Element = { type: string, dimension: number[] }
 
 export type State = {
@@ -315,7 +315,7 @@ const moveScreen = (state: State): State => {
 
   newState.enemiesMobiles.map((enemie: Enemie) => {
     const newEnemie: Enemie = { ...enemie };
-    newEnemie.position.x += newDx;
+    newEnemie.coord.x += newDx;
   })
 
   const newCenter: Rect = {

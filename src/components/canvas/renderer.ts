@@ -170,7 +170,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
     drawEnemies(ctx, r.coord, r.width, r.height))
 
   state.enemiesMobiles.map((enemieMobile) =>
-    drawEnemiesMobile(ctx, enemieMobile.position, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
+    drawEnemiesMobile(ctx, {x:enemieMobile.coord.x, y:enemieMobile.coord.y}, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
 
   if (state.endOfGame) {
     const text = 'Game Over'

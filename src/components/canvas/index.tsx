@@ -55,7 +55,12 @@ const buildEnemiesMobile = (data: any[]) => (
     direction: data.direction,
     debut: data.debut, 
     destination: data.destination,
-    position: {x: data.position[0], y: data.position[1]}
+    coord: {
+      x: data.position[0], 
+      y: data.position[1], 
+      dx: data.direction === "H"? conf.ENEMIE_VITESSE : 0,
+      dy: data.direction === "V"? conf.ENEMIE_VITESSE : 0
+    }
   }
 )
 

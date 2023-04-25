@@ -17,7 +17,7 @@ export const CONFIG = {
                     dimensions: [0, MAX_Y - 3 * COTE, COTE * 100, COTE * 3],
                 },
                 {
-                    type: "enemie", 
+                    type: "enemie",
                     dimensions: [COTE * 25, MAX_Y - 3 * COTE - TAILLE_ENEMIE, TAILLE_ENEMIE, TAILLE_ENEMIE],
                 }
 
@@ -26,8 +26,8 @@ export const CONFIG = {
                 {
                     direction: "H",
                     debut: 500,
-                    destination: 600,
-                    position: [500, MAX_Y-TAILLE_ENEMIE-COTE*3],
+                    destination: 800,
+                    position: [400, MAX_Y - TAILLE_ENEMIE - COTE * 3],
                 }
             ],
             ressources: []
