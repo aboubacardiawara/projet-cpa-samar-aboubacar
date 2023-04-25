@@ -4,9 +4,10 @@ import * as conf from './conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
 import { notJumping, stopBall, stopScreen, stopScreenVitesse } from './keyboard';
+export type Position = {x: number, y:number}
 export type Rect = { coord: Coord, height: number; width: number }
 export type Size = { height: number; width: number }
-
+export type Enemie = {direction: String, debut: Position, destination: Position, position: Position}
 export type Element = { type: string, dimension: number[] }
 
 export type State = {
@@ -19,6 +20,7 @@ export type State = {
   walls: Array<Rect>
   water: Array<Rect>
   enemies: Array<Rect>
+  enemiesMobiles: Array<Enemie>
 }
 
 const enLair = (state: State): boolean => {

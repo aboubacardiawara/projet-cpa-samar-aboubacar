@@ -11,4 +11,5 @@ export const DECELERATION: number = 0.2
 export const VITESSE_MAX: number = 7
 export const DEBUG_ON: boolean = false
 export const MAX_X: number = 1200;
+export const TAILLE_ENEMIE = 80
 const MAX_Y: number = 800;

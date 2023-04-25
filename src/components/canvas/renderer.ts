@@ -56,6 +56,18 @@ const drawEnemies = (
   ctx.fill()
 }
 
+const drawEnemiesMobile = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number },
+  w: number,
+  h: number
+) => {
+  ctx.beginPath()
+  ctx.rect(x, y, w, h)
+  ctx.fillStyle = "green"
+  ctx.fill()
+}
+
 
 const drawWater = (
   ctx: CanvasRenderingContext2D,
@@ -145,7 +157,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
 
   const c = state.ball;
   let couleur;
-  
+
   drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE));
 
   state.walls.map((r) =>
@@ -156,6 +168,9 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
 
   state.enemies.map((r) =>
     drawEnemies(ctx, r.coord, r.width, r.height))
+
+  state.enemiesMobiles.map((enemieMobile) =>
+    drawEnemiesMobile(ctx, enemieMobile.position, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
 
   if (state.endOfGame) {
     const text = 'Game Over'

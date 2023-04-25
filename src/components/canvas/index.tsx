@@ -1,9 +1,9 @@
 import * as conf from './conf'
 import { useRef, useEffect, MutableRefObject } from 'react'
-import { State, step, endOfGame, Element } from './state'
+import { State, step, endOfGame, Element, Enemie } from './state'
 
 import { render } from './renderer'
-import { CONFIG } from '../../config/game/samples/enemies'
+import { CONFIG } from '../../config/game/samples/enemie_mobile'
 import { keyDown, keyUp } from './keyboard'
 import { Direction } from './direction'
 
@@ -17,19 +17,7 @@ const superloadObstacles = function () {
       const element: Element = { type: obstacleData.type, dimension: dim }
       rectangles.push(element)
     })
-
   }
-
-  return rectangles;
-}
-
-const loadObstaclesNormal = function () {
-  let rectangles: Element[] = []
-
-  CONFIG.levels[0].obstacles.forEach(obstacleData => {
-    const element: Element = { type: obstacleData.type, dimension: obstacleData.dimensions }
-    return rectangles.push(element)
-  })
 
   return rectangles;
 }
@@ -62,11 +50,12 @@ const buildWater = (data: number[]) => (
   }
 )
 
-const buildEnemies = (data: number[]) => (
+const buildEnemiesMobile = (data: any[]) => (
   {
-    coord: { x: data[0], y: data[1], dx: 0, dy: 0 },
-    width: data[2],
-    height: data[3]
+    direction: data.direction,
+    debut: data.debut, 
+    destination: data.destination,
+    position: {x: data.position[0], y: data.position[1]}
   }
 )
 
@@ -84,7 +73,13 @@ function initWalls(): { coord: { x: number; y: number; dx: number; dy: number };
 }
 
 function initEnemies(): { coord: { x: number; y: number; dx: number; dy: number }; height: number; width: number }[] {
-  return loadObstacles().filter(isEnemie).map((data: Element) => buildEnemies(data.dimension))
+  //return loadObstacles().filter(isEnemu)
+  return []
+}
+
+const initEnemiesMobiles = (): Enemie[] =>  {
+  return CONFIG.levels[0].enemies.map(
+    enemieData => buildEnemiesMobile(enemieData))
 }
 
 
@@ -96,6 +91,7 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
     centerAcceleration: 0,
     water: initWater(),
     enemies: initEnemies(),
+    enemiesMobiles: initEnemiesMobiles(),
     ballShouldBeRecentered: false,
     size: { height, width },
     endOfGame: true,
