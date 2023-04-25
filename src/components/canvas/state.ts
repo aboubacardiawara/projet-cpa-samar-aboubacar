@@ -306,16 +306,21 @@ const moveScreen = (state: State): State => {
   newState.walls.map((wal: Rect) => {
     const newRect: Rect = { ...wal };
     newRect.coord.x += newDx;
+    return newRect
   })
 
   newState.enemies.map((enemie: Rect) => {
     const newRect: Rect = { ...enemie };
     newRect.coord.x += newDx;
+    return newRect
   })
 
   newState.enemiesMobiles.map((enemie: Enemie) => {
-    const newEnemie: Enemie = { ...enemie };
-    newEnemie.coord.x += newDx;
+    const newEnemie: Enemie = enemie
+    newEnemie.coord.x += newDx
+    newEnemie.debut += newDx
+    newEnemie.destination += newDx
+    return newEnemie
   })
 
   const newCenter: Rect = {
