@@ -3,10 +3,8 @@ import { Enemie, Position, State } from "./state";
 
 const horizontalDestinationReached = (enemie: Enemie): boolean => {
     if (enemie.coord.dx > 0) {// sens: -->
-        console.log("-->");
         return enemie.coord.x + enemie.coord.dx >= enemie.destination
     } else if (enemie.coord.dx < 0) { // sens: <--
-        console.log("<--");
         return enemie.coord.x + enemie.coord.dx <= enemie.destination
     }
     return false;

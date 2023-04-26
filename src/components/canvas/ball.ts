@@ -128,7 +128,7 @@ export const moveBallHoriz = (state0: State) => {
     return isBallInCanvasHorital(newState) ? newState : state
 }
 
-const arreteBallAndScreen = (state: State) : State => {
+const arreteBallAndScreen = (state: State): State => {
     return arreteBall(stopMovingScreen(state))
 }
 
@@ -147,7 +147,7 @@ const replaceBall = (state: State, wall: Wall): State => {
     let newBall: Ball = state.ball
     if (state.ball.coord.x < wall.position.x) {
         // la balle est à gauche
-        newBall.coord.x = wall.position.x - conf.RADIUS -1
+        newBall.coord.x = wall.position.x - conf.RADIUS - 1
     } else if ((state.ball.coord.x > wall.position.x)) {
         // la balle est à droite
         newBall.coord.x = wall.position.x + wall.width + conf.RADIUS + 1

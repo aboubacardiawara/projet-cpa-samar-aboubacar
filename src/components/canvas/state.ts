@@ -1,10 +1,10 @@
-import { Ball, arreteBall, changeBallVelocity, moveBall } from './ball';
-import { collisionBallEnemie, collisionCircleBox } from './collision';
+import { Ball, changeBallVelocity, moveBall } from './ball';
+import { collisionBallEnemie } from './collision';
 import * as conf from './conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
 import { moveEnemie } from './enemie';
-import { notJumping, stopBall, stopScreen, stopScreenVitesse } from './keyboard';
+import { notJumping } from './keyboard';
 export type Position = { x: number, y: number }
 export type Rect = { coord: Coord, height: number; width: number }
 export type Size = { height: number; width: number }
@@ -99,9 +99,11 @@ export const step = (state: State) => {
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
   resVert = enLair(resVert) ? jumping(resVert) : resVert
-  const resHor: State = state.ball.acceleration !== 0 ? resVert : ralentir(resVert);
+  const resHor: State = state.ball.acceleration !== 0 ?
+    resVert : ralentir(resVert);
 
-  let screenState: State = state.centerAcceleration !== 0 ? moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
+  let screenState: State = state.centerAcceleration !== 0 ?
+    moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
   screenState = recenterScreenChecker(screenState)
   return checkGameOver(screenState);
 }
@@ -109,7 +111,7 @@ export const step = (state: State) => {
 const checkGameOver = (state: State): State => {
   const newState: State = state
   newState.endOfGame = state.enemies.some(
-    (enemie:Enemie) => collisionBallEnemie(state.ball, enemie))
+    (enemie: Enemie) => collisionBallEnemie(state.ball, enemie))
   return newState;
 }
 
@@ -126,7 +128,9 @@ const auSol = (state: State): boolean => {
  * @returns 
  */
 export const blocDessous = (state: State): number => {
-  const walls: Array<Wall> = state.walls.filter((w:Wall) => canSupportBall(w, state.ball))
+  const walls: Array<Wall> = state.walls.filter(
+    (w: Wall) => canSupportBall(w, state.ball)
+  )
   const candidatWall: Wall = maxWallInHeight(state, walls)
   const res: number = distanceToBottom(state, candidatWall)
   return res
@@ -186,7 +190,6 @@ const arreteNewton = (state: State): State => {
   if (ball.coord.dy > 0) {
     newDy = ball.coord.dy <= 2 ? 0 : ball.coord.dy * elasticity
   }
-  console.log(`${ball.coord.dy}, ${newDy} ${auSol(state)} ${enLair(state)}`);
 
   const newBall: Ball = changeBallVelocity(ball, { dx: ball.coord.dx, dy: ball.jumping ? ball.coord.dy : - newDy })
   const newState: State = updateState(state, newBall);
@@ -205,8 +208,6 @@ const newton = (state: State): State => {
   const newBall: Ball = changeBallVelocity(ball, { dx: ball.coord.dx, dy: ball.coord.dy + conf.ACCELERATION_CHUTE })
   return updateState(state, newBall)
 }
-
-
 
 const ralentir = (state: State): State => {
   const direction = state.ball.direction
@@ -244,11 +245,6 @@ const isMovingRightEcran = (ecran: Rect): boolean => {
   return ecran.coord.dx > 0;
 }
 
-const isMovingLeftEcran = (ecran: Rect): boolean => {
-  return ecran.coord.dx < 0;
-}
-
-
 const ralentirEcran = (state: State): State => {
   const currentDx = state.center.coord.dx;
   let newDx: number;
@@ -271,7 +267,7 @@ const ralentirEcran = (state: State): State => {
  * @param state 
  */
 const screenCanMoveToLeft = (state: State): boolean => {
-  return state.walls.some((wall:Wall) => wall.position.x >= state.size.width)
+  return state.walls.some((wall: Wall) => wall.position.x >= state.size.width)
 }
 
 /**

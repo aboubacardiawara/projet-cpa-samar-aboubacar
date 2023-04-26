@@ -27,15 +27,21 @@ export const CONFIG = {
       enemies: [
         {
           direction: "H",
-          debut: 500,
+          debut: 300,
           destination: 800,
           position: {
-            x: 500,
+            x: 600,
             y: MAX_Y - TAILLE_ENEMIE - COTE * 3
           },
         }
       ],
-      ressources: []
+      ressources: [],
+      sortie: {
+        position: {
+          x: 600,
+          y: MAX_Y - TAILLE_ENEMIE - COTE * 3
+        },
+      }
     }
 
   ]

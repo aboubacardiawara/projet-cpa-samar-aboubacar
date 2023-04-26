@@ -56,31 +56,6 @@ const drawEnemie = (
   ctx.fill()
 }
 
-const drawEnemies = (
-  ctx: CanvasRenderingContext2D,
-  { x, y }: { x: number; y: number },
-  w: number,
-  h: number
-) => {
-  ctx.beginPath()
-  ctx.rect(x, y, w, h)
-  ctx.fillStyle = "green"
-  ctx.fill()
-}
-
-
-const drawWater = (
-  ctx: CanvasRenderingContext2D,
-  { x, y }: { x: number; y: number },
-  w: number,
-  h: number
-) => {
-  ctx.beginPath()
-  ctx.rect(x, y, w, h)
-  ctx.fillStyle = "red"
-  ctx.fill()
-}
-
 const drawCenter = (
   ctx: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number; },
@@ -122,25 +97,6 @@ const drawCirle = (
   ctx.fillStyle = color
   ctx.arc(x, y, conf.RADIUS, 0, 2 * Math.PI)
   ctx.fill()
-}
-
-const drawBounce = (
-  ctx: CanvasRenderingContext2D,
-  { x, y }: { x: number; y: number; },
-  id: number
-) => {
-  ctx.beginPath()
-  ctx.arc(x, y, conf.RADIUS, 0, 2 * Math.PI)
-  ctx.closePath()
-  ctx.save() // sauvegarder l'état courant du contexte
-  ctx.clip() // définir un masque circulaire
-
-  var img = new Image()
-  img.src = `bounce${id}.png`
-  img.onload = () => {
-    ctx.drawImage(img, x - conf.RADIUS, y - conf.RADIUS, conf.RADIUS * 2, conf.RADIUS * 2)
-    ctx.restore() // restaurer l'état du contexte
-  }
 }
 
 
