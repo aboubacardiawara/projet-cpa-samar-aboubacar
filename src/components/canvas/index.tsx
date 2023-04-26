@@ -1,11 +1,11 @@
 import * as conf from './conf'
 import { useRef, useEffect } from 'react'
-import { State, step } from './state'
+import { State, gameOver, step } from './state'
 
 import { render } from './renderer'
 import { keyDown, keyUp } from './keyboard'
 import { Direction } from './direction'
-import { initCanvas, initEnemies, initWalls } from './charactersLoader'
+import { initCanvas, initEnemies, initSortie, initWalls } from './charactersLoader'
 
 
 export const Canvas = ({ height, width }: { height: number; width: number }) => {
@@ -17,7 +17,8 @@ export const Canvas = ({ height, width }: { height: number; width: number }) => 
     enemies: initEnemies(),
     ballShouldBeRecentered: false,
     size: { height, width },
-    endOfGame: true,
+    endOfGame: {end: false, hasWinPlayer: false},
+    sortie: initSortie()
   }
 
   const ref = useRef<any>()
@@ -26,7 +27,7 @@ export const Canvas = ({ height, width }: { height: number; width: number }) => 
   const iterate = (ctx: CanvasRenderingContext2D) => {
     state.current = step(state.current)
     render(ctx)(state.current)
-    if (!state.current.endOfGame) requestAnimationFrame(() => iterate(ctx))
+    if (!gameOver(state.current)) requestAnimationFrame(() => iterate(ctx))
   }
 
   const onKeyDown = (e: KeyboardEvent) => {

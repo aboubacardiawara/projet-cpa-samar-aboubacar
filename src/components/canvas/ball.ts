@@ -1,6 +1,6 @@
 import { Coord } from "./coord";
 import { Direction, isMovingLeft, isMovingRight } from "./direction";
-import { Rect, Size, State, Wall, blocDessous, updateState } from "./state";
+import { Size, State, Wall, blocDessous, updateState } from "./state";
 import * as conf from './conf'
 import { stat } from "fs";
 import { collisionCircleBox } from "./collision";

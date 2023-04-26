@@ -1,26 +1,33 @@
 import { Ball, changeBallVelocity, moveBall } from './ball';
-import { collisionBallEnemie } from './collision';
+import { collisionBallEnemie, collisionCircleExit } from './collision';
 import * as conf from './conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
 import { moveEnemie } from './enemie';
 import { notJumping } from './keyboard';
+
+/*********************************************
+              GAME ELEMENTS TYPE 
+**********************************************/
 export type Position = { x: number, y: number }
-export type Rect = { coord: Coord, height: number; width: number }
+export type Mobile = { coord: Coord, height: number; width: number }
 export type Size = { height: number; width: number }
 export type Enemie = { direction: String, debut: number, destination: number, coord: Coord }
 export type Wall = { position: Position, height: number; width: number }
 export type Element = { type: string, dimension: number[] }
+export type Sortie = { position: Position }
+export type EndOfGame = { end: boolean, hasWinPlayer: boolean }
 
 export type State = {
   ball: Ball
   size: Size
-  center: Rect
+  center: Mobile
   centerAcceleration: number
   ballShouldBeRecentered: boolean
-  endOfGame: boolean
+  endOfGame: EndOfGame
   walls: Array<Wall>
   enemies: Array<Enemie>
+  sortie: Sortie
 }
 
 const enLair = (state: State): boolean => {
@@ -34,84 +41,44 @@ const jumping = (state: State): State => {
   })
 }
 
-/**
- * 
- * @param state verifie si la ball est en dehaord du centre.
- * En consequence, on doit adapter la camera.
- * @returns 
- */
-const ballOutSideCenter = (state: State): boolean => {
-  const epsilon: number = 5
-  return !state.ball.jumping && state.ball.coord.x - epsilon > state.center.coord.x + state.center.width
-  /*|| state.ball.coord.x < state.center.coord.x;*/
-}
-
-/**
- * 
- * @param state verifie si la balle est au centre de l'ecran.
- * @returns 
- */
-const ballShouldNotBeCentered = (state: State): boolean => {
-  const epsilon: number = 100
-  return state.ball.coord.x < state.center.coord.x + state.center.width - epsilon
-}
-
-
-const recenterBall = (state: State): State => {
-  const newState = state
-  const delta = -state.center.coord.dx
-  // deplacer la balle
-  newState.ball.coord.x -= delta
-
-  // deplacer les murs
-  newState.walls = newState.walls.map((w: Wall) => {
-    w.position.x -= delta
-    return w
-  })
-
-
-  // deplacer les enemis
-  newState.enemies = newState.enemies.map(e => {
-    e.coord.x -= delta
-    return e
-  })
-  return newState
-}
-
-const recenterScreenChecker = (state: State): State => {
-  const newState = state
-  newState.ballShouldBeRecentered = ballOutSideCenter(state)
-  return newState
-}
-
-
-const moveCharacters = (state: State): State => {
+const moveOtherCharacters = (state: State): State => {
   state.enemies = state.enemies.map(
     (enemie: Enemie) => moveEnemie(enemie)
   )
-
   return state
 }
 
 export const step = (state: State) => {
-  const moveOtherCharacters = moveCharacters(state)
-  const newState: State = moveBall(moveOtherCharacters);
+  const moveCharacters = moveOtherCharacters(state)
+  const newState: State = moveBall(moveCharacters);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
   resVert = enLair(resVert) ? jumping(resVert) : resVert
   const resHor: State = state.ball.acceleration !== 0 ?
     resVert : ralentir(resVert);
-
   let screenState: State = state.centerAcceleration !== 0 ?
     moveScreen(resHor) : ralentirEcran(moveScreen(resHor))
-  screenState = recenterScreenChecker(screenState)
   return checkGameOver(screenState);
 }
 
+const colisionBallEtExit = (state: State): boolean => {
+  return collisionCircleExit(state.ball, state.sortie)
+}
+
+const collisionBallEtEnemie = (state: State): boolean => {
+  return state.enemies.some(
+    (enemie: Enemie) => collisionBallEnemie(state.ball, enemie));
+}
+
+
 const checkGameOver = (state: State): State => {
   const newState: State = state
-  newState.endOfGame = state.enemies.some(
-    (enemie: Enemie) => collisionBallEnemie(state.ball, enemie))
+  const collisionWithEnemie: boolean = collisionBallEtEnemie(state);
+  const collisionWithExit: boolean = colisionBallEtExit(state)
+  newState.endOfGame = {
+    end: collisionWithEnemie || collisionWithExit,
+    hasWinPlayer: collisionWithExit
+  }
   return newState;
 }
 
@@ -145,7 +112,6 @@ export const blocDessous = (state: State): number => {
  * @returns 
  */
 const distanceToBottom = (state: State, wall: Wall): number => {
-
   const ballX: number = state.ball.coord.x
   const wallX: number = wall.position.x
   const distanceNaive: number = state.size.height - wall.position.y
@@ -167,7 +133,6 @@ const maxWallInHeight = (state: State, walls: Array<Wall>): Wall => {
     if (distanceToBottom(state, element) > distanceToBottom(state, res)) {
       res = element
     }
-
   }
   return res;
 }
@@ -241,7 +206,7 @@ const ralentir = (state: State): State => {
   }
 }
 
-const isMovingRightEcran = (ecran: Rect): boolean => {
+const isMovingRightEcran = (ecran: Mobile): boolean => {
   return ecran.coord.dx > 0;
 }
 
@@ -281,7 +246,7 @@ const screenCanMoveToRight = (state: State): boolean => {
 
 const moveScreen = (state: State): State => {
   const newState = { ...state };
-  const center: Rect = state.center;
+  const center: Mobile = state.center;
   const currentDx = center.coord.dx;
   const newDx: number = Math.abs(currentDx) < conf.VITESSE_MAX ? currentDx + state.centerAcceleration : currentDx
 
@@ -303,6 +268,8 @@ const moveScreen = (state: State): State => {
     return newWall
   })
 
+  newState.sortie.position.x += newDx
+
 
   newState.enemies.map((enemie: Enemie) => {
     const newEnemie: Enemie = enemie
@@ -312,7 +279,7 @@ const moveScreen = (state: State): State => {
     return newEnemie
   })
 
-  const newCenter: Rect = {
+  const newCenter: Mobile = {
     ...center,
     coord: {
       ...center.coord,
@@ -323,4 +290,10 @@ const moveScreen = (state: State): State => {
   return { ...newState, center: newCenter };
 }
 
-export const endOfGame = (state: State): boolean => state.endOfGame
+export const gameOver = (state: State): boolean => {
+  return state.endOfGame.end
+}
+
+export const playerHasWin = (state: State): boolean => {
+  return state.endOfGame.hasWinPlayer
+}

@@ -1,7 +1,7 @@
 import { collisionCircleBox } from './collision'
 import * as conf from './conf'
 import { Coord } from './coord'
-import { Enemie, State, Wall } from './state'
+import { Enemie, State, Wall, gameOver, playerHasWin } from './state'
 const COLORS = {
   RED: '#ff0000',
   GREEN: '#00ff00',
@@ -53,6 +53,18 @@ const drawEnemie = (
   ctx.beginPath()
   ctx.rect(x, y, w, h)
   ctx.fillStyle = "red"
+  ctx.fill()
+}
+
+const drawSortie = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number },
+  w: number,
+  h: number
+) => {
+  ctx.beginPath()
+  ctx.rect(x, y, w, h)
+  ctx.fillStyle = "green"
   ctx.fill()
 }
 
@@ -112,7 +124,6 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   }
 
   const c = state.ball;
-  let couleur;
 
   drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE));
 
@@ -122,8 +133,13 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   state.enemies.map((e: Enemie) =>
     drawEnemie(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
 
-  if (state.endOfGame) {
-    const text = 'Game Over'
+  drawSortie(ctx, { ...state.sortie.position }, conf.WIDTH_SORTIE, conf.HEIGHT_SORTIE)
+
+  if (gameOver(state)) {
+    let text = 'Game Over'
+    if (playerHasWin(state)) {
+      text = 'Congratulation'
+    }
     ctx.font = '48px arial'
     ctx.strokeText(text, state.size.width / 2 - 100, state.size.height / 2)
   }

@@ -1,3 +1,5 @@
+import { HEIGHT_SORTIE, WIDTH_SORTIE } from "../../../components/canvas/conf";
+
 const COTE = 40;
 const MAX_X = 1200;
 const MAX_Y = 800;
@@ -38,11 +40,10 @@ export const CONFIG = {
       ressources: [],
       sortie: {
         position: {
-          x: 600,
-          y: MAX_Y - TAILLE_ENEMIE - COTE * 3
+          x: 1100,
+          y: MAX_Y - HEIGHT_SORTIE - COTE * 3
         },
       }
     }
-
   ]
 }

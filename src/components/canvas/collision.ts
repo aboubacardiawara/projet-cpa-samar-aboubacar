@@ -1,6 +1,6 @@
 import { Ball } from "./ball";
-import { RADIUS, TAILLE_ENEMIE } from "./conf";
-import { Enemie, Position, Rect, Wall } from "./state";
+import { HEIGHT_SORTIE, RADIUS, TAILLE_ENEMIE, WIDTH_SORTIE } from "./conf";
+import { Enemie, Sortie, Wall } from "./state";
 
 /**
  * 
@@ -47,7 +47,7 @@ const collisionCircleBoxProf = (ball: Ball, rec: Wall): boolean => {
  */
 export const collisionBallEnemie = (ball: Ball, enemie: Enemie): boolean => {
   const circle = { x: ball.coord.x, y: ball.coord.y, radius: RADIUS }
-  const box = { x: enemie.coord.x, y: enemie.coord.y, width: TAILLE_ENEMIE, height: TAILLE_ENEMIE}
+  const box = { x: enemie.coord.x, y: enemie.coord.y, width: TAILLE_ENEMIE, height: TAILLE_ENEMIE }
 
   let distX = Math.abs(circle.x - box.x - box.width / 2)
   let distY = Math.abs(circle.y - box.y - box.height / 2)
@@ -70,4 +70,14 @@ export const collisionBallEnemie = (ball: Ball, enemie: Enemie): boolean => {
 
 export const collisionCircleBox = (ball: Ball, rec: Wall): boolean => {
   return collisionCircleBoxProf(ball, rec)
+}
+
+export const collisionCircleExit = (ball: Ball, exit: Sortie): boolean => {
+  const wall: Wall = {
+    ...exit,
+    width: WIDTH_SORTIE,
+    height: HEIGHT_SORTIE,
+  }
+
+  return collisionCircleBoxProf(ball, wall)
 }

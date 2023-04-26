@@ -1,7 +1,7 @@
 import { CONFIG } from '../../config/game/samples/enemie_mobile'
 import * as conf from './conf'
 import { EnemieData, WallData } from './interfaces'
-import { Enemie, Wall } from './state'
+import { Enemie, Sortie, Wall } from './state'
 
 export const getLevel = () => {
     let wallsData: WallData[] = []
@@ -87,3 +87,7 @@ export const initEnemies = (): Enemie[] => {
     return CONFIG.levels[0].enemies.map(
         enemieData => buildEnemiesMobile(enemieData))
 }
+
+export const initSortie = (): Sortie => ({
+    ...getLevel().sortie
+})
