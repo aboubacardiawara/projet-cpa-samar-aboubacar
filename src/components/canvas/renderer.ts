@@ -1,7 +1,7 @@
 import { collisionCircleBox } from './collision'
 import * as conf from './conf'
 import { Coord } from './coord'
-import { State } from './state'
+import { Enemie, State, Wall } from './state'
 const COLORS = {
   RED: '#ff0000',
   GREEN: '#00ff00',
@@ -44,7 +44,7 @@ const clear = (ctx: CanvasRenderingContext2D) => {
 }
 
 
-const drawEnemies = (
+const drawEnemie = (
   ctx: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number },
   w: number,
@@ -56,7 +56,7 @@ const drawEnemies = (
   ctx.fill()
 }
 
-const drawEnemiesMobile = (
+const drawEnemies = (
   ctx: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number },
   w: number,
@@ -160,17 +160,11 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
 
   drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE));
 
-  state.walls.map((r) =>
-    drawRect(ctx, r.coord, r.width, r.height))
+  state.walls.map((r: Wall) =>
+    drawRect(ctx, r.position, r.width, r.height))
 
-  state.water.map((r) =>
-    drawWater(ctx, r.coord, r.width, r.height))
-
-  state.enemies.map((r) =>
-    drawEnemies(ctx, r.coord, r.width, r.height))
-
-  state.enemiesMobiles.map((enemieMobile) =>
-    drawEnemiesMobile(ctx, {x:enemieMobile.coord.x, y:enemieMobile.coord.y}, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
+  state.enemies.map((e: Enemie) =>
+    drawEnemie(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
 
   if (state.endOfGame) {
     const text = 'Game Over'

@@ -1,6 +1,6 @@
 import { Coord } from "./coord";
 import { Direction, isMovingLeft, isMovingRight } from "./direction";
-import { Rect, Size, State, blocDessous, updateState } from "./state";
+import { Rect, Size, State, Wall, blocDessous, updateState } from "./state";
 import * as conf from './conf'
 import { stat } from "fs";
 import { collisionCircleBox } from "./collision";
@@ -143,14 +143,14 @@ const gestionCollisionHorizontal = (state: State): State => {
     return state;
 }
 
-const replaceBall = (state: State, wall: Rect): State => {
+const replaceBall = (state: State, wall: Wall): State => {
     let newBall: Ball = state.ball
-    if (state.ball.coord.x < wall.coord.x) {
+    if (state.ball.coord.x < wall.position.x) {
         // la balle est à gauche
-        newBall.coord.x = wall.coord.x - conf.RADIUS -1
-    } else if ((state.ball.coord.x > wall.coord.x)) {
+        newBall.coord.x = wall.position.x - conf.RADIUS -1
+    } else if ((state.ball.coord.x > wall.position.x)) {
         // la balle est à droite
-        newBall.coord.x = wall.coord.x + wall.width + conf.RADIUS + 1
+        newBall.coord.x = wall.position.x + wall.width + conf.RADIUS + 1
     }
     return updateState(state, newBall)
 }

@@ -1,29 +1,52 @@
 import * as conf from './conf'
 import { useRef, useEffect, MutableRefObject } from 'react'
-import { State, step, endOfGame, Element, Enemie } from './state'
+import { State, step, endOfGame, Element, Enemie, Wall } from './state'
 
 import { render } from './renderer'
 import { CONFIG } from '../../config/game/samples/enemie_mobile'
 import { keyDown, keyUp } from './keyboard'
 import { Direction } from './direction'
+import { EnemieData, WallData } from './interfaces'
 
-const superloadObstacles = function () {
-  let rectangles: Element[] = []
+const getLevel = () => {
+  let wallsData: WallData[] = []
+  let enemiesData: EnemieData[] = []
 
-  for (let i = 0; i < 4; i++) {
-    CONFIG.levels[0].obstacles.forEach(obstacleData => {
-      const dim: number[] = [...obstacleData.dimensions];
-      dim[0] = dim[0] + i * conf.MAX_X;
-      const element: Element = { type: obstacleData.type, dimension: dim }
-      rectangles.push(element)
-    })
+  for (let screenNum = 0; screenNum < 3; screenNum++) {
+    const screen = { ...CONFIG.levels[0] };
+    wallsData = wallsData.concat(screen.walls.map(
+      (wallData: WallData) => {
+        const newWalldata: WallData = {
+          ...wallData,
+          position: {
+            ...wallData.position,
+            x: screenNum * conf.MAX_X + wallData.position.x
+          }
+        }
+        return newWalldata
+      }
+    ))
+
+    enemiesData = enemiesData.concat(screen.enemies.map(
+      (enemieData: EnemieData) => {
+        const newEnemieData: EnemieData = {
+          ...enemieData,
+          position: {
+            ...enemieData.position,
+            x: screenNum * conf.MAX_X + enemieData.position.x
+          }
+        }
+        return newEnemieData;
+      }
+    ))
   }
 
-  return rectangles;
-}
+  const newLevel = { ...CONFIG.levels[0] };
+  newLevel.enemies = enemiesData;
+  newLevel.walls = wallsData;
+  console.log(newLevel);
 
-const loadObstacles = function () {
-  return superloadObstacles();
+  return newLevel
 }
 
 const initCanvas =
@@ -34,55 +57,39 @@ const initCanvas =
       requestAnimationFrame(() => iterate(ctx))
     }
 
-const buildWalls = (data: number[]) => (
-  {
-    coord: { x: data[0], y: data[1], dx: 0, dy: 0 },
-    width: data[2],
-    height: data[3]
-  }
+/**
+ * Prend un objet données d'un mur et construit un element mur.
+ * @param data 
+ * @returns 
+ */
+const buildWall = (data: WallData): Wall => (
+  data
 )
 
-const buildWater = (data: number[]) => (
-  {
-    coord: { x: data[0], y: data[1], dx: 0, dy: 0 },
-    width: data[2],
-    height: data[3]
-  }
-)
-
-const buildEnemiesMobile = (data: any[]) => (
+const buildEnemiesMobile = (
+  data: EnemieData) => (
   {
     direction: data.direction,
-    debut: data.debut, 
+    debut: data.debut,
     destination: data.destination,
     coord: {
-      x: data.position[0], 
-      y: data.position[1], 
-      dx: data.direction === "H"? conf.ENEMIE_VITESSE : 0,
-      dy: data.direction === "V"? conf.ENEMIE_VITESSE : 0
+      x: data.position.x,
+      y: data.position.y,
+      dx: data.direction === "H" ? conf.ENEMIE_VITESSE : 0,
+      dy: data.direction === "V" ? conf.ENEMIE_VITESSE : 0
     }
   }
 )
 
-
-const isWall = (data: Element) => (data.type === 'wall')
-const isWater = (data: Element) => (data.type === 'water')
-const isEnemie = (data: Element) => (data.type === 'enemie')
-
-function initWater(): { coord: { x: number; y: number; dx: number; dy: number }; height: number; width: number }[] {
-  return loadObstacles().filter(isWater).map((data: Element) => buildWater(data.dimension))
+/**
+ * Initilise les elements murs de ce niveau
+ * @returns 
+ */
+const initWalls = (): Wall[] => {
+  return getLevel().walls.map(buildWall)
 }
 
-function initWalls(): { coord: { x: number; y: number; dx: number; dy: number }; height: number; width: number }[] {
-  return loadObstacles().filter(isWall).map((data: Element) => buildWalls(data.dimension))
-}
-
-function initEnemies(): { coord: { x: number; y: number; dx: number; dy: number }; height: number; width: number }[] {
-  //return loadObstacles().filter(isEnemu)
-  return []
-}
-
-const initEnemiesMobiles = (): Enemie[] =>  {
+const initEnemiesMobiles = (): Enemie[] => {
   return CONFIG.levels[0].enemies.map(
     enemieData => buildEnemiesMobile(enemieData))
 }
@@ -92,11 +99,9 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
   const initialState: State = {
     ball: initBall(),
     walls: initWalls(),
-    center: { coord: { dx: 0, dy: 0, x: 480-40, y: 0 }, height: 800, width: 40 * 8 },
+    center: { coord: { dx: 0, dy: 0, x: 480 - 40, y: 0 }, height: 800, width: 40 * 8 },
     centerAcceleration: 0,
-    water: initWater(),
-    enemies: initEnemies(),
-    enemiesMobiles: initEnemiesMobiles(),
+    enemies: initEnemiesMobiles(),
     ballShouldBeRecentered: false,
     size: { height, width },
     endOfGame: true,
@@ -144,7 +149,7 @@ function initBall() {
   return {
     life: conf.BALLLIFE,
     coord: {
-      x: conf.MAX_X/2,
+      x: conf.MAX_X / 2,
       y: 300,
       dx: 0,
       dy: 0,
