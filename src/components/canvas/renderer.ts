@@ -106,6 +106,7 @@ const drawRect = (
 
 }
 
+
 const drawCirle = (
   ctx: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number },
@@ -135,13 +136,13 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
 
   state.walls.forEach((w: Wall) => {
     if (inScreen(w.position, w.width, w.height)) {
-      drawRect(ctx, w.position, w.width, w.height)
+      drawRect(ctx, w.position, w.width, w.height, 40, 40)
     }
   })
 
   state.enemies.forEach((e: Enemie) => {
-    if (inScreen({x:e.coord.x, y:e.coord.y}, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
-    drawEnemie(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE)
+    if (inScreen({ x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
+      drawEnemie(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE)
   })
 
   drawSortie(ctx, { ...state.sortie.position }, conf.WIDTH_SORTIE, conf.HEIGHT_SORTIE)
