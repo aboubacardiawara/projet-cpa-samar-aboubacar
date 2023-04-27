@@ -1,7 +1,7 @@
 import { collisionCircleBox } from './collision'
 import * as conf from './conf'
 import { Coord } from './coord'
-import { Enemie, State, Wall, gameOver, playerHasWin } from './state'
+import { Enemie, Position, State, Wall, gameOver, playerHasWin } from './state'
 const COLORS = {
   RED: '#ff0000',
   GREEN: '#00ff00',
@@ -82,22 +82,28 @@ const drawCenter = (
 
 const drawRect = (
   ctx: CanvasRenderingContext2D,
-  { x, y }: { x: number; y: number; },
+  position: Position,
   w: number
   , h: number,
 ) => {
-  ctx.beginPath()
-  ctx.rect(x, y, w, h)
+  const x: number = position.x
+  const y: number = position.y
+
   var img = new Image()
-  img.src = 'brick.png'
-  var tempCanvas = document.createElement("canvas")
-  const tCtx = tempCanvas.getContext("2d");
-  tempCanvas.width = 40;
-  tempCanvas.height = 40;
-  tCtx?.drawImage(img, 0, 0, img.width, img.height, 0, 0, 40, 40)
-  var brick = ctx.createPattern(tempCanvas, 'repeat')
-  ctx.fillStyle = brick!
-  ctx.fill()
+  img.src = 'brick2.png'
+  // remplir le mur avec des briques
+
+  // Calculate the number of images needed to fill the wall
+  const numImagesAcross = Math.ceil(w / 40)
+  const numImagesDown = Math.ceil(h / 40)
+
+  // Loop through each position on the wall and draw the image
+  for (let i = 0; i < w; i += 40) {
+    for (let j = 0; j < h; j += 40) {
+      ctx.drawImage(img, x + i, y + j, 42, 42)
+    }
+  }
+
 }
 
 const drawCirle = (
@@ -127,11 +133,16 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
 
   drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE));
 
-  state.walls.map((r: Wall) =>
-    drawRect(ctx, r.position, r.width, r.height))
+  state.walls.forEach((w: Wall) => {
+    if (inScreen(w.position, w.width, w.height)) {
+      drawRect(ctx, w.position, w.width, w.height)
+    }
+  })
 
-  state.enemies.map((e: Enemie) =>
-    drawEnemie(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
+  state.enemies.forEach((e: Enemie) => {
+    if (inScreen({x:e.coord.x, y:e.coord.y}, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
+    drawEnemie(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE)
+  })
 
   drawSortie(ctx, { ...state.sortie.position }, conf.WIDTH_SORTIE, conf.HEIGHT_SORTIE)
 
@@ -143,4 +154,8 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
     ctx.font = '48px arial'
     ctx.strokeText(text, state.size.width / 2 - 100, state.size.height / 2)
   }
+}
+
+const inScreen = (pos: Position, w: number, h: number): boolean => {
+  return pos.x + w >= 0 && pos.x <= conf.MAX_X && pos.y + h >= 0 && pos.y <= conf.MAX_Y
 }
