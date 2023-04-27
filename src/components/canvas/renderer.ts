@@ -136,7 +136,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
 
   state.walls.forEach((w: Wall) => {
     if (inScreen(w.position, w.width, w.height)) {
-      drawRect(ctx, w.position, w.width, w.height, 40, 40)
+      drawRect(ctx, w.position, w.width, w.height)
     }
   })
 
@@ -157,6 +157,6 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   }
 }
 
-const inScreen = (pos: Position, w: number, h: number): boolean => {
+export const inScreen = (pos: Position, w: number, h: number): boolean => {
   return pos.x + w >= 0 && pos.x <= conf.MAX_X && pos.y + h >= 0 && pos.y <= conf.MAX_Y
 }

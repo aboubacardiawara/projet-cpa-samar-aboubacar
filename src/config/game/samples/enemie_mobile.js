@@ -12,18 +12,10 @@ export const CONFIG = {
         {
           position: {
             x: 0,
-            y: 0
+            y: MAX_Y - COTE
           },
-          width: COTE * 5,
-          height: COTE * 20,
-        },
-        {
-          position: {
-            x: 0,
-            y: MAX_Y - 3 * COTE
-          },
-          width: COTE * 500,
-          height: COTE * 3,
+          width: COTE * 100,
+          height: COTE,
         },
       ],
       enemies: [
@@ -33,7 +25,7 @@ export const CONFIG = {
           destination: 800,
           position: {
             x: 600,
-            y: MAX_Y - TAILLE_ENEMIE - COTE * 3
+            y: MAX_Y - TAILLE_ENEMIE - COTE
           },
         }
       ],
@@ -41,7 +33,7 @@ export const CONFIG = {
       sortie: {
         position: {
           x: 1100,
-          y: MAX_Y - HEIGHT_SORTIE - COTE * 3
+          y: MAX_Y - HEIGHT_SORTIE - COTE
         },
       }
     }

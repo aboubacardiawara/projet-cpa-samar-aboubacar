@@ -5,6 +5,7 @@ import { Coord } from './coord';
 import { isMovingRight } from './direction';
 import { moveEnemie } from './enemie';
 import { notJumping } from './keyboard';
+import { inScreen } from './renderer';
 
 /*********************************************
               GAME ELEMENTS TYPE 
@@ -66,8 +67,10 @@ const colisionBallEtExit = (state: State): boolean => {
 }
 
 const collisionBallEtEnemie = (state: State): boolean => {
-  return state.enemies.some(
-    (enemie: Enemie) => collisionBallEnemie(state.ball, enemie));
+  return state.enemies
+    .filter(enemie => inScreen({ x: enemie.coord.x, y: enemie.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
+    .some(
+      (enemie: Enemie) => collisionBallEnemie(state.ball, enemie));
 }
 
 
@@ -95,7 +98,10 @@ const auSol = (state: State): boolean => {
  * @returns 
  */
 export const blocDessous = (state: State): number => {
-  const walls: Array<Wall> = state.walls.filter(
+  const walls: Array<Wall> = 
+  state.walls
+  .filter(w => inScreen(w.position, w.width, w.height))
+  .filter(
     (w: Wall) => canSupportBall(w, state.ball)
   )
   const candidatWall: Wall = maxWallInHeight(state, walls)

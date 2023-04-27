@@ -4,6 +4,7 @@ import { Size, State, Wall, blocDessous, updateState } from "./state";
 import * as conf from './conf'
 import { stat } from "fs";
 import { collisionCircleBox } from "./collision";
+import { inScreen } from "./renderer";
 
 export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction, imgid: number }
 
@@ -133,7 +134,9 @@ const arreteBallAndScreen = (state: State): State => {
 }
 
 const gestionCollisionHorizontal = (state: State): State => {
-    state.walls.forEach(wall => {
+    state.walls
+    .filter(w => inScreen(w.position, w.width, w.height))
+    .forEach(wall => {
         if (collisionCircleBox(state.ball, wall)) {
             console.log("collision")
             return arreteBallAndScreen(replaceBall(state, wall));
