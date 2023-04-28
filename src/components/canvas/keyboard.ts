@@ -1,4 +1,4 @@
-import { Ball, ballAtLeftBoundarie, ballAtRightBoundarie, changeBallVelocity } from "./ball";
+import { Ball, ballAtLeftBoundarie, ballAtRightBoundarie, changeBallVelocity, computeNexId } from "./ball";
 import { ACCELARATION_HORIZ, RADIUS, VITESSE_INIT_SAUT } from "./conf";
 import { State, updateState } from "./state";
 
@@ -29,7 +29,7 @@ export const keyUp =
     (state: State) =>
         (event: KeyboardEvent): State => {
             event.preventDefault()
-            let newState:State;
+            let newState: State;
             const keyName: string = event.key;
             switch (keyName) {
                 case "ArrowLeft":
@@ -48,7 +48,8 @@ export const keyUp =
 const handleLeftClick = (state: State): State => {
     const newState = state
     newState.centerAcceleration = +ACCELARATION_HORIZ
-
+    // gestion img
+    newState.ball.imgIndex = computeNexId(newState.ball.imgIndex, false)
     return newState
 }
 
@@ -56,12 +57,7 @@ const handleRightClick = (state: State): State => {
     const newState = state
     newState.centerAcceleration = -ACCELARATION_HORIZ
     // gestion img
-    newState.ball.imgIndex= (newState.ball.imgIndex+1)
-    if (newState.ball.imgIndex > 4) {
-        newState.ball.currentImageIndex = - newState.ball.currentImageIndex
-    }
-    newState.ball.image.src = newState.ball.images[newState.ball.currentImageIndex];
-
+    newState.ball.imgIndex = computeNexId(newState.ball.imgIndex, true)
     return newState
 }
 
@@ -105,7 +101,7 @@ export const stopBall = (state: State): State => {
 
 export const stopScreen = (state: State): State => {
     state.centerAcceleration = 0;
-    
+
     return state.ballShouldBeRecentered ? state : replaceBall(state);
 }
 

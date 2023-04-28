@@ -108,14 +108,18 @@ const drawRect = (
 
 
 const drawCirle = (
-  ctx: CanvasRenderingContext2D,
+
+  context: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number },
-  color: string
+  color: string, img: HTMLImageElement
 ) => {
-  ctx.beginPath()
-  ctx.fillStyle = color
-  ctx.arc(x, y, conf.RADIUS, 0, 2 * Math.PI)
-  ctx.fill()
+  context.save()
+  context.beginPath();
+  context.arc(x, y, conf.RADIUS, 0, 2 * Math.PI, false);
+  context.closePath();
+  context.clip();
+  context.drawImage(img, x - conf.RADIUS, y - conf.RADIUS, conf.RADIUS * 2, conf.RADIUS * 2);
+  context.restore();
 }
 
 
@@ -131,8 +135,11 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   }
 
   const c = state.ball;
-
-  drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE));
+  const img = new Image();
+  img.src = state.ball.images[state.ball.imgIndex]
+  console.log(img);
+  
+  drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE), img);
 
   state.walls.forEach((w: Wall) => {
     if (inScreen(w.position, w.width, w.height)) {

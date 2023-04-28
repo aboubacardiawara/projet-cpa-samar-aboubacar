@@ -124,6 +124,7 @@ export const moveBallHoriz = (state0: State) => {
     }
 
     newState = gestionCollisionHorizontal(newState)
+    console.log(newDx);
 
     return isBallInCanvasHorital(newState) ? newState : state
 }
@@ -134,13 +135,13 @@ const arreteBallAndScreen = (state: State): State => {
 
 const gestionCollisionHorizontal = (state: State): State => {
     state.walls
-    .filter(w => inScreen(w.position, w.width, w.height))
-    .forEach(wall => {
-        if (collisionCircleBox(state.ball, wall)) {
-            console.log("collision")
-            return arreteBallAndScreen(replaceBall(state, wall));
-        }
-    })
+        .filter(w => inScreen(w.position, w.width, w.height))
+        .forEach(wall => {
+            if (collisionCircleBox(state.ball, wall)) {
+                console.log("collision")
+                return arreteBallAndScreen(replaceBall(state, wall));
+            }
+        })
 
     return state;
 }
@@ -155,14 +156,6 @@ const replaceBall = (state: State, wall: Wall): State => {
         newBall.coord.x = wall.position.x + wall.width + conf.RADIUS + 1
     }
     return updateState(state, newBall)
-}
-
-
-const computeNewImgId = (state: State): number => {
-    if (state.centerAcceleration === 0 && state.ball.coord.dx == 0) {
-        return 0
-    }
-    return 1
 }
 
 /**
@@ -210,3 +203,19 @@ export const changeBallVelocity = (ball: Ball, newVelocity: any): Ball => {
     }
 }
 
+
+export const computeNexId = (id: number, forward: boolean): number => {
+    if (forward) {
+        if (id == 3) {
+            return 0
+        } else {
+            return id + 1
+        }
+    } else {
+        if (id == 0) {
+            return 3
+        } else {
+            return id - 1
+        }
+    }
+}

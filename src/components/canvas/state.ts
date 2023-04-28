@@ -1,4 +1,4 @@
-import { Ball, changeBallVelocity, moveBall } from './ball';
+import { Ball, changeBallVelocity, computeNexId, moveBall } from './ball';
 import { collisionBallEnemie, collisionCircleExit } from './collision';
 import * as conf from './conf'
 import { Coord } from './coord';
@@ -267,15 +267,14 @@ const moveScreen = (state: State): State => {
       return state
     }
   }
-
+  
   newState.walls.map((wal: Wall) => {
     const newWall: Wall = { ...wal };
     newWall.position.x += newDx;
     return newWall
   })
-
+  
   newState.sortie.position.x += newDx
-
 
   newState.enemies.map((enemie: Enemie) => {
     const newEnemie: Enemie = enemie
