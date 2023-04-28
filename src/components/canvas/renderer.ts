@@ -72,6 +72,7 @@ const drawSortie = (
   ctx.rect(x, y, w, h)
   ctx.fillStyle = color
   ctx.fill()
+  ctx.fillStyle = "black"
 }
 
 const drawCenter = (
@@ -116,7 +117,7 @@ const drawRessource = (
   ctx: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number },
   img: HTMLImageElement
-) => { 
+) => {
   ctx.drawImage(img, x, y, conf.SIZE_RESSOURCE, conf.SIZE_RESSOURCE)
 }
 
@@ -157,9 +158,20 @@ const enemieImg = (): HTMLImageElement => {
   return img
 }
 
+const displayCoinsStats = (ctx: CanvasRenderingContext2D, state: State) => {
+  ctx.font = '25px serif';
+  const img: HTMLImageElement = new Image()
+  img.src = 'piece-1.png'
+  drawRessource(ctx, { x: 10, y: 20 }, img);
+  ctx.fillText(": " + state.collectedCoins + " /" + state.goal, 40, 43);
+}
+
+const displayStat = (ctx: CanvasRenderingContext2D, state: State) => {
+  displayCoinsStats(ctx, state);
+}
+
 export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   clear(ctx)
-
   if (conf.DEBUG_ON) {
     const center = state.center;
     drawCenter(ctx, center.coord, center.width, center.height)
@@ -183,17 +195,17 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   })
   state.ressources.forEach(
     (ressource: Ressource) => {
-      if (inScreen({...ressource.position}, conf.SIZE_RESSOURCE, conf.SIZE_RESSOURCE)) {
+      if (inScreen({ ...ressource.position }, conf.SIZE_RESSOURCE, conf.SIZE_RESSOURCE)) {
         const img: HTMLImageElement = new Image()
         img.src = ressource.imagesSrc[ressource.imgIndex]
         drawRessource(ctx, ressource.position, img)
-        
+
       }
     }
   )
 
   drawSortie(ctx, { ...state.sortie.position }, conf.WIDTH_SORTIE, conf.HEIGHT_SORTIE, state.sortie.unlocked)
-
+  displayStat(ctx, state)
   if (gameOver(state)) {
     let text = 'Game Over'
     if (playerHasWin(state)) {
