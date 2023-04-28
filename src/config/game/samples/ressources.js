@@ -24,6 +24,14 @@ export const CONFIG = {
           width: conf.COTE * 30,
           height: conf.COTE * 4,
         },
+        {
+          position: {
+            x: 1400,
+            y: 500
+          },
+          width: conf.COTE * 30,
+          height: conf.COTE,
+        },
       ],
       enemies: [
         {

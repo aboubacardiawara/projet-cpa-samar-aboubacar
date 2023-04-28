@@ -117,7 +117,7 @@ const auSol = (state: State): boolean => {
 }
 
 const wallOverBall = (w: Wall, ball: Ball): boolean => {
-  return w.position.y + w.height <= ball.coord.x - conf.RADIUS
+  return w.position.y + w.height <= ball.coord.y - conf.RADIUS
 }
 /**
  * Calcul le niveau sur lequel doit chuter la balle.
