@@ -17,7 +17,7 @@ export const Canvas = ({ height, width }: { height: number; width: number }) => 
     enemies: initEnemies(),
     ballShouldBeRecentered: false,
     size: { height, width },
-    endOfGame: {end: false, hasWinPlayer: false},
+    endOfGame: { end: false, hasWinPlayer: false },
     sortie: initSortie()
   }
 
@@ -69,6 +69,11 @@ function initBall() {
     jumping: false,
     acceleration: 0,
     direction: sens,
-    imgid: 0
+    imgIndex: 0,
+    images: [
+      "bounce-1.png",
+      "bounce-2.png",
+      "bounce-3.png",
+      "bounce-4.png"],
   }
 }

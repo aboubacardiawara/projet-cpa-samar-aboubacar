@@ -6,7 +6,7 @@ import { stat } from "fs";
 import { collisionCircleBox } from "./collision";
 import { inScreen } from "./renderer";
 
-export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction, imgid: number }
+export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction, imgIndex: number, images: string[] }
 
 
 export const moveBall = (state: State): State => {
@@ -113,8 +113,7 @@ export const moveBallHoriz = (state0: State) => {
             ...ball.coord,
             x: ball.coord.x + newDx,
             dx: newDx
-        },
-        imgid: computeNewImgId(state) + ball.imgid
+        }
     }
     if (newBall.coord.dx === 0) {
         //all.direction = "nothing"
