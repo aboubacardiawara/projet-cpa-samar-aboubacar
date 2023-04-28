@@ -1,9 +1,8 @@
-import { HEIGHT_SORTIE, WIDTH_SORTIE } from "../../../components/canvas/conf";
+import * as conf from '../../../components/canvas/conf'
 
 const COTE = 40;
 const MAX_X = 1200;
 const MAX_Y = 800;
-const TAILLE_ENEMIE = 80
 
 export const CONFIG = {
   levels: [
@@ -12,10 +11,10 @@ export const CONFIG = {
         {
           position: {
             x: 0,
-            y: MAX_Y - COTE
+            y: MAX_Y - conf.COTE
           },
-          width: COTE * 100,
-          height: COTE,
+          width: conf.COTE * 100,
+          height: conf.COTE,
         },
       ],
       enemies: [
@@ -25,7 +24,7 @@ export const CONFIG = {
           destination: 800,
           position: {
             x: 600,
-            y: MAX_Y - TAILLE_ENEMIE - COTE
+            y: conf.MAX_Y -conf.TAILLE_ENEMIE - conf.COTE
           },
         }
       ],
@@ -33,7 +32,7 @@ export const CONFIG = {
       sortie: {
         position: {
           x: 1100,
-          y: MAX_Y - HEIGHT_SORTIE - COTE
+          y: MAX_Y - conf.HEIGHT_SORTIE - conf.COTE
         },
       }
     }

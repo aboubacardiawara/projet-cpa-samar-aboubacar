@@ -122,9 +122,25 @@ const drawCirle = (
   context.restore();
 }
 
+const drawEnemieAsImg = (
+  context: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number },
+  w: number,
+  h: number,
+  img: HTMLImageElement
+) => {
+  context.drawImage(img, x, y, w, h)
+}
+
 
 const computeColor = (life: number, maxLife: number, baseColor: string) =>
   rgbaTorgb(baseColor, (maxLife - life) * (1 / maxLife))
+
+const enemieImg = (): HTMLImageElement => {
+  const img = new Image()
+  img.src = 'ennemie_mobile.png'
+  return img
+}
 
 export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   clear(ctx)
@@ -137,8 +153,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   const c = state.ball;
   const img = new Image();
   img.src = state.ball.images[state.ball.imgIndex]
-  console.log(img);
-  
+
   drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE), img);
 
   state.walls.forEach((w: Wall) => {
@@ -149,7 +164,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
 
   state.enemies.forEach((e: Enemie) => {
     if (inScreen({ x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
-      drawEnemie(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE)
+      drawEnemieAsImg(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE, enemieImg())
   })
 
   drawSortie(ctx, { ...state.sortie.position }, conf.WIDTH_SORTIE, conf.HEIGHT_SORTIE)
