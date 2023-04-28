@@ -104,7 +104,8 @@ export const initEnemies = (): Enemie[] => {
 }
 
 export const initSortie = (): Sortie => ({
-    ...getLevel().sortie
+    ...getLevel().sortie,
+    unlocked: false
 })
 
 
@@ -112,4 +113,8 @@ export const initRessources = (): Ressource[] => {
     return getLevel().ressources.map(
         (ressourceData: RessourceData) => buildRessource(ressourceData)
     )
+}
+
+export const initGoal = (): number => {
+    return getLevel().goal
 }

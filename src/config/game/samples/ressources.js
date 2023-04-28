@@ -24,36 +24,37 @@ export const CONFIG = {
           destination: 800,
           position: {
             x: 600,
-            y: conf.MAX_Y -conf.TAILLE_ENEMIE - conf.COTE
+            y: conf.MAX_Y - conf.TAILLE_ENEMIE - conf.COTE
           },
         }
       ],
       sortie: {
-          position: {
-              x: 1100,
-              y: MAX_Y - conf.HEIGHT_SORTIE - conf.COTE
-            },
+        position: {
+          x: 1100,
+          y: MAX_Y - conf.HEIGHT_SORTIE - conf.COTE
         },
-        ressources: [
-            {
-                position: {
-                    x: 600,
-                    y: 500
-                }
-            },
-            {
-                position: {
-                    x: 900,
-                    y: 500
-                }
-            },
-            {
-                position: {
-                    x: 1000,
-                    y: 700
-                }
-            }
-        ]
+      },
+      ressources: [
+        {
+          position: {
+            x: 600,
+            y: 500
+          }
+        },
+        {
+          position: {
+            x: 900,
+            y: 500
+          }
+        },
+        {
+          position: {
+            x: 1000,
+            y: 700
+          }
+        }
+      ],
+      goal: 3
     }
   ]
 }

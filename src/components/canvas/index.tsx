@@ -5,7 +5,7 @@ import { State, gameOver, step } from './state'
 import { render } from './renderer'
 import { keyDown, keyUp } from './keyboard'
 import { Direction } from './direction'
-import { initCanvas, initEnemies, initRessources, initSortie, initWalls } from './charactersLoader'
+import { initCanvas, initEnemies, initGoal, initRessources, initSortie, initWalls } from './charactersLoader'
 
 
 export const Canvas = ({ height, width }: { height: number; width: number }) => {
@@ -20,7 +20,8 @@ export const Canvas = ({ height, width }: { height: number; width: number }) => 
     endOfGame: { end: false, hasWinPlayer: false },
     sortie: initSortie(),
     ressources: initRessources(),
-    collectedCoins: 0
+    collectedCoins: 0,
+    goal: initGoal()
   }
 
   const ref = useRef<any>()

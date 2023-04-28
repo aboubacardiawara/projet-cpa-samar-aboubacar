@@ -61,11 +61,16 @@ const drawSortie = (
   ctx: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number },
   w: number,
-  h: number
+  h: number,
+  unlocked: boolean
 ) => {
+  let color: string = "grey"
+  if (unlocked) {
+    color = "green"
+  }
   ctx.beginPath()
   ctx.rect(x, y, w, h)
-  ctx.fillStyle = "green"
+  ctx.fillStyle = color
   ctx.fill()
 }
 
@@ -187,7 +192,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
     }
   )
 
-  drawSortie(ctx, { ...state.sortie.position }, conf.WIDTH_SORTIE, conf.HEIGHT_SORTIE)
+  drawSortie(ctx, { ...state.sortie.position }, conf.WIDTH_SORTIE, conf.HEIGHT_SORTIE, state.sortie.unlocked)
 
   if (gameOver(state)) {
     let text = 'Game Over'

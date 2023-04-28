@@ -17,7 +17,7 @@ export type Size = { height: number; width: number }
 export type Enemie = { direction: String, debut: number, destination: number, coord: Coord }
 export type Wall = { position: Position, height: number; width: number }
 export type Element = { type: string, dimension: number[] }
-export type Sortie = { position: Position }
+export type Sortie = { position: Position, unlocked: boolean }
 export type EndOfGame = { end: boolean, hasWinPlayer: boolean }
 
 export type State = {
@@ -32,6 +32,7 @@ export type State = {
   ressources: Array<Ressource>
   sortie: Sortie
   collectedCoins: number
+  goal: number
 }
 
 const enLair = (state: State): boolean => {
@@ -64,12 +65,11 @@ const stepRessources = (state: State): State => {
   
   const size1: number = newState.ressources.length
   newState.collectedCoins += size0 - size1
+  newState.sortie.unlocked = state.collectedCoins >= newState.goal
   return newState
 }
 
-export const step = (state: State) => {  
-  console.log("collected coins: " + state.collectedCoins);
-  
+export const step = (state: State) => {
   const stateRessource: State =  stepRessources(state);
   const moveCharacters = moveOtherCharacters(stateRessource)
   const newState: State = moveBall(moveCharacters);
@@ -84,6 +84,9 @@ export const step = (state: State) => {
 }
 
 const colisionBallEtExit = (state: State): boolean => {
+  if (!state.sortie.unlocked) {
+    return false;
+  }
   return collisionCircleExit(state.ball, state.sortie)
 }
 
