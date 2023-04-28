@@ -16,6 +16,14 @@ export const CONFIG = {
           width: conf.COTE * 100,
           height: conf.COTE,
         },
+        {
+          position: {
+            x: 0,
+            y: 0
+          },
+          width: conf.COTE * 30,
+          height: conf.COTE * 4,
+        },
       ],
       enemies: [
         {

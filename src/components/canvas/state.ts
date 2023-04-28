@@ -56,13 +56,13 @@ const moveOtherCharacters = (state: State): State => {
 
 const stepRessources = (state: State): State => {
   const newState: State = state
-  const size0:number = state.ressources.length
+  const size0: number = state.ressources.length
   newState.ressources = newState.ressources
-  .filter((ressource:Ressource) => {
-    return !collisionBallRessource(state.ball, ressource)
-  })
-  .map(nextStepRessource)
-  
+    .filter((ressource: Ressource) => {
+      return !collisionBallRessource(state.ball, ressource)
+    })
+    .map(nextStepRessource)
+
   const size1: number = newState.ressources.length
   newState.collectedCoins += size0 - size1
   newState.sortie.unlocked = state.collectedCoins >= newState.goal
@@ -70,7 +70,7 @@ const stepRessources = (state: State): State => {
 }
 
 export const step = (state: State) => {
-  const stateRessource: State =  stepRessources(state);
+  const stateRessource: State = stepRessources(state);
   const moveCharacters = moveOtherCharacters(stateRessource)
   const newState: State = moveBall(moveCharacters);
   let resVert: State;
@@ -116,6 +116,9 @@ const auSol = (state: State): boolean => {
   return (y + r) === limitY - blocDessous(state);
 }
 
+const wallOverBall = (w: Wall, ball: Ball): boolean => {
+  return w.position.y + w.height <= ball.coord.x - conf.RADIUS
+}
 /**
  * Calcul le niveau sur lequel doit chuter la balle.
  * @param state 
@@ -124,9 +127,10 @@ const auSol = (state: State): boolean => {
 export const blocDessous = (state: State): number => {
   const walls: Array<Wall> =
     state.walls
-      .filter(w => inScreen(w.position, w.width, w.height))
-      .filter(
-        (w: Wall) => canSupportBall(w, state.ball)
+      .filter((w: Wall) =>
+        inScreen(w.position, w.width, w.height)
+        && canSupportBall(w, state.ball)
+        && !wallOverBall(w, state.ball)
       )
   const candidatWall: Wall = maxWallInHeight(state, walls)
   const res: number = distanceToBottom(state, candidatWall)
