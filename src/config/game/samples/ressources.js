@@ -37,8 +37,20 @@ export const CONFIG = {
         ressources: [
             {
                 position: {
-                    x: 500,
+                    x: 600,
                     y: 500
+                }
+            },
+            {
+                position: {
+                    x: 900,
+                    y: 500
+                }
+            },
+            {
+                position: {
+                    x: 1000,
+                    y: 700
                 }
             }
         ]
