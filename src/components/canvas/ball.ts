@@ -6,7 +6,14 @@ import { stat } from "fs";
 import { collisionCircleBox } from "./collision";
 import { inScreen } from "./renderer";
 
-export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction, imgIndex: number, images: string[] }
+export type Ball = {
+    coord: Coord,
+    life: number; jumping: boolean,
+    acceleration: number,
+    direction: Direction,
+    imgIndex: number,
+    images: string[]
+}
 
 
 export const moveBall = (state: State): State => {
@@ -124,7 +131,6 @@ export const moveBallHoriz = (state0: State) => {
     }
 
     newState = gestionCollisionHorizontal(newState)
-    console.log(newDx);
 
     return isBallInCanvasHorital(newState) ? newState : state
 }
@@ -138,7 +144,6 @@ const gestionCollisionHorizontal = (state: State): State => {
         .filter(w => inScreen(w.position, w.width, w.height))
         .forEach(wall => {
             if (collisionCircleBox(state.ball, wall)) {
-                console.log("collision")
                 return arreteBallAndScreen(replaceBall(state, wall));
             }
         })

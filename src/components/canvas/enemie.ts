@@ -1,4 +1,5 @@
 import { ENEMIE_VITESSE } from "./conf";
+import { Ressource } from "./ressource";
 import { Enemie, Position, State } from "./state";
 
 const horizontalDestinationReached = (enemie: Enemie): boolean => {

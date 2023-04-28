@@ -12,3 +12,7 @@ export interface WallData {
     width: number;
     height: number;
 }
+
+export interface RessourceData {
+    position: Position
+}

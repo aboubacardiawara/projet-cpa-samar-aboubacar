@@ -1,6 +1,7 @@
 import { collisionCircleBox } from './collision'
 import * as conf from './conf'
 import { Coord } from './coord'
+import { Ressource } from './ressource'
 import { Enemie, Position, State, Wall, gameOver, playerHasWin } from './state'
 const COLORS = {
   RED: '#ff0000',
@@ -106,6 +107,13 @@ const drawRect = (
 
 }
 
+const drawRessource = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: { x: number; y: number },
+  img: HTMLImageElement
+) => { 
+  ctx.drawImage(img, x, y, conf.SIZE_RESSOURCE, conf.SIZE_RESSOURCE)
+}
 
 const drawCirle = (
 
@@ -121,6 +129,8 @@ const drawCirle = (
   context.drawImage(img, x - conf.RADIUS, y - conf.RADIUS, conf.RADIUS * 2, conf.RADIUS * 2);
   context.restore();
 }
+
+
 
 const drawEnemieAsImg = (
   context: CanvasRenderingContext2D,
@@ -166,6 +176,17 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
     if (inScreen({ x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
       drawEnemieAsImg(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE, enemieImg())
   })
+  state.ressources.forEach(
+    (ressource: Ressource) => {
+      if (inScreen({...ressource.position}, conf.SIZE_RESSOURCE, conf.SIZE_RESSOURCE)) {
+        const img: HTMLImageElement = new Image()
+        img.src = ressource.imagesSrc[ressource.imgIndex]
+        drawRessource(ctx, ressource.position, img)
+        console.log(ressource.cpt);
+        
+      }
+    }
+  )
 
   drawSortie(ctx, { ...state.sortie.position }, conf.WIDTH_SORTIE, conf.HEIGHT_SORTIE)
 

@@ -1,6 +1,8 @@
-import { CONFIG } from '../../config/game/samples/enemie_mobile'
+import { positional } from 'yargs'
+import { CONFIG } from '../../config/game/samples/ressources'
 import * as conf from './conf'
-import { EnemieData, WallData } from './interfaces'
+import { EnemieData, WallData, RessourceData } from './interfaces'
+import { Ressource } from './ressource'
 import { Enemie, Sortie, Wall } from './state'
 
 export const getLevel = () => {
@@ -75,6 +77,14 @@ const buildEnemiesMobile = (
     }
 )
 
+const buildRessource = (ressourceData: RessourceData): Ressource => {
+    return { ...ressourceData, 
+        cpt: 0,
+        imagesSrc: ['piece-1.png', 'piece-2.png'],
+        imgIndex: 0
+    }
+}
+
 /**
  * Initilise les elements murs de ce niveau
  * @returns 
@@ -91,3 +101,10 @@ export const initEnemies = (): Enemie[] => {
 export const initSortie = (): Sortie => ({
     ...getLevel().sortie
 })
+
+
+export const initRessources = (): Ressource[] => {
+    return getLevel().ressources.map(
+        (ressourceData: RessourceData) => buildRessource(ressourceData)
+    )
+}

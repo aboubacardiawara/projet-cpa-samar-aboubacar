@@ -6,6 +6,7 @@ import { isMovingRight } from './direction';
 import { moveEnemie } from './enemie';
 import { notJumping } from './keyboard';
 import { inScreen } from './renderer';
+import { Ressource, nextStepRessource } from './ressource';
 
 /*********************************************
               GAME ELEMENTS TYPE 
@@ -28,6 +29,7 @@ export type State = {
   endOfGame: EndOfGame
   walls: Array<Wall>
   enemies: Array<Enemie>
+  ressources: Array<Ressource>
   sortie: Sortie
 }
 
@@ -46,11 +48,13 @@ const moveOtherCharacters = (state: State): State => {
   state.enemies = state.enemies.map(
     (enemie: Enemie) => moveEnemie(enemie)
   )
+
   return state
 }
 
-export const step = (state: State) => {
+export const step = (state: State) => {  
   const moveCharacters = moveOtherCharacters(state)
+  moveCharacters.ressources = moveCharacters.ressources.map(nextStepRessource)
   const newState: State = moveBall(moveCharacters);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)
@@ -98,12 +102,12 @@ const auSol = (state: State): boolean => {
  * @returns 
  */
 export const blocDessous = (state: State): number => {
-  const walls: Array<Wall> = 
-  state.walls
-  .filter(w => inScreen(w.position, w.width, w.height))
-  .filter(
-    (w: Wall) => canSupportBall(w, state.ball)
-  )
+  const walls: Array<Wall> =
+    state.walls
+      .filter(w => inScreen(w.position, w.width, w.height))
+      .filter(
+        (w: Wall) => canSupportBall(w, state.ball)
+      )
   const candidatWall: Wall = maxWallInHeight(state, walls)
   const res: number = distanceToBottom(state, candidatWall)
   return res
@@ -267,13 +271,13 @@ const moveScreen = (state: State): State => {
       return state
     }
   }
-  
+
   newState.walls.map((wal: Wall) => {
     const newWall: Wall = { ...wal };
     newWall.position.x += newDx;
     return newWall
   })
-  
+
   newState.sortie.position.x += newDx
 
   newState.enemies.map((enemie: Enemie) => {
@@ -283,6 +287,14 @@ const moveScreen = (state: State): State => {
     newEnemie.destination += newDx
     return newEnemie
   })
+
+
+  newState.ressources = state.ressources.map((ressource: Ressource) => {
+    const newRessource: Ressource = { ...ressource }
+    newRessource.position.x += newDx
+    return newRessource
+  }
+  )
 
   const newCenter: Mobile = {
     ...center,
