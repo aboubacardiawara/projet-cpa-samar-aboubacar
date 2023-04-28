@@ -1,3 +1,5 @@
+import { TypeOfExpression } from 'typescript'
+import { CONFIG } from '../../config/game/levelsConfig'
 import { collisionCircleBox } from './collision'
 import * as conf from './conf'
 import { Coord } from './coord'
@@ -114,14 +116,17 @@ const drawRect = (
 }
 
 const drawCirle = (
-  ctx: CanvasRenderingContext2D,
+  context: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number },
-  color: string
+  color: string , img : HTMLImageElement
 ) => {
-  ctx.beginPath()
-  ctx.fillStyle = color
-  ctx.arc(x, y, conf.RADIUS, 0, 2 * Math.PI)
-  ctx.fill()
+  context.save()
+	context.beginPath();
+	context.arc(x, y, conf.RADIUS, 0, 2 * Math.PI, false);
+	context.closePath();
+	context.clip();
+	context.drawImage(img , x - conf.RADIUS, y - conf.RADIUS, conf.RADIUS * 2, conf.RADIUS * 2);
+	context.restore();
 }
 
 const drawBounce = (
@@ -158,7 +163,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   const c = state.ball;
   let couleur;
 
-  drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE));
+  
 
   state.walls.map((r) =>
     drawRect(ctx, r.coord, r.width, r.height))
@@ -172,6 +177,9 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   state.enemiesMobiles.map((enemieMobile) =>
     drawEnemiesMobile(ctx, {x:enemieMobile.coord.x, y:enemieMobile.coord.y}, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
 
+  drawCirle(ctx, c.coord,computeColor(c.life, conf.BALLLIFE, COLORS.BLUE),state.ball.image);
+
+  
   if (state.endOfGame) {
     const text = 'Game Over'
     ctx.font = '48px arial'

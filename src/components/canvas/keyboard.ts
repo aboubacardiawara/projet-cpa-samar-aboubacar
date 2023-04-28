@@ -48,15 +48,25 @@ export const keyUp =
 const handleLeftClick = (state: State): State => {
     const newState = state
     newState.centerAcceleration = +ACCELARATION_HORIZ
+    newState.ball.currentImageIndex=(newState.ball.currentImageIndex-1 )% 4
+   if (newState.ball.currentImageIndex < 0) {
+        newState.ball.currentImageIndex = - newState.ball.currentImageIndex
+    }
+    
+    newState.ball.image.src = newState.ball.images[newState.ball.currentImageIndex];
     return newState
 }
 
 const handleRightClick = (state: State): State => {
     const newState = state
     newState.centerAcceleration = -ACCELARATION_HORIZ
+    newState.ball.currentImageIndex= (newState.ball.currentImageIndex+1 )% 4
+    if (newState.ball.currentImageIndex < 0) {
+        newState.ball.currentImageIndex = - newState.ball.currentImageIndex
+    }
+    newState.ball.image.src = newState.ball.images[newState.ball.currentImageIndex];
     return newState
 }
-
 const handleSpaceClick = (state: State): State => {
     const ball: Ball = state.ball
     const newBall: Ball = jump(ball)

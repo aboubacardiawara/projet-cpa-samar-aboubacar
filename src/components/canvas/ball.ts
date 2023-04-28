@@ -5,7 +5,14 @@ import * as conf from './conf'
 import { stat } from "fs";
 import { collisionCircleBox } from "./collision";
 
-export type Ball = { coord: Coord; life: number; jumping: boolean, acceleration: number, direction: Direction, imgid: number }
+export type Ball = { coord: Coord; 
+    life: number; 
+    jumping: boolean, 
+    acceleration: number, 
+    direction: Direction, 
+    images: [],
+image : HTMLImageElement,
+currentImageIndex: number,}
 
 
 export const moveBall = (state: State): State => {

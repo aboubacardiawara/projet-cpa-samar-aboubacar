@@ -140,6 +140,8 @@ const Canvas = ({ height, width }: { height: number; width: number }) => {
 export default Canvas
 
 function initBall() {
+  var img = new Image()
+  img.src = "bounce-1.png"
   const sens: Direction = "nothing"
   return {
     life: conf.BALLLIFE,
@@ -152,6 +154,13 @@ function initBall() {
     jumping: false,
     acceleration: 0,
     direction: sens,
-    imgid: 0
+    images :[ 
+    "bounce-1.png",
+    "bounce-2.png",
+    "bounce-3.png",
+    "bounce-4.png"],
+    image : img,
+    currentImageIndex: 0,  
+    
   }
 }
