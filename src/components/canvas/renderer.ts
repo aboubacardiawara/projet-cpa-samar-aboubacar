@@ -182,7 +182,6 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
         const img: HTMLImageElement = new Image()
         img.src = ressource.imagesSrc[ressource.imgIndex]
         drawRessource(ctx, ressource.position, img)
-        console.log(ressource.cpt);
         
       }
     }

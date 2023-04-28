@@ -4,8 +4,7 @@ export type Ressource = {
     position: Position,
     cpt: number,
     imagesSrc: string[],
-    imgIndex: number,
-    collected: boolean
+    imgIndex: number
 }
 
 

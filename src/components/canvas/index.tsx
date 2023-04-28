@@ -19,7 +19,8 @@ export const Canvas = ({ height, width }: { height: number; width: number }) => 
     size: { height, width },
     endOfGame: { end: false, hasWinPlayer: false },
     sortie: initSortie(),
-    ressources: initRessources()
+    ressources: initRessources(),
+    collectedCoins: 0
   }
 
   const ref = useRef<any>()

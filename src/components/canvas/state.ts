@@ -31,6 +31,7 @@ export type State = {
   enemies: Array<Enemie>
   ressources: Array<Ressource>
   sortie: Sortie
+  collectedCoins: number
 }
 
 const enLair = (state: State): boolean => {
@@ -54,16 +55,21 @@ const moveOtherCharacters = (state: State): State => {
 
 const stepRessources = (state: State): State => {
   const newState: State = state
+  const size0:number = state.ressources.length
   newState.ressources = newState.ressources
   .filter((ressource:Ressource) => {
-    ressource.collected = collisionBallRessource(state.ball, ressource)
-    return !ressource.collected
+    return !collisionBallRessource(state.ball, ressource)
   })
   .map(nextStepRessource)
+  
+  const size1: number = newState.ressources.length
+  newState.collectedCoins += size0 - size1
   return newState
 }
 
 export const step = (state: State) => {  
+  console.log("collected coins: " + state.collectedCoins);
+  
   const stateRessource: State =  stepRessources(state);
   const moveCharacters = moveOtherCharacters(stateRessource)
   const newState: State = moveBall(moveCharacters);
