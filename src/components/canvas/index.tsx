@@ -5,7 +5,7 @@ import { State, gameOver, step } from './state'
 import { render } from './renderer'
 import { keyDown, keyUp } from './keyboard'
 import { Direction } from './direction'
-import { initCanvas, initEnemies, initGoal, initRessources, initSortie, initWalls } from './charactersLoader'
+import { initBall, initCanvas, initEnemies, initGoal, initRessources, initSortie, initWalls } from './charactersLoader'
 
 
 export const Canvas = ({ height, width }: { height: number; width: number }) => {
@@ -59,24 +59,3 @@ export const Canvas = ({ height, width }: { height: number; width: number }) => 
   return <canvas {...{ height, width, ref }} />
 }
 
-function initBall() {
-  const sens: Direction = "nothing"
-  return {
-    life: conf.BALLLIFE,
-    coord: {
-      x: conf.MAX_X / 2,
-      y: 300,
-      dx: 0,
-      dy: 0,
-    },
-    jumping: false,
-    acceleration: 0,
-    direction: sens,
-    imgIndex: 0,
-    images: [
-      "bounce-1.png",
-      "bounce-2.png",
-      "bounce-3.png",
-      "bounce-4.png"],
-  }
-}

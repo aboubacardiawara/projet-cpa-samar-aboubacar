@@ -266,7 +266,7 @@ const ralentirEcran = (state: State): State => {
  * @param state 
  */
 const screenCanMoveToLeft = (state: State): boolean => {
-  return state.walls.some((wall: Wall) => wall.position.x >= state.size.width)
+  return state.walls.some((wall: Wall) => wall.position.x + wall.width > state.size.width)
 }
 
 /**
@@ -306,9 +306,11 @@ const moveScreen = (state: State): State => {
 
   newState.enemies.map((enemie: Enemie) => {
     const newEnemie: Enemie = enemie
+    if (newEnemie.direction === "H" ){
+      newEnemie.debut += newDx
+      newEnemie.destination += newDx
+    }
     newEnemie.coord.x += newDx
-    newEnemie.debut += newDx
-    newEnemie.destination += newDx
     return newEnemie
   })
 

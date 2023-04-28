@@ -4,12 +4,14 @@ import * as conf from './conf'
 import { EnemieData, WallData, RessourceData } from './interfaces'
 import { Ressource } from './ressource'
 import { Enemie, Sortie, Wall } from './state'
+import { Direction } from './direction'
+
 
 export const getLevel = () => {
     let wallsData: WallData[] = []
     let enemiesData: EnemieData[] = []
 
-    for (let screenNum = 0; screenNum < 3; screenNum++) {
+    for (let screenNum = 0; screenNum < 1; screenNum++) {
         const screen = { ...CONFIG.levels[0] };
         wallsData = wallsData.concat(screen.walls.map(
             (wallData: WallData) => {
@@ -118,3 +120,26 @@ export const initRessources = (): Ressource[] => {
 export const initGoal = (): number => {
     return getLevel().goal
 }
+
+export function initBall() {
+    const position = getLevel().entree.position 
+    const sens: Direction = "nothing"
+    return {
+      life: conf.BALLLIFE,
+      coord: {
+        x: position.x,
+        y: position.y,
+        dx: 0,
+        dy: 0,
+      },
+      jumping: false,
+      acceleration: 0,
+      direction: sens,
+      imgIndex: 0,
+      images: [
+        "bounce-1.png",
+        "bounce-2.png",
+        "bounce-3.png",
+        "bounce-4.png"],
+    }
+  }

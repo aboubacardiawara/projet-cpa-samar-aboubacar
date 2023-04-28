@@ -11,37 +11,55 @@ export const CONFIG = {
         {
           position: {
             x: 0,
-            y: MAX_Y - conf.COTE
+            y: MAX_Y - conf.COTE*4
           },
           width: conf.COTE * 100,
-          height: conf.COTE,
+          height: conf.COTE*4,
         },
         {
           position: {
             x: 0,
             y: 0
           },
-          width: conf.COTE * 30,
-          height: conf.COTE * 4,
+          width: conf.COTE * 4,
+          height: MAX_Y - conf.COTE*4,
+        }
+        ,
+        {
+          position: {
+            x: conf.COTE * 4,
+            y: 0
+          },
+          width: conf.COTE * 8,
+          height: conf.COTE*3,
         },
         {
           position: {
-            x: 1400,
-            y: 500
+            x: conf.COTE * 12,
+            y: 0
           },
-          width: conf.COTE * 30,
-          height: conf.COTE,
+          width: conf.COTE * 8,
+          height: conf.COTE*10,
+        },
+        {
+          position: {
+            x: conf.COTE * 20,
+            y: 0
+          },
+          width: conf.COTE * 12,
+          height: conf.COTE*3,
         },
       ],
       enemies: [
+        
         {
-          direction: "H",
-          debut: 300,
-          destination: 800,
+          direction: "V",
+          debut: 500,
+          destination: 700-conf.COTE,
           position: {
-            x: 600,
-            y: conf.MAX_Y - conf.TAILLE_ENEMIE - conf.COTE
-          },
+            x: 800,
+            y: 600
+          }
         }
       ],
       sortie: {
@@ -50,13 +68,15 @@ export const CONFIG = {
           y: MAX_Y - conf.HEIGHT_SORTIE - conf.COTE
         },
       },
+      entree :{
+        position: {
+          x: 600,
+          y: 500
+        }
+
+      },
       ressources: [
-        {
-          position: {
-            x: 600,
-            y: 500
-          }
-        },
+        
         {
           position: {
             x: 900,
