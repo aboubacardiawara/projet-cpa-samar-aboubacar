@@ -1,5 +1,5 @@
 import { Ball, changeBallVelocity, computeNexId, moveBall } from './ball';
-import { collisionBallEnemie, collisionCircleExit } from './collision';
+import { collisionBallEnemie, collisionBallRessource, collisionCircleExit } from './collision';
 import * as conf from './conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
@@ -52,9 +52,20 @@ const moveOtherCharacters = (state: State): State => {
   return state
 }
 
+const stepRessources = (state: State): State => {
+  const newState: State = state
+  newState.ressources = newState.ressources
+  .filter((ressource:Ressource) => {
+    ressource.collected = collisionBallRessource(state.ball, ressource)
+    return !ressource.collected
+  })
+  .map(nextStepRessource)
+  return newState
+}
+
 export const step = (state: State) => {  
-  const moveCharacters = moveOtherCharacters(state)
-  moveCharacters.ressources = moveCharacters.ressources.map(nextStepRessource)
+  const stateRessource: State =  stepRessources(state);
+  const moveCharacters = moveOtherCharacters(stateRessource)
   const newState: State = moveBall(moveCharacters);
   let resVert: State;
   resVert = auSol(state) ? arreteNewton(newState) : newton(newState)

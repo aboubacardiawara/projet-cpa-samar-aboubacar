@@ -1,5 +1,6 @@
 import { Ball } from "./ball";
-import { HEIGHT_SORTIE, RADIUS, TAILLE_ENEMIE, WIDTH_SORTIE } from "./conf";
+import { HEIGHT_SORTIE, RADIUS, SIZE_RESSOURCE, TAILLE_ENEMIE, WIDTH_SORTIE } from "./conf";
+import { Ressource } from "./ressource";
 import { Enemie, Sortie, Wall } from "./state";
 
 /**
@@ -67,6 +68,32 @@ export const collisionBallEnemie = (ball: Ball, enemie: Enemie): boolean => {
   return (dx * dx + dy * dy <= (circle.radius * circle.radius))
 }
 
+export const collisionBallRect = (
+  ball: Ball, 
+  {rectx, recty, rectw, recth}
+  :{rectx: number, recty: number, rectw: number, recth:number}
+  ): boolean => {
+  const circle = { x: ball.coord.x, y: ball.coord.y, radius: RADIUS }
+  const box = { x: rectx, y: recty, width: rectw, height: recth }
+
+  let distX = Math.abs(circle.x - box.x - box.width / 2)
+  let distY = Math.abs(circle.y - box.y - box.height / 2)
+
+  if (distX > (box.width / 2 + circle.radius)) {
+    return false
+  }
+  if (distY > (box.height / 2 + circle.radius)) {
+    return false
+  }
+  if (distX <= (box.width / 2) || distY <= (box.height / 2)) {
+    return true
+  }
+
+  let dx = distX - box.width / 2
+  let dy = distY - box.height / 2
+  return (dx * dx + dy * dy <= (circle.radius * circle.radius))
+}
+
 
 export const collisionCircleBox = (ball: Ball, rec: Wall): boolean => {
   return collisionCircleBoxProf(ball, rec)
@@ -80,4 +107,14 @@ export const collisionCircleExit = (ball: Ball, exit: Sortie): boolean => {
   }
 
   return collisionCircleBoxProf(ball, wall)
+}
+
+export const collisionBallRessource = (ball: Ball, ressource: Ressource): boolean => {
+  const ressourceAsBox = {
+    rectx: ressource.position.x,
+    recty: ressource.position.y,
+    rectw: SIZE_RESSOURCE, 
+    recth:SIZE_RESSOURCE}
+
+  return collisionBallRect(ball, ressourceAsBox);
 }

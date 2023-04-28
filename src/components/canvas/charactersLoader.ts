@@ -86,7 +86,8 @@ const buildRessource = (ressourceData: RessourceData): Ressource => {
         ...ressourceData,
         cpt: randomInteger(0, 25),
             imagesSrc: ['piece-1.png', 'piece-2.png'],
-        imgIndex: randomInteger(0, 1)
+        imgIndex: randomInteger(0, 1),
+        collected: false
     }
 }
 
