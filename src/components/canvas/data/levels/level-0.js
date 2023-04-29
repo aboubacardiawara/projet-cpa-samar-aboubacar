@@ -44,6 +44,7 @@ export const LEVEL_0 =
             width: conf.COTE * 200,
             height: conf.COTE * 4,
         },
+        /*
         {
             position: {
                 x: conf.COTE * 30,
@@ -139,7 +140,7 @@ export const LEVEL_0 =
             },
             width: conf.COTE * 2,
             height: conf.COTE * 2,
-        },
+        },*/
         {
             position: {
                 x: conf.COTE * 200,
@@ -151,7 +152,7 @@ export const LEVEL_0 =
         {
             position: {
                 x: conf.COTE * 200 + conf.TAILLE_ENEMIE_MOBILE,
-                y: conf.MAX_Y - conf.COTE * 4
+                y: conf.MAX_Y - conf.COTE * 2
             },
             width: conf.COTE * conf.TAILLE_ENEMIE_MOBILE,
             height: conf.COTE * 4,
@@ -164,10 +165,42 @@ export const LEVEL_0 =
             width: conf.COTE * 7,
             height: conf.COTE * 1,
         },
+        {
+            position: {
+                x: conf.COTE * 208,
+                y: 550
+            },
+            width: conf.COTE * 3,
+            height: conf.COTE * 1,
+        },
+        {
+            position: {
+                x: conf.COTE * 214,
+                y: 550
+            },
+            width: conf.COTE * 3,
+            height: conf.COTE * 1,
+        },
+        {
+            position: {
+                x: conf.COTE * 220,
+                y: 550
+            },
+            width: conf.COTE * 3,
+            height: conf.COTE * 1,
+        },
+        {
+            position: {
+                x: conf.COTE * 226,
+                y: 550
+            },
+            width: conf.COTE * 3,
+            height: conf.COTE * 1,
+        },
 
     ],
     enemies: [
-
+        /*
         {
             direction: "N",
             debut: conf.COTE * 36,
@@ -201,16 +234,6 @@ export const LEVEL_0 =
             destination: conf.COTE * 80 - conf.TAILLE_ENEMIE_MOBILE,
             position: {
                 x: conf.COTE * 75,
-                y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE_MOBILE
-            }
-        },
-
-        {
-            direction: "H",
-            debut: conf.TAILLE_ENEMIE_MOBILE + conf.COTE * 126,
-            destination: conf.TAILLE_ENEMIE_MOBILE + conf.COTE * 126,
-            position: {
-                x: conf.TAILLE_ENEMIE_MOBILE + conf.COTE * 126,
                 y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE_MOBILE
             }
         },
@@ -330,7 +353,91 @@ export const LEVEL_0 =
                 x: conf.COTE * 42 - conf.TAILLE_ENEMIE_MOBILE,
                 y: 200
             }
+        }*/,
+        {
+            direction: "N",
+            debut: null,
+            destination: null,
+            position: {
+                x: conf.COTE * 211,
+                y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
+            }
+        },
+        {
+            direction: "N",
+            debut: null,
+            destination: null,
+            position: {
+                x: conf.COTE * 212,
+                y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
+            }
+        },
+        {
+            direction: "N",
+            debut: null,
+            destination: null,
+            position: {
+                x: conf.COTE * 213,
+                y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
+            }
         }
+        ,
+        {
+            direction: "N",
+            debut: null,
+            destination: null,
+            position: {
+                x: conf.COTE * 217,
+                y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
+            }
+        },
+        {
+            direction: "N",
+            debut: null,
+            destination: null,
+            position: {
+                x: conf.COTE * 218,
+                y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
+            }
+        },
+        {
+            direction: "N",
+            debut: null,
+            destination: null,
+            position: {
+                x: conf.COTE * 219,
+                y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
+            }
+        }
+        ,
+        {
+            direction: "N",
+            debut: null,
+            destination: null,
+            position: {
+                x: conf.COTE * 223,
+                y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
+            }
+        },
+        {
+            direction: "N",
+            debut: null,
+            destination: null,
+            position: {
+                x: conf.COTE * 224,
+                y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
+            }
+        },
+        {
+            direction: "N",
+            debut: null,
+            destination: null,
+            position: {
+                x: conf.COTE * 225,
+                y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
+            }
+        }
+
     ],
     sortie: {
         position: {
@@ -346,6 +453,24 @@ export const LEVEL_0 =
 
     },
     ressources: [
+        {
+            position: {
+                x: conf.COTE * 212,
+                y: 350
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 218,
+                y: 350
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 224,
+                y: 350
+            }
+        }
 
     ],
     goal: 0
