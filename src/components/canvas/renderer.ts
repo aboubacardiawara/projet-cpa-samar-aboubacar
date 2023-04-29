@@ -170,6 +170,7 @@ const displayCoinsStats = (ctx: CanvasRenderingContext2D, state: State) => {
   ctx.font = '25px serif';
   const img: HTMLImageElement = new Image()
   img.src = 'piece-1.png'
+  ctx.fillStyle = "white"
   drawRessource(ctx, { x: 10, y: 20 }, img);
   ctx.fillText(": " + state.collectedCoins + " /" + state.goal, 40, 43);
 }
@@ -228,8 +229,9 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
     if (playerHasWin(state)) {
       text = 'Congratulation'
     }
-    ctx.font = '48px arial'
-    ctx.strokeText(text, state.size.width / 2 - 100, state.size.height / 2)
+    ctx.font = '80px arial'
+    ctx.textAlign = 'center'
+    ctx.strokeText(text, state.size.width / 2 , state.size.height / 2)
   }
 }
 
