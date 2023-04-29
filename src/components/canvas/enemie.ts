@@ -21,6 +21,10 @@ const verticalDestinationReached = (enemie: Enemie): boolean => {
 }
 
 export const moveEnemie = (enemie0: Enemie): Enemie => {
+    if (enemie0.debut == enemie0.destination) {
+        // dont move it
+        return enemie0
+    }
     const enemie = enemie0
     if (horizontalDestinationReached(enemie)) {
         // swap, debut, fin

@@ -39,7 +39,7 @@ export const CONFIG = {
             y: 0
           },
           width: conf.COTE * 8,
-          height: conf.COTE*10,
+          height: conf.COTE*8,
         },
         {
           position: {
@@ -55,10 +55,10 @@ export const CONFIG = {
         {
           direction: "V",
           debut: 500,
-          destination: 700-conf.COTE,
+          destination: 500,
           position: {
             x: 800,
-            y: 600
+            y: 500
           }
         }
       ],

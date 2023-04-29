@@ -1,5 +1,5 @@
 import { positional } from 'yargs'
-import { CONFIG } from '../../config/game/samples/ressources'
+import { CONFIG } from '../../config/game/levelsConfig'
 import * as conf from './conf'
 import { EnemieData, WallData, RessourceData } from './interfaces'
 import { Ressource } from './ressource'
