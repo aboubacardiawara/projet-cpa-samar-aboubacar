@@ -8,7 +8,7 @@ export const LEVEL_0 =
                 x: 0,
                 y: conf.MAX_Y - conf.COTE * 4
             },
-            width: conf.COTE * 100,
+            width: conf.COTE * 200,
             height: conf.COTE * 4,
         },
         {
@@ -77,6 +77,30 @@ export const LEVEL_0 =
         },
         {
             position: {
+                x: conf.COTE * 85,
+                y: 0
+            },
+            width: conf.COTE * 4,
+            height: conf.COTE * 13,
+        },
+        {
+            position: {
+                x: conf.TAILLE_ENEMIE + conf.COTE * 124,
+                y: conf.MAX_Y - conf.COTE * 6
+            },
+            width: conf.COTE * 2,
+            height: conf.COTE * 2,
+        },
+        {
+            position: {
+                x: conf.COTE * 126 + 2*conf.TAILLE_ENEMIE,
+                y: conf.MAX_Y - conf.COTE * 8
+            },
+            width: conf.COTE * 2,
+            height: conf.COTE * 4,
+        },
+        {
+            position: {
                 x: 0,
                 y: 0
             },
@@ -111,6 +135,7 @@ export const LEVEL_0 =
     ],
     enemies: [
         /*
+        
         {
             direction: "V",
             debut: conf.COTE * 36,
@@ -126,6 +151,70 @@ export const LEVEL_0 =
             destination: conf.COTE * 50,
             position: {
                 x: conf.COTE * 42,
+                y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE
+            }
+        },
+        {
+            direction: "H",
+            debut: conf.COTE * 62,
+            destination: conf.COTE * 70 - conf.TAILLE_ENEMIE,
+            position: {
+                x: conf.COTE * 62,
+                y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE
+            }
+        },
+        {
+            direction: "H",
+            debut: conf.COTE * 71,
+            destination: conf.COTE * 80 - conf.TAILLE_ENEMIE,
+            position: {
+                x: conf.COTE * 75,
+                y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE
+            }
+        },
+        
+        {
+            direction: "H",
+            debut: conf.TAILLE_ENEMIE + conf.COTE * 126,
+            destination: conf.TAILLE_ENEMIE + conf.COTE * 126,
+            position: {
+                x: conf.TAILLE_ENEMIE + conf.COTE * 126,
+                y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE
+            }
+        },
+        {
+            direction: "H",
+            debut: conf.COTE * 95,
+            destination: conf.COTE * 95,
+            position: {
+                x: conf.COTE * 95,
+                y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE
+            }
+        },
+        {
+            direction: "H",
+            debut: conf.COTE * 100 + conf.TAILLE_ENEMIE,
+            destination: conf.COTE * 100 + conf.TAILLE_ENEMIE,
+            position: {
+                x: conf.COTE * 100 + conf.TAILLE_ENEMIE,
+                y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE
+            }
+        },
+        {
+            direction: "H",
+            debut: conf.COTE * 105 + 2 * conf.TAILLE_ENEMIE,
+            destination: conf.COTE * 105 + 2* conf.TAILLE_ENEMIE,
+            position: {
+                x: conf.COTE * 105 + 2* conf.TAILLE_ENEMIE,
+                y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE
+            }
+        },
+        {
+            direction: "H",
+            debut: conf.COTE * 110 + 3*conf.TAILLE_ENEMIE,
+            destination: conf.COTE * 110 + 3*conf.TAILLE_ENEMIE,
+            position: {
+                x: conf.COTE * 110 + 3*conf.TAILLE_ENEMIE,
                 y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE
             }
         }*/
