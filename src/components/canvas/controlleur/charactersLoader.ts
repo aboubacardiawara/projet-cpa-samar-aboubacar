@@ -1,6 +1,5 @@
-import { positional } from 'yargs'
-import { CONFIG } from '../../config/game/levelsConfig'
-import * as conf from './conf'
+import { CONFIG } from '../data/levelsConfig'
+import * as conf from '../data/conf'
 import { EnemieData, WallData, RessourceData } from './interfaces'
 import { Ressource } from './ressource'
 import { Enemie, Sortie, Wall } from './state'
@@ -125,7 +124,6 @@ export function initBall() {
     const position = getLevel().entree.position 
     const sens: Direction = "nothing"
     return {
-      life: conf.BALLLIFE,
       coord: {
         x: position.x,
         y: position.y,

@@ -1,11 +1,11 @@
 import { Ball, changeBallVelocity, computeNexId, moveBall } from './ball';
 import { collisionBallEnemie, collisionBallRessource, collisionCircleExit } from './collision';
-import * as conf from './conf'
+import * as conf from '../data/conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
 import { moveEnemie } from './enemie';
 import { notJumping, stopScreen } from './keyboard';
-import { inScreen } from './renderer';
+import { inScreen } from '../view/renderer';
 import { Ressource, nextStepRessource } from './ressource';
 
 /*********************************************

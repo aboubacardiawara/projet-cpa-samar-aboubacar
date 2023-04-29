@@ -1,10 +1,8 @@
-import * as conf from './conf'
 import { useRef, useEffect } from 'react'
 import { State, gameOver, step } from './state'
 
-import { render } from './renderer'
+import { render } from '../view/renderer'
 import { keyDown, keyUp } from './keyboard'
-import { Direction } from './direction'
 import { initBall, initCanvas, initEnemies, initGoal, initRessources, initSortie, initWalls } from './charactersLoader'
 
 

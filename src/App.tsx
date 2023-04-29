@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 import Loader from './components/loader'
 import './App.css'
-import { Canvas } from './components/canvas'
+import { Canvas } from './components/canvas/controlleur/index'
 
 type Size = {
   height: number

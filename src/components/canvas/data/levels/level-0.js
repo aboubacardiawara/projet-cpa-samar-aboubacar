@@ -1,8 +1,41 @@
-import * as conf from '../../../components/canvas/conf'
+import * as conf from '../conf'
 
 export const LEVEL_0 =
 {
     walls: [
+        {
+            position: {
+                x: 0,
+                y: 0
+            },
+            width: conf.COTE * 4,
+            height: conf.MAX_Y - conf.COTE * 4,
+        }
+        ,
+        {
+            position: {
+                x: conf.COTE * 4,
+                y: 0
+            },
+            width: conf.COTE * 8,
+            height: conf.COTE * 3,
+        },
+        {
+            position: {
+                x: conf.COTE * 12,
+                y: 0
+            },
+            width: conf.COTE * 8,
+            height: conf.COTE * 8,
+        },
+        {
+            position: {
+                x: conf.COTE * 20,
+                y: 0
+            },
+            width: conf.COTE * 12,
+            height: conf.COTE * 3,
+        },
         {
             position: {
                 x: 0,
@@ -93,47 +126,16 @@ export const LEVEL_0 =
         },
         {
             position: {
-                x: conf.COTE * 126 + 2 * conf.TAILLE_ENEMIE_MOBILE,
+                x: conf.COTE * 126 + 2 * conf.TAILLE_ENEMIE_IMMOBILE,
                 y: conf.MAX_Y - conf.COTE * 8
             },
-            width: conf.COTE * 2,
+            width: conf.COTE * 5,
             height: conf.COTE * 4,
-        },
-        {
-            position: {
-                x: 0,
-                y: 0
-            },
-            width: conf.COTE * 4,
-            height: conf.MAX_Y - conf.COTE * 4,
         }
-        ,
-        {
-            position: {
-                x: conf.COTE * 4,
-                y: 0
-            },
-            width: conf.COTE * 8,
-            height: conf.COTE * 3,
-        },
-        {
-            position: {
-                x: conf.COTE * 12,
-                y: 0
-            },
-            width: conf.COTE * 8,
-            height: conf.COTE * 8,
-        },
-        {
-            position: {
-                x: conf.COTE * 20,
-                y: 0
-            },
-            width: conf.COTE * 12,
-            height: conf.COTE * 3,
-        },
+        
     ],
     enemies: [
+        /*
 
         {
             direction: "N",
@@ -207,13 +209,13 @@ export const LEVEL_0 =
                 x: conf.COTE * 105 + 2 * conf.TAILLE_ENEMIE_MOBILE,
                 y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE_IMMOBILE.h
             }
-        },
+        },*/
         {
             direction: "N",
-            debut: conf.COTE * 110 + 3 * conf.TAILLE_ENEMIE_MOBILE,
-            destination: conf.COTE * 110 + 3 * conf.TAILLE_ENEMIE_MOBILE,
+            debut: conf.COTE * 110 + 3 * conf.TAILLE_ENEMIE_IMMOBILE,
+            destination: conf.COTE * 110 + 3 * conf.TAILLE_ENEMIE_IMMOBILE,
             position: {
-                x: conf.COTE * 110 + 3 * conf.TAILLE_ENEMIE_MOBILE,
+                x: conf.COTE * 110 + 3 * conf.TAILLE_ENEMIE_IMMOBILE,
                 y: conf.MAX_Y - conf.COTE * 4 - conf.TAILLE_ENEMIE_IMMOBILE.h
             }
         }

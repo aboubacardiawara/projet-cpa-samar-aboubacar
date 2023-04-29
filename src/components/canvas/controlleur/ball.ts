@@ -1,14 +1,13 @@
 import { Coord } from "./coord";
 import { Direction, isMovingLeft, isMovingRight } from "./direction";
 import { Size, State, Wall, blocDessous, updateState } from "./state";
-import * as conf from './conf'
-import { stat } from "fs";
+import * as conf from '../data/conf'
 import { collisionCircleBox } from "./collision";
-import { inScreen } from "./renderer";
+import { inScreen } from "../view/renderer";
 
 export type Ball = {
     coord: Coord,
-    life: number; jumping: boolean,
+    jumping: boolean,
     acceleration: number,
     direction: Direction,
     imgIndex: number,

@@ -1,5 +1,5 @@
 import { Ball } from "./ball";
-import { HEIGHT_SORTIE, RADIUS, SIZE_RESSOURCE, TAILLE_ENEMIE_IMMOBILE, TAILLE_ENEMIE_MOBILE, WIDTH_SORTIE } from "./conf";
+import { HEIGHT_SORTIE, RADIUS, SIZE_RESSOURCE, TAILLE_ENEMIE_IMMOBILE, TAILLE_ENEMIE_MOBILE, WIDTH_SORTIE } from "../data/conf";
 import { isImobileEnemie } from "./enemie";
 import { Ressource } from "./ressource";
 import { Enemie, Sortie, Wall } from "./state";

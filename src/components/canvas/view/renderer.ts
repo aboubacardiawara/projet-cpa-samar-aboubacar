@@ -1,9 +1,7 @@
-import { collisionCircleBox } from './collision'
-import * as conf from './conf'
-import { Coord } from './coord'
-import { isImobileEnemie } from './enemie'
-import { Ressource } from './ressource'
-import { Enemie, Position, State, Wall, gameOver, playerHasWin } from './state'
+import * as conf from '../data/conf'
+import { isImobileEnemie } from '../controlleur/enemie'
+import { Ressource } from '../controlleur/ressource'
+import { Enemie, Position, State, Wall, gameOver, playerHasWin } from '../controlleur/state'
 const COLORS = {
   RED: '#ff0000',
   GREEN: '#00ff00',
@@ -44,19 +42,6 @@ const clear = (ctx: CanvasRenderingContext2D) => {
   const { height, width } = ctx.canvas
   ctx.fillStyle = COLORS.LIGHT_BLUE
   ctx.fillRect(0, 0, width, height)
-}
-
-
-const drawEnemie = (
-  ctx: CanvasRenderingContext2D,
-  { x, y }: { x: number; y: number },
-  w: number,
-  h: number
-) => {
-  ctx.beginPath()
-  ctx.rect(x, y, w, h)
-  ctx.fillStyle = "red"
-  ctx.fill()
 }
 
 const drawSortie = (
@@ -124,10 +109,9 @@ const drawRessource = (
 }
 
 const drawCirle = (
-
   context: CanvasRenderingContext2D,
   { x, y }: { x: number; y: number },
-  color: string, img: HTMLImageElement
+  img: HTMLImageElement
 ) => {
   context.save()
   context.beginPath();
@@ -149,10 +133,6 @@ const drawEnemieAsImg = (
 ) => {
   context.drawImage(img, x, y, w, h)
 }
-
-
-const computeColor = (life: number, maxLife: number, baseColor: string) =>
-  rgbaTorgb(baseColor, (maxLife - life) * (1 / maxLife))
 
 const enemieMobileImg = (): HTMLImageElement => {
   const img = new Image()
@@ -190,7 +170,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   const img = new Image();
   img.src = state.ball.images[state.ball.imgIndex]
 
-  drawCirle(ctx, c.coord, computeColor(c.life, conf.BALLLIFE, COLORS.BLUE), img);
+  drawCirle(ctx, c.coord, img);
 
   state.walls.forEach((w: Wall) => {
     if (inScreen(w.position, w.width, w.height)) {
@@ -206,7 +186,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
       if (isImobileEnemie(e)) {
         img = enemieImobileImg()
         w = conf.TAILLE_ENEMIE_IMMOBILE.w
-        h = conf.TAILLE_ENEMIE_IMMOBILE.h 
+        h = conf.TAILLE_ENEMIE_IMMOBILE.h
       }
       drawEnemieAsImg(ctx, { x: e.coord.x, y: e.coord.y }, w, h, img)
     }
@@ -231,7 +211,7 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
     }
     ctx.font = '80px arial'
     ctx.textAlign = 'center'
-    ctx.strokeText(text, state.size.width / 2 , state.size.height / 2)
+    ctx.strokeText(text, state.size.width / 2, state.size.height / 2)
   }
 }
 

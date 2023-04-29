@@ -1,4 +1,4 @@
-import { ENEMIE_VITESSE } from "./conf";
+import { ENEMIE_VITESSE } from "../data/conf";
 import { Ressource } from "./ressource";
 import { Enemie, Position, State } from "./state";
 

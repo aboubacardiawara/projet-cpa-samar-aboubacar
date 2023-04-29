@@ -1,5 +1,5 @@
 import { Ball, ballAtLeftBoundarie, ballAtRightBoundarie, changeBallVelocity, computeNexId } from "./ball";
-import { ACCELARATION_HORIZ, RADIUS, VITESSE_INIT_SAUT } from "./conf";
+import { ACCELARATION_HORIZ, RADIUS, VITESSE_INIT_SAUT } from "../data/conf";
 import { State, updateState } from "./state";
 
 export const keyDown =
