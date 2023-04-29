@@ -1,5 +1,6 @@
 import { Ball } from "./ball";
-import { HEIGHT_SORTIE, RADIUS, SIZE_RESSOURCE, TAILLE_ENEMIE, WIDTH_SORTIE } from "./conf";
+import { HEIGHT_SORTIE, RADIUS, SIZE_RESSOURCE, TAILLE_ENEMIE_IMMOBILE, TAILLE_ENEMIE_MOBILE, WIDTH_SORTIE } from "./conf";
+import { isImobileEnemie } from "./enemie";
 import { Ressource } from "./ressource";
 import { Enemie, Sortie, Wall } from "./state";
 
@@ -48,7 +49,12 @@ const collisionCircleBoxProf = (ball: Ball, rec: Wall): boolean => {
  */
 export const collisionBallEnemie = (ball: Ball, enemie: Enemie): boolean => {
   const circle = { x: ball.coord.x, y: ball.coord.y, radius: RADIUS }
-  const box = { x: enemie.coord.x, y: enemie.coord.y, width: TAILLE_ENEMIE, height: TAILLE_ENEMIE }
+  const box = {
+    x: enemie.coord.x,
+    y: enemie.coord.y,
+    width: isImobileEnemie(enemie) ? TAILLE_ENEMIE_IMMOBILE.w : TAILLE_ENEMIE_MOBILE,
+    height: isImobileEnemie(enemie) ? TAILLE_ENEMIE_IMMOBILE.h : TAILLE_ENEMIE_MOBILE
+  }
 
   let distX = Math.abs(circle.x - box.x - box.width / 2)
   let distY = Math.abs(circle.y - box.y - box.height / 2)
@@ -69,10 +75,10 @@ export const collisionBallEnemie = (ball: Ball, enemie: Enemie): boolean => {
 }
 
 export const collisionBallRect = (
-  ball: Ball, 
-  {rectx, recty, rectw, recth}
-  :{rectx: number, recty: number, rectw: number, recth:number}
-  ): boolean => {
+  ball: Ball,
+  { rectx, recty, rectw, recth }
+    : { rectx: number, recty: number, rectw: number, recth: number }
+): boolean => {
   const circle = { x: ball.coord.x, y: ball.coord.y, radius: RADIUS }
   const box = { x: rectx, y: recty, width: rectw, height: recth }
 
@@ -113,8 +119,9 @@ export const collisionBallRessource = (ball: Ball, ressource: Ressource): boolea
   const ressourceAsBox = {
     rectx: ressource.position.x,
     recty: ressource.position.y,
-    rectw: SIZE_RESSOURCE, 
-    recth:SIZE_RESSOURCE}
+    rectw: SIZE_RESSOURCE,
+    recth: SIZE_RESSOURCE
+  }
 
   return collisionBallRect(ball, ressourceAsBox);
 }

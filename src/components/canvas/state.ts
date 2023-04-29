@@ -92,7 +92,7 @@ const colisionBallEtExit = (state: State): boolean => {
 
 const collisionBallEtEnemie = (state: State): boolean => {
   return state.enemies
-    .filter(enemie => inScreen({ x: enemie.coord.x, y: enemie.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
+    .filter(enemie => inScreen({ x: enemie.coord.x, y: enemie.coord.y }, conf.TAILLE_ENEMIE_MOBILE, conf.TAILLE_ENEMIE_MOBILE))
     .some(
       (enemie: Enemie) => collisionBallEnemie(state.ball, enemie));
 }

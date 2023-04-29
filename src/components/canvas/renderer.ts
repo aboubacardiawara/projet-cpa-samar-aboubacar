@@ -1,12 +1,14 @@
 import { collisionCircleBox } from './collision'
 import * as conf from './conf'
 import { Coord } from './coord'
+import { isImobileEnemie } from './enemie'
 import { Ressource } from './ressource'
 import { Enemie, Position, State, Wall, gameOver, playerHasWin } from './state'
 const COLORS = {
   RED: '#ff0000',
   GREEN: '#00ff00',
   BLUE: '#0000ff',
+  LIGHT_BLUE: '#87CEFA'
 }
 
 const toDoubleHexa = (n: number) =>
@@ -40,7 +42,7 @@ export const rgbaTorgb = (rgb: string, alpha = 0) => {
 
 const clear = (ctx: CanvasRenderingContext2D) => {
   const { height, width } = ctx.canvas
-  ctx.fillStyle = 'white'
+  ctx.fillStyle = COLORS.LIGHT_BLUE
   ctx.fillRect(0, 0, width, height)
 }
 
@@ -152,9 +154,15 @@ const drawEnemieAsImg = (
 const computeColor = (life: number, maxLife: number, baseColor: string) =>
   rgbaTorgb(baseColor, (maxLife - life) * (1 / maxLife))
 
-const enemieImg = (): HTMLImageElement => {
+const enemieMobileImg = (): HTMLImageElement => {
   const img = new Image()
   img.src = 'ennemie_mobile.png'
+  return img
+}
+
+const enemieImobileImg = (): HTMLImageElement => {
+  const img = new Image()
+  img.src = 'ennemie_immobile.png'
   return img
 }
 
@@ -190,8 +198,17 @@ export const render = (ctx: CanvasRenderingContext2D) => (state: State) => {
   })
 
   state.enemies.forEach((e: Enemie) => {
-    if (inScreen({ x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE))
-      drawEnemieAsImg(ctx, { x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE, conf.TAILLE_ENEMIE, enemieImg())
+    if (inScreen({ x: e.coord.x, y: e.coord.y }, conf.TAILLE_ENEMIE_MOBILE, conf.TAILLE_ENEMIE_MOBILE)) {
+      let w: number = conf.TAILLE_ENEMIE_MOBILE
+      let h: number = conf.TAILLE_ENEMIE_MOBILE
+      let img = enemieMobileImg()
+      if (isImobileEnemie(e)) {
+        img = enemieImobileImg()
+        w = conf.TAILLE_ENEMIE_IMMOBILE.w
+        h = conf.TAILLE_ENEMIE_IMMOBILE.h 
+      }
+      drawEnemieAsImg(ctx, { x: e.coord.x, y: e.coord.y }, w, h, img)
+    }
   })
   state.ressources.forEach(
     (ressource: Ressource) => {

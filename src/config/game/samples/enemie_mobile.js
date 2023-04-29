@@ -24,7 +24,7 @@ export const CONFIG = {
           destination: 800,
           position: {
             x: 600,
-            y: conf.MAX_Y -conf.TAILLE_ENEMIE - conf.COTE
+            y: conf.MAX_Y -conf.TAILLE_ENEMIE_MOBILE - conf.COTE
           },
         }
       ],

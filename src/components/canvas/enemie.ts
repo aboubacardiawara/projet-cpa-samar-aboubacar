@@ -46,3 +46,7 @@ export const moveEnemie = (enemie0: Enemie): Enemie => {
     enemie.coord.y += enemie.coord.dy
     return enemie
 }
+
+export const isImobileEnemie = (enemie: Enemie): boolean => {
+    return enemie.direction == "N"
+}
