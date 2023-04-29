@@ -4,7 +4,7 @@ import * as conf from './conf'
 import { Coord } from './coord';
 import { isMovingRight } from './direction';
 import { moveEnemie } from './enemie';
-import { notJumping } from './keyboard';
+import { notJumping, stopScreen } from './keyboard';
 import { inScreen } from './renderer';
 import { Ressource, nextStepRessource } from './ressource';
 
@@ -279,6 +279,8 @@ const screenCanMoveToRight = (state: State): boolean => {
 }
 
 const moveScreen = (state: State): State => {
+  console.log(state.center.coord.dx);
+  
   const newState = { ...state };
   const center: Mobile = state.center;
   const currentDx = center.coord.dx;
@@ -286,12 +288,16 @@ const moveScreen = (state: State): State => {
 
   if (newDx > 0) {
     if (!screenCanMoveToRight(state)) {
+      state.centerAcceleration = 0
+      state.center.coord.dx = 0
       return state
     }
   }
 
   if (newDx < 0) {
     if (!screenCanMoveToLeft(state)) {
+      state.centerAcceleration = 0
+      state.center.coord.dx = 0
       return state
     }
   }
