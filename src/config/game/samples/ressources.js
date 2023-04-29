@@ -1,9 +1,5 @@
 import * as conf from '../../../components/canvas/conf'
 
-const COTE = 40;
-const MAX_X = 1200;
-const MAX_Y = 800;
-
 export const CONFIG = {
   levels: [
     {
