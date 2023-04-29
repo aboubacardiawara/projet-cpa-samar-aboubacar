@@ -41,7 +41,7 @@ export const getLevel = () => {
     }
 
     const newLevel = { ...CONFIG.levels[0] };
-    //newLevel.enemies = enemiesData;
+    newLevel.enemies = enemiesData;
     newLevel.walls = wallsData;
 
     return newLevel
