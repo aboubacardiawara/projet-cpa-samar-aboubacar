@@ -279,7 +279,6 @@ const screenCanMoveToRight = (state: State): boolean => {
 }
 
 const moveScreen = (state: State): State => {
-  console.log(state.center.coord.dx);
   
   const newState = { ...state };
   const center: Mobile = state.center;

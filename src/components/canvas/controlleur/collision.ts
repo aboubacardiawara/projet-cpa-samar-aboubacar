@@ -11,7 +11,7 @@ import { Enemie, Sortie, Wall } from "./state";
  * @param rec 
  * @returns 
  */
-const collisionCircleBoxProf = (ball: Ball, rec: Wall): boolean => {
+const collisionCircleBoxProf2 = (ball: Ball, rec: Wall): boolean => {
 
   const circle = { x: ball.coord.x, y: ball.coord.y, radius: RADIUS }
   const box = { x: rec.position.x, y: rec.position.y, width: rec.width, height: rec.height }

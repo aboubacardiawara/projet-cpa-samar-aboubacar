@@ -44,7 +44,6 @@ export const LEVEL_0 =
             width: conf.COTE * 200,
             height: conf.COTE * 4,
         },
-        /*
         {
             position: {
                 x: conf.COTE * 30,
@@ -140,7 +139,7 @@ export const LEVEL_0 =
             },
             width: conf.COTE * 2,
             height: conf.COTE * 2,
-        },*/
+        },
         {
             position: {
                 x: conf.COTE * 200,
@@ -200,7 +199,6 @@ export const LEVEL_0 =
 
     ],
     enemies: [
-        /*
         {
             direction: "N",
             debut: conf.COTE * 36,
@@ -353,11 +351,11 @@ export const LEVEL_0 =
                 x: conf.COTE * 42 - conf.TAILLE_ENEMIE_MOBILE,
                 y: 200
             }
-        }*/,
+        },
         {
             direction: "N",
-            debut: null,
-            destination: null,
+            debut: -1,
+            destination: -1,
             position: {
                 x: conf.COTE * 211,
                 y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
@@ -365,8 +363,8 @@ export const LEVEL_0 =
         },
         {
             direction: "N",
-            debut: null,
-            destination: null,
+            debut: -1,
+            destination: -1,
             position: {
                 x: conf.COTE * 212,
                 y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
@@ -374,8 +372,8 @@ export const LEVEL_0 =
         },
         {
             direction: "N",
-            debut: null,
-            destination: null,
+            debut: -1,
+            destination: -1,
             position: {
                 x: conf.COTE * 213,
                 y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
@@ -384,8 +382,8 @@ export const LEVEL_0 =
         ,
         {
             direction: "N",
-            debut: null,
-            destination: null,
+            debut: -1,
+            destination: -1,
             position: {
                 x: conf.COTE * 217,
                 y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
@@ -393,8 +391,8 @@ export const LEVEL_0 =
         },
         {
             direction: "N",
-            debut: null,
-            destination: null,
+            debut: -1,
+            destination: -1,
             position: {
                 x: conf.COTE * 218,
                 y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
@@ -402,8 +400,8 @@ export const LEVEL_0 =
         },
         {
             direction: "N",
-            debut: null,
-            destination: null,
+            debut: -1,
+            destination: -1,
             position: {
                 x: conf.COTE * 219,
                 y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
@@ -412,8 +410,8 @@ export const LEVEL_0 =
         ,
         {
             direction: "N",
-            debut: null,
-            destination: null,
+            debut: -1,
+            destination: -1,
             position: {
                 x: conf.COTE * 223,
                 y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
@@ -421,8 +419,8 @@ export const LEVEL_0 =
         },
         {
             direction: "N",
-            debut: null,
-            destination: null,
+            debut: -1,
+            destination: -1,
             position: {
                 x: conf.COTE * 224,
                 y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
@@ -430,8 +428,8 @@ export const LEVEL_0 =
         },
         {
             direction: "N",
-            debut: null,
-            destination: null,
+            debut: -1,
+            destination: -1,
             position: {
                 x: conf.COTE * 225,
                 y: conf.MAX_Y - conf.COTE * 2 - conf.TAILLE_ENEMIE_IMMOBILE.h
@@ -455,6 +453,61 @@ export const LEVEL_0 =
     ressources: [
         {
             position: {
+                x: conf.COTE * 34,
+                y: conf.MAX_Y - conf.COTE * 5
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 66,
+                y: 300
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 75,
+                y: 300
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 100,
+                y: 350
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 103 + conf.TAILLE_ENEMIE_MOBILE,
+                y: 350
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 108 + 2 * conf.TAILLE_ENEMIE_MOBILE,
+                y: 350
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 130 + conf.COTE/2,
+                y: conf.MAX_Y - conf.COTE * 6 - conf.SIZE_RESSOURCE
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 201,
+                y: conf.MAX_Y - conf.COTE * 2
+            }
+        },
+        {
+            position: {
+                x: conf.COTE * 58,
+                y: conf.MAX_Y - conf.COTE * 5
+            }
+        },
+
+        {
+            position: {
                 x: conf.COTE * 212,
                 y: 350
             }
@@ -473,5 +526,5 @@ export const LEVEL_0 =
         }
 
     ],
-    goal: 0
+    goal: 12
 }
