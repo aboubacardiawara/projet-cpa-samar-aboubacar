@@ -5,6 +5,15 @@ import * as conf from '../data/conf'
 import { collisionCircleBox } from "./collision";
 import { inScreen } from "../view/renderer";
 
+/**
+ * @typedef {Object} Ball la balle
+ * @property {Coord} coord les coordonnées de la balle
+ * @property {boolean} jumping true si la balle est en train de sauter
+ * @property {number} acceleration  l'acceleration de la balle
+ * @property {Direction} direction la direction de la balle
+ * @property {number} imgIndex l'index de l'image de la balle
+ * @property {string[]} images l'enemble des images de la balle
+ */
 export type Ball = {
     coord: Coord,
     jumping: boolean,
@@ -15,6 +24,13 @@ export type Ball = {
 }
 
 
+/**
+ * Deplace la balle horizontalement puis verticalement
+ * en fonction de sa vitessse et gère les eventuelles
+ * corrections de replacement.
+ * @param state {State} l'etat du jeu
+ * @returns {State} le nouvel etat du jeu
+ */
 export const moveBall = (state: State): State => {
 
     const deplacementHorizontal: State = moveBallHoriz(state);
@@ -39,6 +55,15 @@ export const moveBallVerti = (state: State) => {
     return isBallInCanvasVertical(newState) ? newState : replaceVert(state)
 }
 
+/**
+ * Replace la balle sur la direction verticale
+ * Dans le cas ou la balle est en dehors de l'ecran
+ * il la replace sur le point le plus bas de l'ecran et valide.
+ * Parfois en fonction de la vitesse de la balle, elle peut 
+ * ne pas atterir exactement au sol. Dans ce cas on la replace.
+ * @param state 
+ * @returns 
+ */
 export const replaceVert = (state: State): State => {
     const ball: Ball = state.ball;
     const newBall: Ball = {
@@ -52,34 +77,79 @@ export const replaceVert = (state: State): State => {
     return updateState(state, newBall)
 }
 
+/**
+ * /!\
+ * Ce bloc n'est pas utile même si c'set référé.
+ * Sa lecture n'est pas vraiement utile.
+ * Pour les curieux, en effet il a été utilisé pour 
+ * la première strategie de defilement de l'ecran.
+ * (Lire le rapport pour plus de détails)
+ * @deprecated 
+ * @param state 
+ * @returns 
+ */
 export const ballAtLeftBoundarie = (state: State): boolean => {
     return state.ball.coord.x <= state.center.coord.x
 }
 
+/**
+ * /!\
+ * Ce bloc n'est pas utile même si c'set référé.
+ * Sa lecture n'est pas vraiement utile.
+ * Pour les curieux, en effet il a été utilisé pour 
+ * la première strategie de defilement de l'ecran.
+ * (Lire le rapport pour plus de détails)
+ * @deprecated 
+ * @param state 
+ * @returns 
+ */
 export const ballAtRightBoundarie = (state: State): boolean => {
     const x: number = state.center.coord.x;
     const w: number = state.center.width;
     return state.ball.coord.x >= x + w;
 }
 
+/**
+ * Deplace l'ecran vers la droite.
+ * Cela donne l'impression que la balle se deplace vers la gauche.
+ * @param state 
+ * @returns 
+ */
 const moveScreenToTheRight = (state: State): State => {
     const newState: State = state;
     newState.centerAcceleration = conf.ACCELARATION_HORIZ;
     return newState;
 }
 
+/**
+ * Deplace l'ecran vers la gauche.
+ * Cela donne l'impression que la balle se deplace vers la droite.
+ * @param state 
+ * @returns 
+ */
 const moveScreenToTheLeft = (state: State): State => {
     const newState: State = state;
     newState.centerAcceleration = -conf.ACCELARATION_HORIZ;
     return newState;
 }
 
+/**
+ * Arrete le deplacement de l'ecran.
+ * Cela donne l'impression que la balle est arretée.
+ * @param state 
+ * @returns 
+ */
 const stopMovingScreen = (state: State): State => {
     const newState: State = state;
     newState.center.coord.dx = 0;
     return newState;
 }
 
+/**
+ * Annule la vitesse et l'acceleration de la balle.
+ * @param state 
+ * @returns 
+ */
 export const arreteBall = (state: State): State => {
     if (state.ball.jumping) {
         return state
@@ -90,18 +160,24 @@ export const arreteBall = (state: State): State => {
     return { ...state, ball: newBall };
 }
 
+/**
+ * Mouvement de la balle horizontalement.
+ * Cela reviens à derminer dans quel sens la balle se deplace
+ * et à deplacer l'ecran dans le sens inverse.
+ * Sans bouger la balle.
+ * @param state0 
+ * @returns 
+ */
 export const moveBallHoriz = (state0: State) => {
     let state: State;
     if (state0.center.coord.dx < 0) { // moving right
         if (ballAtRightBoundarie(state0)) {
-            //state = arreteBall(moveScreenToTheLeft(state0));
             state = moveScreenToTheLeft(state0);
         } else {
             state = state0;
         }
     } else if (state0.center.coord.dx > 0) { // moving left
         if (ballAtLeftBoundarie(state0)) {
-            //state = arreteBall(moveScreenToTheRight(state0));
             state = moveScreenToTheRight(state0);
         } else {
             state = state0;
@@ -112,7 +188,10 @@ export const moveBallHoriz = (state0: State) => {
 
     const ball = state.ball
     const currentDx = ball.coord.dx;
-    const newDx: number = Math.abs(currentDx) < conf.VITESSE_MAX ? currentDx + ball.acceleration : currentDx
+    const newDx: number =
+        Math.abs(currentDx) < conf.VITESSE_MAX ?
+            currentDx + ball.acceleration
+            : currentDx
     const newBall: Ball = {
         ...ball,
         coord: {
@@ -122,7 +201,6 @@ export const moveBallHoriz = (state0: State) => {
         }
     }
     if (newBall.coord.dx === 0) {
-        //all.direction = "nothing"
     }
     let newState: State = {
         ...state,
@@ -134,16 +212,27 @@ export const moveBallHoriz = (state0: State) => {
     return isBallInCanvasHorital(newState) ? newState : state
 }
 
+/**
+ * 
+ * @param state arrete la balle et le defilement de l'ecran.
+ * Cela arrive quand la balle rencontre un obstacle sur l'horizontale.
+ * @returns 
+ */
 const arreteBallAndScreen = (state: State): State => {
     return arreteBall(stopMovingScreen(state))
 }
 
+/**
+ * QUand la balle rencontre un obstalce sur l'horizontale, elle bloque.
+ * @param state 
+ * @returns 
+ */
 const gestionCollisionHorizontal = (state: State): State => {
     state.walls
         .filter(w => inScreen(w.position, w.width, w.height))
         .forEach(wall => {
             if (collisionCircleBox(state.ball, wall)) {
-                return arreteBallAndScreen(replaceBall(state, wall));
+                return stopMovingScreen(replaceBall(state, wall));
             }
         })
 
