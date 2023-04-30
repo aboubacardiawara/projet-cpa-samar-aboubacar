@@ -212,18 +212,10 @@ export const moveBallHoriz = (state0: State) => {
     return isBallInCanvasHorital(newState) ? newState : state
 }
 
-/**
- * 
- * @param state arrete la balle et le defilement de l'ecran.
- * Cela arrive quand la balle rencontre un obstacle sur l'horizontale.
- * @returns 
- */
-const arreteBallAndScreen = (state: State): State => {
-    return arreteBall(stopMovingScreen(state))
-}
 
 /**
- * QUand la balle rencontre un obstalce sur l'horizontale, elle bloque.
+ * Arrete la balle et le defilement de l'ecran.
+ * Quand la balle rencontre un obstalce sur l'horizontale, elle bloque.
  * @param state 
  * @returns 
  */
@@ -232,14 +224,21 @@ const gestionCollisionHorizontal = (state: State): State => {
         .filter(w => inScreen(w.position, w.width, w.height))
         .forEach(wall => {
             if (collisionCircleBox(state.ball, wall)) {
-                return stopMovingScreen(replaceBall(state, wall));
+                return stopMovingScreen(replaceBallHoriz(state, wall));
             }
         })
 
     return state;
 }
 
-const replaceBall = (state: State, wall: Wall): State => {
+/**
+ * Correction de la position de la balle sur l'horizontale.
+ * Quand elle rencontre un obstacle.
+ * @param state 
+ * @param wall 
+ * @returns 
+ */
+const replaceBallHoriz = (state: State, wall: Wall): State => {
     let newBall: Ball = state.ball
     if (state.ball.coord.x < wall.position.x) {
         // la balle est à gauche
@@ -252,7 +251,9 @@ const replaceBall = (state: State, wall: Wall): State => {
 }
 
 /**
- * 
+ * Predicat pour verfier si la balle est à l'interieur du canvas ou pas.
+ * Une balle est à l'interieur du canvas si tout point du cercle 
+ * est à l'interieur du canvas.
  * @param size {}
  * @param newBall 
  * @returns 
@@ -284,6 +285,12 @@ export const isBallInCanvasHorital = (state: State): boolean => {
     return condLeft && condRight;
 }
 
+/**
+ * Change la vitesse de la balle et renvoie la nouvelle balle.
+ * @param ball 
+ * @param newVelocity 
+ * @returns 
+ */
 export const changeBallVelocity = (ball: Ball, newVelocity: any): Ball => {
     return {
         ...ball,
@@ -297,6 +304,13 @@ export const changeBallVelocity = (ball: Ball, newVelocity: any): Ball => {
 }
 
 
+/**
+ * Pour animer une balle, id est l'index de l'image à afficher.
+ * Suivant si elle recule ou avance, on doit calculer le prochain id.
+ * @param id 
+ * @param forward true si la balle avance, false sinon.
+ * @returns 
+ */
 export const computeNexId = (id: number, forward: boolean): number => {
     if (forward) {
         if (id == 3) {
