@@ -1,7 +1,12 @@
-import { ENEMIE_VITESSE } from "../data/conf";
-import { Ressource } from "./ressource";
-import { Enemie, Position, State } from "./state";
+import { Enemie } from "./state";
 
+/**
+ * Pour les enemis qui se deplacent horizontalement.
+ * verifie si l'enemie a atteint sa destination.
+ * pour ensuite mettre à jour la pochaine destination.
+ * @param enemie 
+ * @returns 
+ */
 const horizontalDestinationReached = (enemie: Enemie): boolean => {
     if (enemie.coord.dx > 0) {// sens: -->
         return enemie.coord.x + enemie.coord.dx >= enemie.destination
@@ -11,6 +16,13 @@ const horizontalDestinationReached = (enemie: Enemie): boolean => {
     return false;
 }
 
+/**
+ * Pour les enemis qui se deplacent verticalement.
+ * verifie si l'enemie a atteint sa destination.
+ * pour ensuite mettre à jour la pochaine destination.
+ * @param enemie 
+ * @returns 
+ */
 const verticalDestinationReached = (enemie: Enemie): boolean => {
     if (enemie.coord.dy > 0) {// sens: -->
         return enemie.coord.y + enemie.coord.dy >= enemie.destination
@@ -20,6 +32,11 @@ const verticalDestinationReached = (enemie: Enemie): boolean => {
     return false
 }
 
+/**
+ * Permet de bouger l'enemie d'une ennemie.
+ * @param enemie0 
+ * @returns 
+ */
 export const moveEnemie = (enemie0: Enemie): Enemie => {
     if (enemie0.debut == enemie0.destination) {
         // dont move it
@@ -47,6 +64,16 @@ export const moveEnemie = (enemie0: Enemie): Enemie => {
     return enemie
 }
 
+/**
+ * Il existe deux types d'ennemies:
+ * 1. Ceux qui se deplacent
+ * 2. Ceux qui sont immobiles
+ * Ils se distinguent par leur direction:
+ * 1. N: Nothing (ne bouge pas)
+ * 2. H: Horizontal (se deplace horizontalement) | V: Vertical (se deplace verticalement)
+ * @param enemie 
+ * @returns 
+ */
 export const isImobileEnemie = (enemie: Enemie): boolean => {
     return enemie.direction == "N"
 }

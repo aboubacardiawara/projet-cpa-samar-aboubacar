@@ -5,7 +5,21 @@ import { Ressource } from './ressource'
 import { Enemie, Sortie, Wall } from './state'
 import { Direction } from './direction'
 
-
+/**
+ * Charge depuis le fichier de description le nivau du jeu.
+ * Le niveau est un objet dont les champs sont:
+ * - walls: les murs
+ * - enemies: les ennemis
+ * - ressources: les ressources
+ * - sortie: la sortie
+ * 
+ * NB: [Pendant la lecture faire abstraction de la boucle].
+ * Elle est là pendant la phase de developpement de niveau
+ * A defaut d'avoir suffisament d'elements pour que le niveau s'etende sur plusieurs ecrans.
+ * on repete les même élements pour simuler un niveau plus grand.
+ * Chacun represente la description d'un groupe de personnage.
+ * @returns 
+ */
 export const getLevel = () => {
     let wallsData: WallData[] = []
     let enemiesData: EnemieData[] = []
@@ -46,13 +60,7 @@ export const getLevel = () => {
     return newLevel
 }
 
-export const initCanvas =
-    (iterate: (ctx: CanvasRenderingContext2D) => void) =>
-        (canvas: HTMLCanvasElement) => {
-            const ctx = canvas.getContext('2d')
-            if (!ctx) return
-            requestAnimationFrame(() => iterate(ctx))
-        }
+
 
 /**
  * Prend un objet données d'un mur et construit un element mur.
@@ -86,7 +94,7 @@ const buildRessource = (ressourceData: RessourceData): Ressource => {
     return {
         ...ressourceData,
         cpt: randomInteger(0, 25),
-            imagesSrc: ['piece-1.png', 'piece-2.png'],
+        imagesSrc: ['piece-1.png', 'piece-2.png'],
         imgIndex: randomInteger(0, 1)
     }
 }
@@ -121,23 +129,23 @@ export const initGoal = (): number => {
 }
 
 export function initBall() {
-    const position = getLevel().entree.position 
+    const position = getLevel().entree.position
     const sens: Direction = "nothing"
     return {
-      coord: {
-        x: position.x,
-        y: position.y,
-        dx: 0,
-        dy: 0,
-      },
-      jumping: false,
-      acceleration: 0,
-      direction: sens,
-      imgIndex: 0,
-      images: [
-        "bounce-1.png",
-        "bounce-2.png",
-        "bounce-3.png",
-        "bounce-4.png"],
+        coord: {
+            x: position.x,
+            y: position.y,
+            dx: 0,
+            dy: 0,
+        },
+        jumping: false,
+        acceleration: 0,
+        direction: sens,
+        imgIndex: 0,
+        images: [
+            "bounce-1.png",
+            "bounce-2.png",
+            "bounce-3.png",
+            "bounce-4.png"],
     }
-  }
+}

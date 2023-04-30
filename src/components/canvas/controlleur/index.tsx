@@ -3,8 +3,16 @@ import { State, gameOver, step } from './state'
 
 import { render } from '../view/renderer'
 import { keyDown, keyUp } from './keyboard'
-import { initBall, initCanvas, initEnemies, initGoal, initRessources, initSortie, initWalls } from './charactersLoader'
+import { initBall, initEnemies, initGoal, initRessources, initSortie, initWalls } from './charactersLoader'
 
+
+const initCanvas =
+  (iterate: (ctx: CanvasRenderingContext2D) => void) =>
+    (canvas: HTMLCanvasElement) => {
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+      requestAnimationFrame(() => iterate(ctx))
+    }
 
 export const Canvas = ({ height, width }: { height: number; width: number }) => {
   const initialState: State = {
